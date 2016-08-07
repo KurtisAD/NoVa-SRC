@@ -1,0 +1,87 @@
+package nova.modules;
+
+import net.minecraft.client.Minecraft;
+import nova.Command;
+import org.lwjgl.opengl.Display;
+
+/**
+ * Created by Skeleton Man on 7/18/2016.
+ */
+public class ModuleFakeCoord extends ModuleBase {
+    static boolean isSpoofing;
+
+    static int xOffset;
+    static int yOffset;
+    static int zOffset;
+
+    String lastTitle;
+    final String spoofingTitle = " [FAKE COORDINATES ACTIVE]";
+
+    public ModuleFakeCoord(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+        super(Nova, mc);
+
+        aliases.add("fakecoords");
+
+        this.command = new Command(Nova, this, aliases, "Offsets coordinates in debug overlay and ModuleGui, input is rounded down to multiples of 16");
+        this.command.registerArg("offset", this.getClass().getMethod("doOffset", int.class,int.class,int.class), "Offsets location by coordinate amount, rounded down to multiples of 16");
+        this.command.registerArg("set", this.getClass().getMethod("doSet", int.class,int.class,int.class), "Sets location to coordinates, rounded down to multiples of 16");
+
+        isSpoofing = false;
+        xOffset = 0;
+        yOffset = 0;
+        zOffset = 0;
+
+        lastTitle = "";
+    }
+
+    public void doOffset(int xOffset, int yOffset, int zOffset){
+        ModuleFakeCoord.xOffset = (xOffset >> 4) << 4;
+        ModuleFakeCoord.yOffset = (yOffset >> 4) << 4;
+        ModuleFakeCoord.zOffset = (zOffset >> 4) << 4;
+    }
+
+    public void doSet(int xSet, int ySet, int zSet){
+        xOffset = (xSet - (int)mc.thePlayer.posX >> 4 ) << 4;
+        yOffset = (ySet - (int)mc.thePlayer.posY >> 4 ) << 4;
+        zOffset = (zSet - (int)mc.thePlayer.posZ >> 4 ) << 4;
+
+
+    }
+
+    @Override
+    public void toggleState(){
+        if(isSpoofing)
+            this.onDisable();
+        else
+            this.onEnable();
+    }
+
+    @Override
+    public void onEnable(){
+        lastTitle = Display.getTitle();
+        Display.setTitle(lastTitle + spoofingTitle);
+        isSpoofing = true;
+    }
+
+    @Override
+    public void onDisable(){
+        Display.setTitle(lastTitle);
+        isSpoofing = false;
+    }
+
+    public static int getX(){
+        return isSpoofing ? xOffset : 0;
+    }
+
+    public static int getY(){
+        return isSpoofing ? yOffset : 0;
+    }
+
+    public static int getZ(){
+        return isSpoofing ? zOffset : 0;
+    }
+
+    public static boolean getSpoofing(){
+        return isSpoofing;
+    }
+}

@@ -1,0 +1,36 @@
+package nova.modules;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.play.client.CPacketChatMessage;
+import nova.Command;
+import nova.Nova;
+import nova.core.Util;
+
+/**
+ * Created by Skeleton Man on 7/22/2016.
+ */
+public class ModuleImpersonate extends ModuleBase {
+    public ModuleImpersonate(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+        super(Nova,mc);
+
+        this.isToggleable = false;
+        this.aliases.add("imp");
+
+        this.command = new Command(Nova, this, aliases, "Impersonates a player");
+        this.command.registerArg("do", this.getClass().getMethod("imp", String.class, String.class),"Takes in [name] and \\\"[message]\\\"");
+        this.defaultArg = "do";
+    }
+
+    public void imp(String user, String message){
+        String username = user;
+        String msg = message;
+
+        String p = "";
+
+        p += Util.toFull("(((((((mmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+        p += "<" + username + "> " + msg;
+
+        mc.thePlayer.connection.netManager.sendPacket(new CPacketChatMessage(p));
+
+    }
+}
