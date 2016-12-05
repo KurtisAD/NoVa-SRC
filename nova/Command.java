@@ -1,5 +1,6 @@
 package nova;
 
+import nova.core.RegisterArgument;
 import nova.modules.ModuleBase;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +27,8 @@ public class Command {
         this.Nova = Nova;
         this.args = new HashMap<String, Argument>();
         this.desc = "No description available";
+
+        getRegisteredArguments();
     }
 
     public Command(Nova Nova, ModuleBase module, ArrayList<String> aliases, String desc)
@@ -35,14 +38,27 @@ public class Command {
         this.Nova = Nova;
         this.args = new HashMap<String, Argument>();
         this.desc = desc;
+
+        getRegisteredArguments();
     }
 
+    public void getRegisteredArguments() {
 
+        for (Method m : this.module.getClass().getDeclaredMethods()) {
+            if (m.isAnnotationPresent(RegisterArgument.class)) {
+                RegisterArgument ra = m.getAnnotation(RegisterArgument.class);
+                args.put(ra.name(), new Argument(this, ra.name(), m, ra.description()));
+            }
+        }
+    }
+
+    /*
     public void registerArg(String arg, Method m, String usage)
     {
         args.put(arg, new Argument(this, arg, m, usage));
 
     }
+    */
 
     public boolean parseArgs(String argv[])
     {
@@ -113,14 +129,13 @@ public class Command {
             if(this.module.isToggleable)
             {
                 this.module.toggleState();
-                // TODO: Save module here
             } else {
                 Nova.errorMessage("You have to provide arguments for this command");
                 return false;
             }
         }
 
-        module.saveModule();
+        this.module.saveModule();
         return true;
     }
 

@@ -1,14 +1,14 @@
 package nova.modules;
 
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import net.minecraft.client.Minecraft;
-import nova.Nova;
 import nova.Command;
 import nova.IModule;
-import nova.core.Util;
+import nova.Nova;
+import nova.Saver;
+import nova.core.Saveable;
 
-import java.io.*;
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -24,6 +24,7 @@ public class ModuleBase implements IModule {
     public String defaultArg;
     public Command command;
 
+    @Saveable
     public boolean isEnabled;
 
     public boolean showEnabled;
@@ -32,14 +33,11 @@ public class ModuleBase implements IModule {
     public boolean isToggleable;
 
 
-    JsonObject json;
     public String filepath;
 
 
-
-
-
-    public ModuleBase(Nova Nova, Minecraft mc) throws NoSuchMethodException{
+    // TODO: fix module shit so it loads on declaration, maybe a check and set function for nulls?
+    public ModuleBase(Nova Nova, Minecraft mc) {
         this.Nova = Nova;
         this.isEnabled = false;
         this.mc = mc;
@@ -55,23 +53,20 @@ public class ModuleBase implements IModule {
         aliases.add(name);
 
         this.filepath = Nova.novaDir + File.separator + this.name + ".nova";
-        json = new JsonObject();
     }
 
-    public void onEnable()
-    {
+    public void onEnable() {
         this.isEnabled = true;
     }
 
 
-    public void onDisable()
-    {
+    public void onDisable() {
         this.isEnabled = false;
     }
 
     public void toggleState() {
-        if(this.isToggleable){
-            if(this.isEnabled)
+        if (this.isToggleable) {
+            if (this.isEnabled)
                 this.onDisable();
             else
                 this.onEnable();
@@ -87,41 +82,19 @@ public class ModuleBase implements IModule {
     }
 
 
-    public void saveModule(){
-        json.add("isEnabled", Util.getGson().toJsonTree(isEnabled));
-        saveJson();
-    }
-    public void loadModule(){
-        try {
-            load();
-        } catch (NullPointerException e){
-            saveModule();
-        }
+    public void saveModule() {
+        Saver.saveModule(this);
     }
 
-    protected void load(){
-        loadJson();
-        isEnabled = Util.getGson().fromJson(json.get("isEnabled"), boolean.class);
+    public void loadModule() {
+        Saver.loadModule(this);
     }
 
-    private void saveJson(){
-        FileWriter file;
-        try {
-            file = new FileWriter(filepath);
-            file.write(Util.getGson().toJson(json));
-            file.flush();
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void loadJson(){
-        try {
-            json = Util.getGson().fromJson(new JsonReader(new FileReader(filepath)), JsonObject.class);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            saveModule();
-        }
+    // Work around for the Saver in saveModule()
+    // m.getClass().getFields() will return only fields of ModuleBase, we need the subclass fields as well
+    // TODO: maybe better implement it?
+    public Field[] getFields() {
+        return this.getClass().getFields();
     }
 }

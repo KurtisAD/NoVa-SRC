@@ -10,7 +10,7 @@ import nova.events.PlayerTickEvent;
  */
 public class ModuleAutoMine extends ModuleBase {
 
-    public ModuleAutoMine(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleAutoMine(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         this.aliases.add("mine");
@@ -30,7 +30,7 @@ public class ModuleAutoMine extends ModuleBase {
             if ((mc.objectMouseOver == null) || (mc.objectMouseOver.getBlockPos() == null)) {
                 return;
             }
-            if (Block.getIdFromBlock(mc.theWorld.getBlockState(mc.objectMouseOver.getBlockPos()).getBlock()) != 0) {
+            if (Block.getIdFromBlock(mc.world.getBlockState(mc.objectMouseOver.getBlockPos()).getBlock()) != 0) {
                 mc.gameSettings.keyBindAttack.pressed = true;
             } else {
                 mc.gameSettings.keyBindAttack.pressed = false;

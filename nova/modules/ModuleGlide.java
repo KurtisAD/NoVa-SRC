@@ -3,7 +3,7 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import nova.Command;
 import nova.Nova;
-import nova.core.Util;
+import nova.core.RegisterArgument;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -12,42 +12,30 @@ import nova.events.PlayerTickEvent;
 public class ModuleGlide extends ModuleBase {
     double speed;
 
-    public ModuleGlide(Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleGlide(Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         this.speed = -0.17D;
 
         this.command = new Command(Nova, this, aliases, "Slows fall speed; NCP patched (?)");
-        this.command.registerArg("speed", this.getClass().getMethod("setSpeed", double.class), "Sets the vertical speed");
         this.defaultArg = "speed";
 
-        loadModule();
     }
 
 
     public void onTick(PlayerTickEvent e)
     {
         if(this.isEnabled) {
-            if(!mc.thePlayer.onGround && mc.thePlayer.motionY < 0.0D && mc.thePlayer.isAirBorne && !mc.thePlayer.isInWater())
+            if (!mc.player.onGround && mc.player.motionY < 0.0D && mc.player.isAirBorne && !mc.player.isInWater())
             {
-                mc.thePlayer.motionY = speed;
+                mc.player.motionY = speed;
             }
         }
 
     }
 
-    @Override
-    public void saveModule(){
-        json.add("speed", Util.getGson().toJsonTree(speed));
-        super.saveModule();
-    }
 
-    @Override
-    public void load(){
-        super.load();
-        speed = Util.getGson().fromJson(json.get("speed"),double.class);
-    }
-
+    @RegisterArgument(name = "speed", description = "Sets the vertical speed")
     public void setSpeed(double speed){
         this.speed = speed;
     }

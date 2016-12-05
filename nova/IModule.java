@@ -12,6 +12,9 @@ public interface IModule {
     String getName();
     String getMetadata();
 
-    void saveModule();
+
     void loadModule();
+
+    void saveModule();
+
 }

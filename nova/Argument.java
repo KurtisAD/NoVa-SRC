@@ -46,6 +46,8 @@ public class Argument {
         Object toReturn[]= new Object[argv.length];
         for(int i = 0; i < argv.length; i++) {
 
+            // TODO: find a way to compare without using strings
+            // getClass().equals() doesn't work
             try {
                 Object o = sets[i];
                 if (sets[i].getName().equals("boolean")) {

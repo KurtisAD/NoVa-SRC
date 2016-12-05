@@ -10,7 +10,7 @@ import nova.events.PlayerTickEvent;
  */
 public class ModuleAutoRespawn extends ModuleBase{
 
-    public ModuleAutoRespawn(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleAutoRespawn(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
         aliases.add("respawn");
         this.command = new Command(Nova, this, aliases, "Automatically respawns on death.");
@@ -19,8 +19,8 @@ public class ModuleAutoRespawn extends ModuleBase{
 
     @EventHandler
     public void onPlayerTick(PlayerTickEvent e){
-        if(this.isEnabled && mc.thePlayer.getHealth() <= 0)
-            mc.thePlayer.respawnPlayer();
+        if (this.isEnabled && mc.player.getHealth() <= 0)
+            mc.player.respawnPlayer();
 
     }
 }

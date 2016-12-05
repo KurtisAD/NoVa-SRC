@@ -1,6 +1,5 @@
 package nova.modules;
 
-import com.google.gson.reflect.TypeToken;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -18,7 +17,10 @@ import nova.events.EventHandler;
 import nova.events.RenderOverlayEvent;
 import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -32,7 +34,10 @@ public class ModuleMarkers extends ModuleBase {
 
     boolean iterating;
 
-    public ModuleMarkers(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    // As a design choice, I decided to keep ints as the input and parse to double when drawing marker to match old versions
+    // This is supposed to fix a problem, I'm not sure if it does
+
+    public ModuleMarkers(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         chunks = new ArrayList<ChunkLocation>();
@@ -44,61 +49,14 @@ public class ModuleMarkers extends ModuleBase {
 
         this.command = new Command(Nova, this, aliases, "Draws a marker of a given style over a given block. Replaces x-ray. All IDs are in the format id:metadata. If you do not provide metadata, it is assumed to be 0. (ex. markers new 98:1; or markers new 98) Comes preloaded with a marker for chests.");
 
-        this.command.registerArg("new", this.getClass().getMethod("newMarker", String.class), "Adds a new marker of the given ID and metadata with the default style, a white star.");
-        this.command.registerArg("del", this.getClass().getMethod("delMarker", String.class), "Deletes a marker of the given ID and metadata");
-        this.command.registerArg("type", this.getClass().getMethod("changeType", String.class, int.class ), "Changes the type of a marker; 0 is box, 1 is star");
-        this.command.registerArg("add", this.getClass().getMethod("addMarker", String.class, int.class, int.class, int.class, int.class ), "Adds a new marker of the given ID and metadata with colors R, G, B (see color) and the type (see type); (ex. markers new 98:2 255 0 0 1; adds a red star for mossy stone brick)");
-        this.command.registerArg("color", this.getClass().getMethod("colorMarker", String.class, int.class, int.class, int.class ), "Changes the color for a marker of the given ID and metadata in the format R G B, where integers R G and B are in the interval [0, 255]");
-        this.command.registerArg("list", this.getClass().getMethod("listMarkers"), "Lists markers");
 //		this.command.registerArg("chunk", new Class[] { }, "Hilight quartz chunks in the nether");
 
         this.iterating = false;
 
-        loadModule();
     }
 
-    @Override
-    public void load(){
-        super.load();
 
-        blockDescriptors = Util.getGson().fromJson(json.get("blockDescriptors"), new TypeToken<Map<SimpleBlock, Marker>>(){}.getType());
-    }
-
-    @Override
-    public void saveModule(){
-        json.add("blockDescriptors",Util.getGson().toJsonTree(blockDescriptors));
-
-        super.saveModule();
-    }
-
-    public SimpleBlock getBlockFromString(String blocktext){
-        int id, metadata;
-        SimpleBlock block;
-        block = new SimpleBlock(0, 0);
-        String[] tmp;
-
-
-        tmp = blocktext.split(":");
-
-        metadata = tmp.length > 1 ? Integer.parseInt(tmp[1]) : 0;
-
-        try{
-            id = Integer.parseInt(tmp[0]);
-        } catch (NumberFormatException e){
-            id = Block.getIdFromBlock(Block.getBlockFromName(tmp[0]));
-            if (id == -1){
-                try{
-                    Nova.errorMessage("Invalid input: " + tmp[0] + ":" + tmp[1]);
-                } catch (ArrayIndexOutOfBoundsException e1){
-                    Nova.errorMessage("Invalid input: " + tmp[0]);
-                }
-                id = 0;
-            }
-        }
-
-        return new SimpleBlock(id, metadata);
-    }
-
+    @RegisterArgument(name = "new", description = "Adds a new marker of the given ID and metadata with the default style, a white star.")
     public void newMarker(String marker){
         SimpleBlock block = getBlockFromString(marker);
 
@@ -114,11 +72,12 @@ public class ModuleMarkers extends ModuleBase {
         mc.renderGlobal.loadRenderers();
 
     }
+
+    @RegisterArgument(name = "del", description = "Deletes a marker of the given ID and metadata")
     public void delMarker(String marker){
         SimpleBlock block = getBlockFromString(marker);
 
-        if(!blockDescriptors.containsKey(block))
-        {
+        if (!blockDescriptors.containsKey(block)) {
             this.Nova.errorMessage("The block " + block.toString() + " does not exist, so you cannot delete it");
             return;
         }
@@ -128,11 +87,11 @@ public class ModuleMarkers extends ModuleBase {
         Nova.confirmMessage("Removed block " + block.toString());
     }
 
+    @RegisterArgument(name = "type", description = "Changes the type of a marker; 0 is box, 1 is star")
     public void changeType(String marker, int type){
         SimpleBlock block = getBlockFromString(marker);
 
-        if(!blockDescriptors.containsKey(block))
-        {
+        if (!blockDescriptors.containsKey(block)) {
             this.Nova.errorMessage("The block " + block.toString() + " does not exist");
             return;
         }
@@ -143,11 +102,12 @@ public class ModuleMarkers extends ModuleBase {
         Nova.confirmMessage("Changed marker type of block " + block.toString() + " to " + type);
 
     }
+
+    @RegisterArgument(name = "add", description = "Adds a new marker of the given ID and metadata with colors R, G, B (see color) and the type (see type); (ex. markers new 98:2 255 0 0 1; adds a red star for mossy stone brick)")
     public void addMarker(String marker, int r, int g, int b, int type){
         SimpleBlock block = getBlockFromString(marker);
 
-        if(blockDescriptors.containsKey(block))
-        {
+        if (blockDescriptors.containsKey(block)) {
             this.Nova.errorMessage("The block " + block.toString() + " has already been added");
             return;
         }
@@ -157,11 +117,12 @@ public class ModuleMarkers extends ModuleBase {
         Nova.confirmMessage("Added marker for block " + block.toString());
         mc.renderGlobal.loadRenderers();
     }
+
+    @RegisterArgument(name = "color", description = "Changes the color for a marker of the given ID and metadata in the format R G B, where integers R G and B are in the interval [0, 255]")
     public void colorMarker(String marker, int r, int g, int b){
         SimpleBlock block = getBlockFromString(marker);
 
-        if(!blockDescriptors.containsKey(block))
-        {
+        if (!blockDescriptors.containsKey(block)) {
             this.Nova.errorMessage("The block " + block.toString() + " has not been added yet");
             return;
         }
@@ -172,11 +133,12 @@ public class ModuleMarkers extends ModuleBase {
         Nova.confirmMessage("Changed color for block " + block.toString());
 
     }
+
+    @RegisterArgument(name = "list", description = "Lists markers")
     public void listMarkers(){
         String itemName = "";
 
-        for(SimpleBlock key : blockDescriptors.keySet())
-        {
+        for (SimpleBlock key : blockDescriptors.keySet()) {
             Marker marker = blockDescriptors.get(key);
 
             try {
@@ -185,6 +147,8 @@ public class ModuleMarkers extends ModuleBase {
                 itemName = "Unknown";
             }
 
+
+            // TODO: set so it only outputs a certain length of double maybe? needs testing
             this.Nova.message(Integer.toString(key.id) + ":" + Integer.toString(key.metadata)
                     + " " + itemName
                     + " rgb(" + marker.color.getRed()
@@ -192,6 +156,34 @@ public class ModuleMarkers extends ModuleBase {
                     + ", " + marker.color.getBlue()
                     + ") Type: " + Integer.toString(marker.setting));
         }
+    }
+
+    public SimpleBlock getBlockFromString(String blocktext) {
+        int id, metadata;
+        SimpleBlock block;
+        block = new SimpleBlock(0, 0);
+        String[] tmp;
+
+
+        tmp = blocktext.split(":");
+
+        metadata = tmp.length > 1 ? Integer.parseInt(tmp[1]) : 0;
+
+        try {
+            id = Integer.parseInt(tmp[0]);
+        } catch (NumberFormatException e) {
+            id = Block.getIdFromBlock(Block.getBlockFromName(tmp[0]));
+            if (id == -1) {
+                try {
+                    Nova.errorMessage("Invalid input: " + tmp[0] + ":" + tmp[1]);
+                } catch (ArrayIndexOutOfBoundsException e1) {
+                    Nova.errorMessage("Invalid input: " + tmp[0]);
+                }
+                id = 0;
+            }
+        }
+
+        return new SimpleBlock(id, metadata);
     }
 
 
@@ -206,9 +198,9 @@ public class ModuleMarkers extends ModuleBase {
         if(blockDescriptors.containsKey(e.block)){
             synchronized(blocks) {
                 if(e.block.equals(Block.getStateId(Block.getStateById(7)))){
-                    if(mc.thePlayer.dimension == -1 && (e.pos.y >= 5 && e.pos.y < 122))
+                    if (mc.player.dimension == -1 && (e.pos.y >= 5 && e.pos.y < 122))
                         this.blocks.put(e.pos, e.block);
-                    else if (mc.thePlayer.dimension != -1 && e.pos.y >= 5)
+                    else if (mc.player.dimension != -1 && e.pos.y >= 5)
                         this.blocks.put(e.pos, e.block);
 
                 } else {
@@ -284,6 +276,9 @@ public class ModuleMarkers extends ModuleBase {
     public void drawMarker(Location pos, Marker marker)
     {
 
+        // I'm going to try to move the GL11 stuff into the draw functions themselves
+        // might be redundant code, probably may change it back for that reason
+
         /*
         GL11.glPushMatrix();
         GL11.glEnable(3042);
@@ -296,13 +291,6 @@ public class ModuleMarkers extends ModuleBase {
         GL11.glDisable(2929);
         GL11.glDepthMask(false);
         */
-
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glLineWidth(2.0F);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(false);
 
         double minX = pos.x - TileEntityRendererDispatcher.staticPlayerX;
         double minZ = pos.z - TileEntityRendererDispatcher.staticPlayerZ;
@@ -335,10 +323,6 @@ public class ModuleMarkers extends ModuleBase {
         GL11.glDisable(3042);
         GL11.glPopMatrix();
         */
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(true);
-        GL11.glDisable(GL11.GL_BLEND);
     }
 
     public int parseBlock(int id, int metadata)

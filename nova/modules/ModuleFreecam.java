@@ -3,8 +3,8 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.play.client.CPacketPlayer;
-import nova.StaticNova;
 import nova.Command;
+import nova.StaticNova;
 import nova.events.EventHandler;
 import nova.events.PacketSendEvent;
 
@@ -13,28 +13,26 @@ public class ModuleFreecam extends ModuleBase {
 	float yaw, pitch;
     private EntityOtherPlayerMP freecamEntity;
 
-	public ModuleFreecam(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
-		super(Nova,mc);
+	public ModuleFreecam(nova.Nova Nova, Minecraft mc) {
+		super(Nova, mc);
 		this.command = new Command(Nova, this, aliases, "Frees your camera");
-
-		loadModule();
 	}
 
 	@Override
 	public void onEnable()
 	{
-		x = mc.thePlayer.posX;
-		y = mc.thePlayer.posY;
-		z = mc.thePlayer.posZ;
-		yaw = mc.thePlayer.rotationYaw;
-		pitch = mc.thePlayer.rotationPitch;
+		x = mc.player.posX;
+		y = mc.player.posY;
+		z = mc.player.posZ;
+		yaw = mc.player.rotationYaw;
+		pitch = mc.player.rotationPitch;
 
-		freecamEntity = new EntityOtherPlayerMP(mc.theWorld, mc.getSession().getProfile());
-		freecamEntity.setPositionAndRotation(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch);
-		freecamEntity.rotationYawHead = mc.thePlayer.rotationYawHead;
-		mc.theWorld.addEntityToWorld(-2, freecamEntity);
+		freecamEntity = new EntityOtherPlayerMP(mc.world, mc.getSession().getProfile());
+		freecamEntity.setPositionAndRotation(mc.player.posX, mc.player.posY, mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch);
+		freecamEntity.rotationYawHead = mc.player.rotationYawHead;
+		mc.world.addEntityToWorld(-2, freecamEntity);
 		StaticNova.Nova.getModule(ModuleFly.class).onEnable();
-		mc.thePlayer.noClip = true;
+		mc.player.noClip = true;
 
 
 		this.isEnabled = true;
@@ -54,14 +52,14 @@ public class ModuleFreecam extends ModuleBase {
 	public void onDisable()
 	{
 		try {
-			mc.thePlayer.setPositionAndRotation(freecamEntity.posX, freecamEntity.posY, freecamEntity.posZ, freecamEntity.rotationYaw, freecamEntity.rotationPitch);
-		} catch (NullPointerException e){
-			mc.thePlayer.setPosition(x,  y,  z);
-			mc.thePlayer.rotationPitch = pitch;
-			mc.thePlayer.rotationYaw = yaw;
+			mc.player.setPositionAndRotation(freecamEntity.posX, freecamEntity.posY, freecamEntity.posZ, freecamEntity.rotationYaw, freecamEntity.rotationPitch);
+		} catch (NullPointerException e) {
+			mc.player.setPosition(x, y, z);
+			mc.player.rotationPitch = pitch;
+			mc.player.rotationYaw = yaw;
 		}
-		mc.thePlayer.noClip = false;
-		mc.theWorld.removeEntityFromWorld(-2);
+		mc.player.noClip = false;
+		mc.world.removeEntityFromWorld(-2);
 		StaticNova.Nova.getModule(ModuleFly.class).onDisable();
 
 		this.isEnabled = false;

@@ -3,7 +3,6 @@ package nova.events;
 import net.minecraft.util.math.BlockPos;
 import nova.core.Location;
 import nova.core.SimpleBlock;
-import optfine.BlockPosM;
 
 /**
  * Created by Skeleton Man on 7/26/2016.

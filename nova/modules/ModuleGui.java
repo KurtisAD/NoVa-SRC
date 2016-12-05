@@ -1,23 +1,25 @@
 package nova.modules;
 
-import com.google.gson.annotations.Expose;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiDisconnected;
+import net.minecraft.client.gui.GuiMultiplayer;
+import net.minecraft.client.gui.GuiScreenServerList;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import nova.core.Util;
-import nova.events.GuiOpenEvent;
-import nova.events.RenderOverlayEvent;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import nova.Command;
 import nova.Nova;
+import nova.core.RegisterArgument;
+import nova.core.Saveable;
+import nova.core.Util;
 import nova.events.EventHandler;
+import nova.events.GuiOpenEvent;
+import nova.events.RenderOverlayEvent;
 import nova.gui.GuiDisconnectedOverride;
 import nova.gui.GuiMultiplayerOverride;
 import nova.gui.GuiScreenServerListOverride;
-
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,71 +32,43 @@ import java.util.Iterator;
  */
 public class ModuleGui extends ModuleBase{
 
-    int width, height;
-    ScaledResolution scaledResolution;
+    private int width, height;
     private ArrayList<HashMap<String, Integer>> note;
-    int maxDisplayedNotifications;
-    int notificationTimeout;
-    int ticks;
-    int potionShift;
-    String fps = "";
+    private int maxDisplayedNotifications;
+    private int potionShift;
 
-    @Expose
-    int guiColor;
-    @Expose
-    String infoFormat;
-    @Expose
-    boolean showArmor;
-    @Expose
+    @Saveable
+    public int guiColor;
+    @Saveable
+    public String infoFormat;
+    @Saveable
+    public boolean showArmor;
+    @Saveable
     public boolean potionInSeconds;
-    @Expose
+    @Saveable
     public boolean isHidden;
 
 
     public static final String[] directions = { "SOUTH", "WEST", "NORTH", "EAST" };
 
 
-    public ModuleGui(Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleGui(Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         this.isHidden = false;
         this.note = new ArrayList<HashMap<String, Integer>>();
         this.maxDisplayedNotifications = 5;
-        this.notificationTimeout = 256;
-        this.ticks = 0;
         this.potionShift = 0;
 
         this.command = new Command(Nova, this, aliases, "Toggles the GUI");
-        this.command.registerArg("format", this.getClass().getMethod("setInfoFormat", String.class), "Wrap your argument in quotes! Changes format of the coord/info text; {x} parses to the x-coord, {z}, {y} do the same; {d} is your direction, {D} is it's single character representation; {v} is your velocity in km/h, {fps}, & is the formatting char");
-        this.command.registerArg("armor", this.getClass().getMethod("toggleArmor") , "Toggles armor display");
-        this.command.registerArg("potion", this.getClass().getMethod("togglePotionInSeconds"), "Toggles potion timer, either in seconds or minutes.");
 
         this.guiColor = 0xFFFFFF;
         this.infoFormat = "[{x}, {z}] {v}km/h";
         this.potionInSeconds = true;
         this.showArmor = true;
 
-        loadModule();
     }
 
-    @Override
-    public void saveModule(){
-        json.add("guiColor",Util.getGson().toJsonTree(guiColor));
-        json.add("infoFormat", Util.getGson().toJsonTree(infoFormat));
-        json.add("potionInSeconds", Util.getGson().toJsonTree(potionInSeconds));
-        json.add("showArmor", Util.getGson().toJsonTree(showArmor));
-        super.saveModule();
-    }
-
-    @Override
-    public void load(){
-        super.load();
-        this.guiColor = Util.getGson().fromJson(json.get("guiColor"), Integer.class);
-        this.infoFormat = Util.getGson().fromJson(json.get("infoFormat"), String.class);
-        this.potionInSeconds = Util.getGson().fromJson(json.get("potionInSeconds"), Boolean.class);
-        this.showArmor = Util.getGson().fromJson(json.get("showArmor"), Boolean.class);
-
-    }
 
     @Override
     public void toggleState()
@@ -106,24 +80,21 @@ public class ModuleGui extends ModuleBase{
     public void onRenderOverlay(RenderOverlayEvent e)
     {
 
-        scaledResolution = new ScaledResolution(mc);
+        ScaledResolution scaledResolution = new ScaledResolution(mc);
         width = scaledResolution.getScaledWidth();
         height = scaledResolution.getScaledHeight();
 
         if(!mc.gameSettings.showDebugInfo && !isHidden) {
 
-            String x = Integer.toString((int)Math.floor(mc.thePlayer.posX) + ModuleFakeCoord.getX());
-            String y = Integer.toString((int)Math.floor(mc.thePlayer.posY) + ModuleFakeCoord.getY());
-            String z = Integer.toString((int)Math.floor(mc.thePlayer.posZ) + ModuleFakeCoord.getZ());
+            String x = Integer.toString((int) Math.floor(mc.player.posX) + ModuleFakeCoord.getX());
+            String y = Integer.toString((int) Math.floor(mc.player.posY) + ModuleFakeCoord.getY());
+            String z = Integer.toString((int) Math.floor(mc.player.posZ) + ModuleFakeCoord.getZ());
             String v = Double.toString(this.getPlayerVelocity());
-            String d = directions[MathHelper.floor_double((double)(mc.thePlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3];
+            String d = directions[MathHelper.floor((double) (mc.player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3];
             String D = Character.toString(d.charAt(0));
 
-            /*
-            if(Sys.getTime() * 1000L / Sys.getTimerResolution() >= mc.debugUpdateTime + 1000L)
-                fps = Integer.toString(mc.getDebugFPS());
-            */
-            fps = Integer.toString(Minecraft.getDebugFPS());
+
+            String fps = Integer.toString(Minecraft.getDebugFPS());
 
             String info = this.infoFormat.replaceAll("&", "\247").replaceAll("\\{x\\}", x).replaceAll("\\{z\\}", z).replaceAll("\\{y\\}", y).replaceAll("\\{v\\}", v).replaceAll("\\{d\\}", d).replaceAll("\\{D\\}", D).replaceAll("\\{fps\\}", fps);
 
@@ -163,7 +134,7 @@ public class ModuleGui extends ModuleBase{
 
     private void drawStats()
     {
-        ItemStack armor[] = mc.thePlayer.inventory.armorInventory;
+        ItemStack armor[] = (ItemStack[]) mc.player.inventory.armorInventory.toArray();
         String helmet, chestplate, leggings, boots = "";
 
         helmet = "h: " + (armor[3] != null ? Util.formatArmorDurability( ( ((double)armor[3].getMaxDamage() - (double)armor[3].getItemDamage() ) / (double)armor[3].getMaxDamage()) * 100.0D ) + "%" : "none");
@@ -171,7 +142,7 @@ public class ModuleGui extends ModuleBase{
         leggings = "l: " + (armor[1] != null ? Util.formatArmorDurability((((double)armor[1].getMaxDamage() - (double)armor[1].getItemDamage()) / (double)armor[1].getMaxDamage()) * 100.0D) + "%" : "none");
         boots = "b: " + (armor[0] != null ? Util.formatArmorDurability( (((double)armor[0].getMaxDamage() - (double)armor[0].getItemDamage()) / (double)armor[0].getMaxDamage()) * 100.0D)  + "%" : "none");
 
-        Iterator potions = mc.thePlayer.getActivePotionEffects().iterator();
+        Iterator potions = mc.player.getActivePotionEffects().iterator();
         PotionEffect potionHolder;
 
         int i = 0;
@@ -236,7 +207,7 @@ public class ModuleGui extends ModuleBase{
     private double getPlayerVelocity()
     {
 
-        double velocity = Math.floor(Math.sqrt(Math.pow(mc.thePlayer.posX - mc.thePlayer.lastTickPosX, 2) + Math.pow(mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ, 2)) * 20 * 60 * 60);
+        double velocity = Math.floor(Math.sqrt(Math.pow(mc.player.posX - mc.player.lastTickPosX, 2) + Math.pow(mc.player.posZ - mc.player.lastTickPosZ, 2)) * 20 * 60 * 60);
         velocity /= 100;
         velocity = Math.round(velocity);
         velocity /= 10;
@@ -305,14 +276,18 @@ public class ModuleGui extends ModuleBase{
         }
     }
 
+    @RegisterArgument(name = "format",
+            description = "Wrap your argument in quotes! Changes format of the coord/info text; {x} parses to the x-coord, {z}, {y} do the same; {d} is your direction, {D} is it's single character representation; {v} is your velocity in km/h, {fps}, & is the formatting char")
     public void setInfoFormat(String infoFormat){
         this.infoFormat = infoFormat;
     }
 
+    @RegisterArgument(name = "armor", description = "Toggles armor display")
     public void toggleArmor(){
         this.showArmor = !this.showArmor;
     }
 
+    @RegisterArgument(name = "potion", description = "Toggles potion timer, either in seconds or minutes")
     public void togglePotionInSeconds(){
         this.potionInSeconds = !potionInSeconds;
     }

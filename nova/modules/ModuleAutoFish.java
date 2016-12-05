@@ -2,10 +2,10 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.projectile.EntityFishHook;
+import nova.Command;
 import nova.Nova;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
-import nova.Command;
 
 /**
  * Created by Skeleton Man on 6/24/2016.
@@ -13,20 +13,18 @@ import nova.Command;
 public class ModuleAutoFish extends ModuleBase {
     private boolean catching;
 
-    public ModuleAutoFish(Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleAutoFish(Nova Nova, Minecraft mc) {
         super(Nova, mc);
         this.command = new Command(Nova, this, aliases, "Automatically catches fish");
         catching = false;
-
-        loadModule();
     }
 
 
     @EventHandler
     public void onPlayerTick(PlayerTickEvent e){
         if (this.isEnabled) {
-            if (mc.thePlayer.fishEntity != null
-                    && isHooked(mc.thePlayer.fishEntity)
+            if (mc.player.fishEntity != null
+                    && isHooked(mc.player.fishEntity)
                     && !catching) {
                 catching = true;
 

@@ -3,18 +3,16 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import nova.Argument;
 import nova.Command;
+import nova.core.RegisterArgument;
 
 public class ModuleHelp extends ModuleBase 
 {
-	public ModuleHelp(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
-		super(Nova, mc);
+    public ModuleHelp(nova.Nova Nova, Minecraft mc) {
+        super(Nova, mc);
 
 		this.command = new Command(Nova, this, aliases, "Sending cached base coords to kinorana...");
-		this.command.registerArg("module", this.getClass().getMethod("getModuleUsages", String.class), "Gives help for modules");
 
 		this.defaultArg = "module";
-
-		loadModule();
 	}
 
 
@@ -38,8 +36,9 @@ public class ModuleHelp extends ModuleBase
 		this.Nova.message(modules);
 	}
 
-	public void getModuleUsages(String name){
-		if (!this.Nova.moduleNameCache.values().contains(name.toLowerCase())){
+    @RegisterArgument(name = "module", description = "Gives help for modules")
+    public void getModuleUsages(String name) {
+        if (!this.Nova.moduleNameCache.values().contains(name.toLowerCase())){
 			toggleState();
 			return;
 		}

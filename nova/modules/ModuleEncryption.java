@@ -1,7 +1,15 @@
 package nova.modules;
 
-import com.google.gson.annotations.Expose;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatAllowedCharacters;
+import nova.Command;
+import nova.core.Base64;
+import nova.core.RegisterArgument;
+import nova.core.Util;
+import nova.events.ChatRecievedEvent;
+import nova.events.ChatSentEvent;
+import nova.events.EventHandler;
+import nova.events.PlayerTickEvent;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -19,21 +27,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import net.minecraft.util.ChatAllowedCharacters;
-import nova.Command;
-import nova.core.Base64;
-import nova.core.Util;
-import nova.events.ChatSentEvent;
-import nova.events.EventHandler;
-import nova.events.PlayerTickEvent;
-import nova.events.ChatRecievedEvent;
-
 /**
  * Created by Skeleton Man on 6/24/2016.
  */
 public class ModuleEncryption extends ModuleBase
 {
-    @Expose
+
     String delimeter;
 
     public HashMap a;
@@ -45,13 +44,12 @@ public class ModuleEncryption extends ModuleBase
     public Queue b;
     public int c;
 
-    public ModuleEncryption(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleEncryption(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
         this.name = "Encryption";
         this.isToggleable = false;
 
         this.command = new Command(Nova, this, aliases, "encrypts chats");
-        this.command.registerArg("delimeter", this.getClass().getMethod("changeDelimeter", String.class), "what to start a chat with to encrypt it, ex. %");
 
         this.defaultArg = "delimeter";
 
@@ -65,20 +63,6 @@ public class ModuleEncryption extends ModuleBase
         c = 0;
 
         this.delimeter = "%";
-
-        loadModule();
-    }
-
-    @Override
-    public void saveModule(){
-        json.add("delimeter", Util.getGson().toJsonTree(delimeter));
-        super.saveModule();
-    }
-
-    @Override
-    public void load(){
-        super.load();
-        delimeter = Util.getGson().fromJson(json.get("delimeter"), String.class);
     }
 
     public String DecryptData(byte[] paramArrayOfByte)
@@ -199,12 +183,12 @@ public class ModuleEncryption extends ModuleBase
             String str = (String)b.poll();
             if (str != null)
 
-                mc.thePlayer.sendChatMessage(str);
+                mc.player.sendChatMessage(str);
 
         }
     }
 
-
+    @RegisterArgument(name = "delimeter", description = "what to start a chat with to encrypt it, eg. %")
     public void changeDelimeter(String del){
         this.delimeter = del;
         this.Nova.confirmMessage("Delimeter changed to: " + del);
@@ -222,7 +206,7 @@ public class ModuleEncryption extends ModuleBase
         if (!(message.startsWith(this.delimeter)))
             return true;
 
-        String str1 = mc.thePlayer.getDisplayName().getUnformattedText();
+        String str1 = mc.player.getDisplayName().getUnformattedText();
         System.out.print(str1);
 
         String str2 = Util.hash(str1);
@@ -258,7 +242,7 @@ public class ModuleEncryption extends ModuleBase
                     return true;
                 String str6 = (String)b.poll();
 
-                mc.thePlayer.sendChatMessage(str6);
+                mc.player.sendChatMessage(str6);
                 return false;
             }
             if (j == 0)
@@ -266,7 +250,7 @@ public class ModuleEncryption extends ModuleBase
                 b.add(str4);
                 return true;
             }
-            mc.thePlayer.sendChatMessage(str4);
+            mc.player.sendChatMessage(str4);
 
             return false;
         }

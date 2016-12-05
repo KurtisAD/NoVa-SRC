@@ -2,12 +2,16 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import nova.Command;
+import nova.core.RegisterArgument;
 import org.lwjgl.opengl.Display;
 
 /**
  * Created by Skeleton Man on 7/18/2016.
  */
 public class ModuleFakeCoord extends ModuleBase {
+
+    // DO NOT USE THIS, DOES NOT PROTECT AGAINST COORDINATE EXPLOITS
+    // NEEDS FIXING
     static boolean isSpoofing;
 
     static int xOffset;
@@ -17,14 +21,12 @@ public class ModuleFakeCoord extends ModuleBase {
     String lastTitle;
     final String spoofingTitle = " [FAKE COORDINATES ACTIVE]";
 
-    public ModuleFakeCoord(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleFakeCoord(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         aliases.add("fakecoords");
 
         this.command = new Command(Nova, this, aliases, "Offsets coordinates in debug overlay and ModuleGui, input is rounded down to multiples of 16");
-        this.command.registerArg("offset", this.getClass().getMethod("doOffset", int.class,int.class,int.class), "Offsets location by coordinate amount, rounded down to multiples of 16");
-        this.command.registerArg("set", this.getClass().getMethod("doSet", int.class,int.class,int.class), "Sets location to coordinates, rounded down to multiples of 16");
 
         isSpoofing = false;
         xOffset = 0;
@@ -34,16 +36,18 @@ public class ModuleFakeCoord extends ModuleBase {
         lastTitle = "";
     }
 
+    @RegisterArgument(name = "offset", description = "Offsets location by coordinate amount, rounded down to multiples of 16")
     public void doOffset(int xOffset, int yOffset, int zOffset){
         ModuleFakeCoord.xOffset = (xOffset >> 4) << 4;
         ModuleFakeCoord.yOffset = (yOffset >> 4) << 4;
         ModuleFakeCoord.zOffset = (zOffset >> 4) << 4;
     }
 
+    @RegisterArgument(name = "set", description = "Sets location to coordinates, rounded down to multiples of 16")
     public void doSet(int xSet, int ySet, int zSet){
-        xOffset = (xSet - (int)mc.thePlayer.posX >> 4 ) << 4;
-        yOffset = (ySet - (int)mc.thePlayer.posY >> 4 ) << 4;
-        zOffset = (zSet - (int)mc.thePlayer.posZ >> 4 ) << 4;
+        xOffset = (xSet - (int) mc.player.posX >> 4) << 4;
+        yOffset = (ySet - (int) mc.player.posY >> 4) << 4;
+        zOffset = (zSet - (int) mc.player.posZ >> 4) << 4;
 
 
     }

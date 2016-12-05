@@ -15,24 +15,22 @@ public class ModuleAutoEat extends ModuleBase {
     private int oldSlot;
     private int bestSlot;
 
-    public ModuleAutoEat(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleAutoEat(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
         this.command = new Command(Nova, this, aliases, "Automatically eats. From Wrust");
-
-        loadModule();
     }
 
     @EventHandler
     public void onUpdate(PlayerTickEvent e){
         if(isEnabled) {
             if (isEating()) {
-                ItemStack item = mc.thePlayer.inventory.getStackInSlot(bestSlot);
+                ItemStack item = mc.player.inventory.getStackInSlot(bestSlot);
 
-                if (mc.thePlayer.getFoodStats().getFoodLevel() >= 20 || item == null || !(item.getItem() instanceof ItemFood)) {
+                if (mc.player.getFoodStats().getFoodLevel() >= 20 || item == null || !(item.getItem() instanceof ItemFood)) {
                     stopEating();
                 } else {
-                    mc.thePlayer.inventory.currentItem = bestSlot;
-                    mc.playerController.processRightClick(mc.thePlayer, mc.theWorld, item, EnumHand.MAIN_HAND);
+                    mc.player.inventory.currentItem = bestSlot;
+                    mc.playerController.processRightClick(mc.player, mc.world, EnumHand.MAIN_HAND);
                     mc.gameSettings.keyBindUseItem.pressed = true;
                 }
             } else {
@@ -40,7 +38,7 @@ public class ModuleAutoEat extends ModuleBase {
                 bestSlot = -1;
 
                 for (int i = 0; i < 9; i++) {
-                    ItemStack item = mc.thePlayer.inventory.getStackInSlot(i);
+                    ItemStack item = mc.player.inventory.getStackInSlot(i);
 
                     if (item == null) {
                         continue;
@@ -59,7 +57,7 @@ public class ModuleAutoEat extends ModuleBase {
                 }
                 if (bestSlot == -1)
                     return;
-                oldSlot = mc.thePlayer.inventory.currentItem;
+                oldSlot = mc.player.inventory.currentItem;
             }
         }
     }
@@ -71,7 +69,7 @@ public class ModuleAutoEat extends ModuleBase {
 
     public void stopEating(){
         mc.gameSettings.keyBindUseItem.pressed = false;
-        mc.thePlayer.inventory.currentItem = oldSlot;
+        mc.player.inventory.currentItem = oldSlot;
         oldSlot = -1;
     }
 }

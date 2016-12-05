@@ -16,12 +16,13 @@ public class ModuleAutotool extends ModuleBase{
 	private boolean isActive = false;
 
 
-	public ModuleAutotool(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleAutotool(nova.Nova Nova, Minecraft mc) {
 
 		super(Nova, mc);
-
 		this.command = new Command(Nova, this, aliases, "Switches to better tool if possible");
 	}
+
+    // This code need revision
 
 	@EventHandler
 	public void onTick(PlayerTickEvent e) {
@@ -29,14 +30,12 @@ public class ModuleAutotool extends ModuleBase{
 			if ((!mc.gameSettings.keyBindAttack.pressed) && (this.isActive))
 			{
 				this.isActive = false;
-				mc.thePlayer.inventory.currentItem = this.oldSlot;
-			}
-			else if ((this.isActive) && 
+                mc.player.inventory.currentItem = this.oldSlot;
+            } else if ((this.isActive) &&
 					(mc.objectMouseOver != null) &&
 					(mc.objectMouseOver.getBlockPos() != null) &&
-					(mc.theWorld.getBlockState(mc.objectMouseOver.getBlockPos())
-							.getBlock().getMaterial(null) != Material.AIR))
-			{
+                    (mc.world.getBlockState(mc.objectMouseOver.getBlockPos())
+                            .getBlock().getMaterial(null) != Material.AIR)) {
 				setSlot(mc.objectMouseOver.getBlockPos());
 			}
 		}
@@ -49,13 +48,12 @@ public class ModuleAutotool extends ModuleBase{
 					(mc.objectMouseOver.getBlockPos() == null)) {
 				return;
 			}
-			if (mc.theWorld.getBlockState(mc.objectMouseOver.getBlockPos())
-					.getBlock().getMaterial(null) != Material.AIR)
-			{
+            if (mc.world.getBlockState(mc.objectMouseOver.getBlockPos())
+                    .getBlock().getMaterial(null) != Material.AIR) {
 				this.isActive = true;
-				this.oldSlot = mc.thePlayer.inventory.currentItem;
-				setSlot(mc.objectMouseOver.getBlockPos());
-			}
+                this.oldSlot = mc.player.inventory.currentItem;
+                setSlot(mc.objectMouseOver.getBlockPos());
+            }
 		}
 	}
 
@@ -63,12 +61,10 @@ public class ModuleAutotool extends ModuleBase{
 	{
 		float bestSpeed = 1.0F;
 		int bestSlot = -1;
-		IBlockState blockState = mc.theWorld.getBlockState(blockPos);
-		for (int i = 0; i < 9; i++)
-		{
-			ItemStack item = mc.thePlayer.inventory.getStackInSlot(i);
-			if (item != null)
-			{
+        IBlockState blockState = mc.world.getBlockState(blockPos);
+        for (int i = 0; i < 9; i++) {
+            ItemStack item = mc.player.inventory.getStackInSlot(i);
+            if (item != null) {
 				float speed = item.getStrVsBlock(blockState);
 				if (speed > bestSpeed)
 				{
@@ -78,7 +74,7 @@ public class ModuleAutotool extends ModuleBase{
 			}
 		}
 		if (bestSlot != -1) {
-			mc.thePlayer.inventory.currentItem = bestSlot;
-		}
-	}
+            mc.player.inventory.currentItem = bestSlot;
+        }
+    }
 }

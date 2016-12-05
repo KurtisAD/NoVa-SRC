@@ -1,8 +1,5 @@
 package nova.core;
 
-import java.io.*;
-import java.util.ArrayList;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.enchantment.Enchantment;
@@ -12,19 +9,23 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Util.EnumOS;
 import nova.modules.ModuleBase;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 /**
  * Created by Skeleton Man on 6/22/2016.
  */
 public class Util {
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public static File getAppDir(String par0Str)
-    {
+    //TODO: implement minecraft code for this, no need to rewrite
+    public static File getAppDir(String par0Str) {
         String var1 = System.getProperty("user.home", ".");
         File var2;
 
-        switch (getOs())
-        {
+        switch (getOs()) {
             case LINUX:
             case SOLARIS:
                 var2 = new File(var1, '.' + par0Str + '/');
@@ -33,12 +34,9 @@ public class Util {
             case WINDOWS:
                 String var3 = System.getenv("APPDATA");
 
-                if (var3 != null)
-                {
+                if (var3 != null) {
                     var2 = new File(var3, "." + par0Str + '/');
-                }
-                else
-                {
+                } else {
                     var2 = new File(var1, '.' + par0Str + '/');
                 }
 
@@ -52,12 +50,9 @@ public class Util {
                 var2 = new File(var1, par0Str + '/');
         }
 
-        if (!var2.exists() && !var2.mkdirs())
-        {
+        if (!var2.exists() && !var2.mkdirs()) {
             throw new RuntimeException("The working directory could not be created: " + var2);
-        }
-        else
-        {
+        } else {
             return var2;
         }
     }

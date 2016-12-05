@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import nova.Command;
 import nova.Nova;
+import nova.core.RegisterArgument;
 import nova.core.Util;
 import nova.events.EntityLabelRenderedEvent;
 import nova.events.EventHandler;
@@ -23,37 +24,17 @@ public class ModuleESP extends ModuleBase {
     boolean itemEsp;
     boolean armorEsp;
 
-    public ModuleESP(Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleESP(Nova Nova, Minecraft mc) {
         super(Nova, mc);
         // TODO Auto-generated constructor stub
 
         this.name = "ESP";
         this.command = new Command(Nova, this, aliases, "Hilights a player's name and shows their health, held item, and distance; friend's names are green.");
-        this.command.registerArg("health", this.getClass().getMethod("toggleHealth"), "Show current health?");
-        this.command.registerArg("items", this.getClass().getMethod("toggleItems"), "Show held items?");
-        this.command.registerArg("armor", this.getClass().getMethod("toggleArmor"), "Show armor durability?");
 
         this.healthEsp = true;
         this.itemEsp = true;
-
-        loadModule();
     }
 
-    @Override
-    public void load(){
-        super.load();
-        healthEsp = Util.getGson().fromJson(json.get("healthEsp"), boolean.class);
-        itemEsp = Util.getGson().fromJson(json.get("itemEsp"), boolean.class);
-        armorEsp = Util.getGson().fromJson(json.get("armorEsp"), boolean.class);
-    }
-
-    @Override
-    public void saveModule(){
-        json.add("healthEsp", Util.getGson().toJsonTree(healthEsp));
-        json.add("itemEsp", Util.getGson().toJsonTree(itemEsp));
-        json.add("armorEsp", Util.getGson().toJsonTree(armorEsp));
-        super.saveModule();
-    }
 
     @EventHandler
     public boolean onEntityLabelRenderedEvent(EntityLabelRenderedEvent event)
@@ -64,7 +45,7 @@ public class ModuleESP extends ModuleBase {
             Entity e = event.entity;
 
             String name = e.getDisplayName().getUnformattedText();
-            double distance = Math.round(mc.thePlayer.getDistanceSqToEntity(e));
+            double distance = Math.round(mc.player.getDistanceSqToEntity(e));
 
             FontRenderer fr = mc.fontRendererObj;
 
@@ -124,7 +105,7 @@ public class ModuleESP extends ModuleBase {
             String leftItem = "";
             if(e instanceof EntityOtherPlayerMP) {
                 item = Util.getItemNameAndEnchantments(((EntityOtherPlayerMP)e).inventory.getCurrentItem());
-                leftItem = Util.getItemNameAndEnchantments(((EntityOtherPlayerMP)e).inventory.offHandInventory[0]);
+                leftItem = Util.getItemNameAndEnchantments(((EntityOtherPlayerMP) e).inventory.offHandInventory.get(0));
             }
 
             int var17 = fr.getStringWidth(name) / 2;
@@ -200,14 +181,17 @@ public class ModuleESP extends ModuleBase {
         return true;
     }
 
+    @RegisterArgument(name = "health", description = "Show current health?")
     public void toggleHealth(){
         this.healthEsp = !this.healthEsp;
     }
 
+    @RegisterArgument(name = "items", description = "Show current items?")
     public void toggleItems(){
         this.itemEsp = !this.itemEsp;
     }
 
+    @RegisterArgument(name = "armor", description = "Show armor durability?")
     public void toggleArmor(){
         this.armorEsp = !this.armorEsp;
     }

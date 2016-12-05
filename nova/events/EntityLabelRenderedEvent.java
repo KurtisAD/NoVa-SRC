@@ -7,14 +7,15 @@ public class EntityLabelRenderedEvent {
 
 	public EntityLivingBase entity;
 	public double interpolationX, interpolationY, interpolationZ;
-	public RenderManager rm;
-	
-	public EntityLabelRenderedEvent(EntityLivingBase e, double interpolationX, double interpolationY, double interpolationZ, RenderManager rm)
-	{
-		this.entity = e;
+    public boolean canRenderName;
+    public RenderManager rm;
+
+    public EntityLabelRenderedEvent(EntityLivingBase e, double interpolationX, double interpolationY, double interpolationZ, boolean canRenderName, RenderManager rm) {
+        this.entity = e;
 		this.interpolationX = interpolationX;
 		this.interpolationY = interpolationY;
 		this.interpolationZ = interpolationZ;
-		this.rm = rm;
-	}
+        this.canRenderName = canRenderName;
+        this.rm = rm;
+    }
 }

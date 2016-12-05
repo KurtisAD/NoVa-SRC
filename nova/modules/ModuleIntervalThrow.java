@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
 import nova.Command;
-import nova.Nova;
+import nova.core.RegisterArgument;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -18,15 +18,12 @@ public class ModuleIntervalThrow extends ModuleBase {
     int priorSlot;
 
 
-    public ModuleIntervalThrow(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleIntervalThrow(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         this.aliases.add("intt");
         this.name = "IntervalThrow";
         this.command = new Command(Nova, this, aliases, "Throws the item in your hotbar every nth millisecond.");
-        this.command.registerArg("int", this.getClass().getMethod("setInt", long.class), "period in milliseconds (ex. 100)");
-        this.command.registerArg("slot", this.getClass().getMethod("setSlot", int.class), "hotbar slot to change to before throwing; -1 means no change");
-        this.command.registerArg("offhand", this.getClass().getMethod("offHand"), "toggles offhand mode");
 
         this.defaultArg = "int";
 
@@ -37,14 +34,21 @@ public class ModuleIntervalThrow extends ModuleBase {
         this.changeToSlot = -1;
     }
 
+    @RegisterArgument(
+            name = "int",
+            description = "period in milliseconds (ex. 100)")
     public void setInt(long inter){
         this.intervalMs = inter;
     }
 
+    @RegisterArgument(
+            name = "slot",
+            description = "hotbar slot to change to before throwing; -1 means no change")
     public void setSlot(int slot){
         this.changeToSlot = slot;
     }
 
+    @RegisterArgument(name = "offhand", description = "toggles offhand mode")
     public void offHand(){
         this.offHand = !this.offHand;
     }
@@ -58,22 +62,22 @@ public class ModuleIntervalThrow extends ModuleBase {
             this.lastMs = System.nanoTime() / 1000000;
 
             if(this.offHand){
-                mc.thePlayer.connection.netManager.sendPacket(new CPacketPlayerTryUseItem(EnumHand.OFF_HAND));
+                mc.player.connection.netManager.sendPacket(new CPacketPlayerTryUseItem(EnumHand.OFF_HAND));
                 return;
             }
 
             if(this.changeToSlot != -1)
             {
-                this.priorSlot = mc.thePlayer.inventory.currentItem;
-                mc.thePlayer.inventory.currentItem = this.changeToSlot;
+                this.priorSlot = mc.player.inventory.currentItem;
+                mc.player.inventory.currentItem = this.changeToSlot;
             }
 
-            mc.thePlayer.connection.netManager.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
+            mc.player.connection.netManager.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
 
 
             if(this.changeToSlot != -1)
             {
-                mc.thePlayer.inventory.currentItem = this.priorSlot;
+                mc.player.inventory.currentItem = this.priorSlot;
             }
         }
 

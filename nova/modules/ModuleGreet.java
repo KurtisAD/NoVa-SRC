@@ -1,19 +1,10 @@
 package nova.modules;
 
-import com.google.gson.reflect.TypeToken;
-import net.minecraft.client.Minecraft;
-import nova.Command;
-import nova.core.Util;
-import nova.events.EventHandler;
-import nova.events.PlayerLogOffEvent;
-import nova.events.PlayerLogOnEvent;
-
-import java.util.*;
-
 /**
  * Created by Skeleton Man on 7/21/2016.
  */
-public class ModuleGreet extends ModuleBase {
+public class ModuleGreet /*extends ModuleBase*/ {
+    /*
     Random rand;
 
     boolean onJoin;
@@ -31,15 +22,10 @@ public class ModuleGreet extends ModuleBase {
 
 
 
-    public ModuleGreet(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleGreet(nova.Nova Nova, Minecraft mc)  {
         super(Nova, mc);
 
         this.command = new Command(Nova, this, aliases, "Greets");
-        this.command.registerArg("join", this.getClass().getMethod("join"), "Welcome");
-        this.command.registerArg("leave", this.getClass().getMethod("leave"), "Good bye");
-        this.command.registerArg("ignore", this.getClass().getMethod("ignore", String.class), "Adds a player to the ignore list");
-        this.command.registerArg("unignore", this.getClass().getMethod("unignore", String.class), "Removes a player from the ignore list");
-        this.command.registerArg("ignored", this.getClass().getMethod("ignored"), "Lists ignored players");
         this.command.registerArg("unignoreall", this.getClass().getMethod("unignoreall"), "Removes all ignored players");
         this.command.registerArg("greetadd", this.getClass().getMethod("greetadd", String.class), "Add a welcome");
         this.command.registerArg("greetdel", this.getClass().getMethod("greetdel", String.class), "Delete a welcome");
@@ -60,44 +46,21 @@ public class ModuleGreet extends ModuleBase {
 
         rand = new Random();
 
-        loadModule();
-    }
-
-    @Override
-    public void load(){
-        super.load();
-
-        onJoin = Util.getGson().fromJson(json.get("onJoin"), Boolean.class);
-        onLeave = Util.getGson().fromJson(json.get("onLeave"), Boolean.class);
-        ignoredPlayers = Util.getGson().fromJson(json.get("ignoredPlayers"), new TypeToken<ArrayList<String>>(){}.getType());
-        greetings = Util.getGson().fromJson(json.get("greetings"), new TypeToken<ArrayList<String>>(){}.getType());
-        goodbyes = Util.getGson().fromJson(json.get("goodbyes"), new TypeToken<ArrayList<String>>(){}.getType());
-        greetingFormat = Util.getGson().fromJson(json.get("ignoredPlayers"), String.class);
-        goodbyeFormat = Util.getGson().fromJson(json.get("ignoredPlayers"), String.class);
 
     }
 
-    @Override
-    public void saveModule(){
-        json.add("onJoin", Util.getGson().toJsonTree(onJoin));
-        json.add("onLeave", Util.getGson().toJsonTree(onLeave));
-        json.add("ignoredPlayers", Util.getGson().toJsonTree(ignoredPlayers));
-        json.add("greetings", Util.getGson().toJsonTree(greetings));
-        json.add("goodbyes", Util.getGson().toJsonTree(goodbyes));
-        json.add("greetingFormat", Util.getGson().toJsonTree(greetingFormat));
-        json.add("goodbyeFormat", Util.getGson().toJsonTree(goodbyeFormat));
 
-        super.saveModule();
-    }
-
+    @RegisterArgument(name = "join", description = "Welcome")
     public void join(){
         this.onJoin = !onJoin;
     }
 
+    @RegisterArgument(name = "leave", description = "Goodbye")
     public void leave(){
         this.onLeave = !onLeave;
     }
 
+    @RegisterArgument(name = "ignore", description = "Adds a player to the ignore list")
     public void ignore(String name){
         String player = name.toLowerCase();
         if (!this.ignoredPlayers.contains(name)){
@@ -108,6 +71,7 @@ public class ModuleGreet extends ModuleBase {
         }
     }
 
+    @RegisterArgument(name = "unignore", description = "Removes a player from the ignore list")
     public void unignore(String name){
         String player = name.toLowerCase();
         if(this.ignoredPlayers.contains(player))
@@ -119,6 +83,7 @@ public class ModuleGreet extends ModuleBase {
             this.Nova.errorMessage("You never ignored " + name);
     }
 
+    @RegisterArgument(name = "ignored", description = "Lists ignored players")
     public void ignored(String name){
         if(this.ignoredPlayers.isEmpty())
         {
@@ -228,7 +193,7 @@ public class ModuleGreet extends ModuleBase {
                 .replaceAll("\\{msg\\}", greet)
                 .replaceAll("\\{.\\}", period);
 
-        mc.thePlayer.sendChatMessage(msg);
+        mc.player.sendChatMessage(msg);
     }
 
     public void farewell(String user)
@@ -244,8 +209,8 @@ public class ModuleGreet extends ModuleBase {
                 .replaceAll("\\{msg\\}", goodbyes.get(i))
                 .replaceAll("\\{.\\}", period);
 
-        mc.thePlayer.sendChatMessage(msg);
+        mc.player.sendChatMessage(msg);
     }
 
-
+*/
 }

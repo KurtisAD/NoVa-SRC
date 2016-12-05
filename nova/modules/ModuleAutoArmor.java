@@ -7,7 +7,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import nova.Command;
-import nova.core.Util;
+import nova.core.RegisterArgument;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -18,30 +18,17 @@ public class ModuleAutoArmor extends ModuleBase{
     private boolean shields;
     private final String[] armorName = {"MAINHAND", "BOOTS", "LEGGINGS", "CHESTPLATE", "HELMET", "OFFHAND"};
 
-    public ModuleAutoArmor(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleAutoArmor(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         aliases.add("aa");
         this.command = new Command(Nova, this, aliases, "Equips armor if an armor slot is available and armor is found. From hotbar to top left to bottom right. Tells you when a piece is replaced.");
-        this.command.registerArg("shield",this.getClass().getMethod("toggleShield"),"Equips shield if offhand slot is available and is found.");
 
         shields = false;
-
-        loadModule();
     }
 
-    @Override
-    public void load(){
-        super.load();
-        shields = Util.getGson().fromJson(json.get("shields"), boolean.class);
-    }
 
-    @Override
-    public void saveModule(){
-        json.add("shields", Util.getGson().toJsonTree(shields));
-        super.saveModule();
-    }
-
+    @RegisterArgument(name = "shield", description = "Equips shield if offhand slot is available and is found.")
     public void toggleShield(){
         this.shields = !this.shields;
     }
@@ -51,10 +38,10 @@ public class ModuleAutoArmor extends ModuleBase{
         if(this.isEnabled)
         {
             // 3 is head, 2 is chest, 1 is leg, 0 is boot
-
+            // TODO: iterate through the List instead of pass to array
             ItemStack inv[];
-            ItemStack armor[] = mc.thePlayer.inventory.armorInventory;
-            ItemStack offhand[] = mc.thePlayer.inventory.offHandInventory;
+            ItemStack armor[] = (ItemStack[]) mc.player.inventory.armorInventory.toArray();
+            ItemStack offhand[] = (ItemStack[]) mc.player.inventory.offHandInventory.toArray();
 
             int armorIndex, inventoryIndex;
 
@@ -63,7 +50,7 @@ public class ModuleAutoArmor extends ModuleBase{
                 // if slot is missing an item
                 if(armorIndex < armor.length ? armor[armorIndex] == null : offhand[0] == null) {
 
-                    inv = mc.thePlayer.inventory.mainInventory;
+                    inv = (ItemStack[]) mc.player.inventory.mainInventory.toArray();
 
                     // looping through inventory
                     for(inventoryIndex = 0; inventoryIndex < inv.length; inventoryIndex++) {
@@ -113,7 +100,7 @@ public class ModuleAutoArmor extends ModuleBase{
 
     public void replace(EntityEquipmentSlot type, int inventoryIndex){
         Nova.notificationMessage("REPLACED " + this.getArmorName(type.getSlotIndex()));
-        mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.QUICK_MOVE, mc.thePlayer);
+        mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.QUICK_MOVE, mc.player);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class ModulePacketLook extends ModuleBase {
     float yaw, pitch;
 
 
-    public ModulePacketLook(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModulePacketLook(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         this.isToggleable = false;

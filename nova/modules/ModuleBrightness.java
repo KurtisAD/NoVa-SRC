@@ -2,6 +2,7 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import nova.Command;
+import nova.core.RegisterArgument;
 
 /**
  * Created by Skeleton Man on 7/19/2016.
@@ -10,7 +11,7 @@ public class ModuleBrightness extends ModuleBase{
     float brightness;
     float defaultBrightness;
 
-    public ModuleBrightness(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleBrightness(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         this.brightness = 10024F;
@@ -20,7 +21,6 @@ public class ModuleBrightness extends ModuleBase{
         aliases.add("fullbright");
 
         this.command = new Command(Nova, this, aliases, "Changes brightness");
-        this.command.registerArg("set", this.getClass().getMethod("setBrightness", float.class), "how bright");
         this.defaultArg = "set";
     }
 
@@ -39,6 +39,7 @@ public class ModuleBrightness extends ModuleBase{
         this.isEnabled = false;
     }
 
+    @RegisterArgument(name = "set", description = "how bright")
     public void setBrightness(float howBright){
         this.brightness = howBright;
     }

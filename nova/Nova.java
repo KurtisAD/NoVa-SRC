@@ -2,8 +2,11 @@ package nova;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
-import nova.modules.*;
 import nova.core.Util;
+import nova.modules.ModuleBase;
+import nova.modules.ModuleFly;
+import nova.modules.ModuleFreecam;
+import nova.modules.ModuleGui;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,9 +16,11 @@ import java.util.Map;
 /**
  * Created by Skeleton Man on 6/18/2016.
  */
+
+// Implement in minecraft
 public class Nova {
     // TODO: implement commands using annotations
-    // TODO: implement enabled event
+    // TODO: implement enabled event (What did I mean by this shit shit shit)
 
     public Minecraft mc;
     public Events events;
@@ -26,7 +31,7 @@ public class Nova {
     public final String delimeter;
 
 
-    public static final String Version = "NoVa 10.2.a1 Optifine C2";
+    public static final String Version = "NoVa 11.a1 Optifine B2";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -49,8 +54,8 @@ public class Nova {
         //Add Modules here
         //Format:            this.modules.add(new ModuleBase(this, mc));
 
+/*
 
-        try{
             this.modules.add(new ModuleAntiAfk(this, mc));
             this.modules.add(new ModuleAutoArmor(this, mc));
             this.modules.add(new ModuleAutoEat(this, mc));
@@ -65,8 +70,10 @@ public class Nova {
             this.modules.add(new ModuleEncryption(this, mc));
             this.modules.add(new ModuleESP(this, mc));
             this.modules.add(new ModuleFakeCoord(this, mc));
+            */
             this.modules.add(new ModuleFly(this, mc));
             this.modules.add(new ModuleFreecam(this, mc));
+            /*
             this.modules.add(new ModuleFriends(this, mc));
             this.modules.add(new ModuleGlide(this, mc));
             this.modules.add(new ModuleGui(this, mc));
@@ -81,19 +88,19 @@ public class Nova {
             this.modules.add(new ModuleSprint(this, mc));
             this.modules.add(new ModuleTextwidth(this, mc));
             this.modules.add(new ModuleYaw(this, mc));
+            */
 
 
 
-        } catch (NoSuchMethodException e){
-            e.printStackTrace();
-        }
-        //End of Modules
+
 
 
         for(ModuleBase m : modules)
         {
             moduleCache.put(m.getName().toLowerCase(), m);
             moduleNameCache.put(m.getClass().getSimpleName(), m.getName().toLowerCase());
+
+            m.loadModule();
         }
 
         events = new Events(this);

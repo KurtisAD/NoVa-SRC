@@ -22,7 +22,8 @@ public class ModuleAntiAfk extends ModuleBase{
     private Long currentMS;
     private Long lastMs;
 
-    public ModuleAntiAfk(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleAntiAfk(nova.Nova Nova, Minecraft mc) {
+        // TODO: change code to implement yaw module
         super(Nova, mc);
         aliases.add("afk");
         aliases.add("aafk");
@@ -30,8 +31,6 @@ public class ModuleAntiAfk extends ModuleBase{
 
         currentMS = System.currentTimeMillis();
         lastMs = currentMS;
-
-        loadModule();
     }
 
     @Override
@@ -39,7 +38,7 @@ public class ModuleAntiAfk extends ModuleBase{
     {
         try
         {
-            block = new BlockPos(mc.thePlayer);
+            block = new BlockPos(mc.player);
         }catch(Exception e)
         {
             e.printStackTrace();
@@ -78,24 +77,24 @@ public class ModuleAntiAfk extends ModuleBase{
     private static void faceBlockClientHorizontally(BlockPos blockPos)
     {
         double diffX =
-                blockPos.getX() + 0.5 - Minecraft.getMinecraft().thePlayer.posX;
+                blockPos.getX() + 0.5 - Minecraft.getMinecraft().player.posX;
         double diffZ =
-                blockPos.getZ() + 0.5 - Minecraft.getMinecraft().thePlayer.posZ;
+                blockPos.getZ() + 0.5 - Minecraft.getMinecraft().player.posZ;
         float yaw =
                 (float)(Math.atan2(diffZ, diffX) * 180.0D / Math.PI) - 90.0F;
-        Minecraft.getMinecraft().thePlayer.rotationYaw =
-                Minecraft.getMinecraft().thePlayer.rotationYaw
+        Minecraft.getMinecraft().player.rotationYaw =
+                Minecraft.getMinecraft().player.rotationYaw
                         + MathHelper.wrapDegrees(yaw
-                        - Minecraft.getMinecraft().thePlayer.rotationYaw);
+                        - Minecraft.getMinecraft().player.rotationYaw);
     }
 
     private static float getHorizontalPlayerBlockDistance(BlockPos blockPos)
     {
         float xDiff =
-                (float)(Minecraft.getMinecraft().thePlayer.posX - blockPos.getX());
+                (float) (Minecraft.getMinecraft().player.posX - blockPos.getX());
         float zDiff =
-                (float)(Minecraft.getMinecraft().thePlayer.posZ - blockPos.getZ());
-        return MathHelper.sqrt_float((xDiff - 0.5F) * (xDiff - 0.5F)
+                (float) (Minecraft.getMinecraft().player.posZ - blockPos.getZ());
+        return MathHelper.sqrt((xDiff - 0.5F) * (xDiff - 0.5F)
                 + (zDiff - 0.5F) * (zDiff - 0.5F));
     }
 }

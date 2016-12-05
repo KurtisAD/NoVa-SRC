@@ -37,7 +37,7 @@ public class GuiDisconnectedOverride extends GuiDisconnected {
         }
         else if ((entry instanceof ServerListEntryLanDetected))
         {
-            LanServerInfo lanServer = ((ServerListEntryLanDetected)entry).func_189995_a();
+            LanServerInfo lanServer = ((ServerListEntryLanDetected) entry).getServerData();
 
             lastServer = new ServerListEntryNormal(guiMultiplayer, new ServerData("LAN-Server", lanServer.getServerIpPort(), true));
         }

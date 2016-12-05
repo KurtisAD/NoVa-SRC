@@ -12,14 +12,12 @@ import nova.events.EventHandler;
  */
 public class ModuleTextwidth extends ModuleBase{
 
-    public ModuleTextwidth(nova.Nova Nova, Minecraft mc) throws NoSuchMethodException {
+    public ModuleTextwidth(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         aliases.add("width");
         this.name = "TextWidth";
         this.command = new Command(Nova, this, aliases, "Converts chats to full-width unicode");
-
-        loadModule();
     }
 
 
@@ -31,7 +29,7 @@ public class ModuleTextwidth extends ModuleBase{
         {
             String message = "";
             if(e.getMessage().startsWith("%") ||
-                    e.getMessage().startsWith(Util.hash(mc.thePlayer.getDisplayName().getUnformattedText()))){
+                    e.getMessage().startsWith(Util.hash(mc.player.getDisplayName().getUnformattedText()))) {
                 return true;
             }
             else if(e.getMessage().startsWith(">"))
@@ -56,7 +54,7 @@ public class ModuleTextwidth extends ModuleBase{
             else
                 message = Util.toFull(e.getMessage());
 
-            mc.thePlayer.connection.netManager.sendPacket(new CPacketChatMessage(message));
+            mc.player.connection.netManager.sendPacket(new CPacketChatMessage(message));
             return false;
         }
         else
