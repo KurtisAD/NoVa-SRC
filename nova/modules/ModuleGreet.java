@@ -3,6 +3,8 @@ package nova.modules;
 /**
  * Created by Skeleton Man on 7/21/2016.
  */
+
+// TODO: pretty much rewrite this entire class
 public class ModuleGreet /*extends ModuleBase*/ {
     /*
     Random rand;

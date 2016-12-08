@@ -3,10 +3,7 @@ package nova;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import nova.core.Util;
-import nova.modules.ModuleBase;
-import nova.modules.ModuleFly;
-import nova.modules.ModuleFreecam;
-import nova.modules.ModuleGui;
+import nova.modules.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,8 +16,10 @@ import java.util.Map;
 
 // Implement in minecraft
 public class Nova {
-    // TODO: implement commands using annotations
-    // TODO: implement enabled event (What did I mean by this shit shit shit)
+    // TODO: implement enabled event (What did I mean by this shit shit shit) (I think I meant adding an event type that checks if module is enabled? Like Pre and Post?)
+    // TODO: organize core so that it has some consistency
+    // TODO: consider adding modules via reflection
+    // TODO: Document more and more
 
     public Minecraft mc;
     public Events events;
@@ -31,7 +30,7 @@ public class Nova {
     public final String delimeter;
 
 
-    public static final String Version = "NoVa 11.a1 Optifine B2";
+    public static final String Version = "NoVa 11.a2 Optifine B2";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -54,41 +53,39 @@ public class Nova {
         //Add Modules here
         //Format:            this.modules.add(new ModuleBase(this, mc));
 
-/*
 
-            this.modules.add(new ModuleAntiAfk(this, mc));
-            this.modules.add(new ModuleAutoArmor(this, mc));
-            this.modules.add(new ModuleAutoEat(this, mc));
-            this.modules.add(new ModuleAutoFish(this, mc));
-            this.modules.add(new ModuleAutoMine(this, mc));
-            this.modules.add(new ModuleAutoRespawn(this, mc));
-            this.modules.add(new ModuleAutotool(this, mc));
-            this.modules.add(new ModuleAutowalk(this, mc));
-            this.modules.add(new ModuleBindEditor(this, mc));
-            this.modules.add(new ModuleBlink(this, mc));
-            this.modules.add(new ModuleBrightness(this, mc));
-            this.modules.add(new ModuleEncryption(this, mc));
-            this.modules.add(new ModuleESP(this, mc));
-            this.modules.add(new ModuleFakeCoord(this, mc));
-            */
-            this.modules.add(new ModuleFly(this, mc));
-            this.modules.add(new ModuleFreecam(this, mc));
-            /*
-            this.modules.add(new ModuleFriends(this, mc));
-            this.modules.add(new ModuleGlide(this, mc));
-            this.modules.add(new ModuleGui(this, mc));
-            this.modules.add(new ModuleHelp(this, mc));
-            this.modules.add(new ModuleHorseRide(this, mc));
-            this.modules.add(new ModuleImpersonate(this, mc));
-            this.modules.add(new ModuleInfo(this, mc));
-            this.modules.add(new ModuleIntervalThrow(this, mc));
-            //this.modules.add(new ModuleMarkers(this, mc));
-            this.modules.add(new ModuleNofall(this, mc));
-            this.modules.add(new ModuleSay(this, mc));
-            this.modules.add(new ModuleSprint(this, mc));
-            this.modules.add(new ModuleTextwidth(this, mc));
-            this.modules.add(new ModuleYaw(this, mc));
-            */
+        //this.modules.add(new ModuleAntiAfk(this, mc));
+        //this.modules.add(new ModuleAutoArmor(this, mc));
+        this.modules.add(new ModuleAutoEat(this, mc));
+        //this.modules.add(new ModuleAutoFish(this, mc));
+        //this.modules.add(new ModuleAutoMine(this, mc));
+        //this.modules.add(new ModuleAutoRespawn(this, mc));
+        //this.modules.add(new ModuleAutotool(this, mc));
+        this.modules.add(new ModuleAutowalk(this, mc));
+        this.modules.add(new ModuleBindEditor(this, mc));
+        //this.modules.add(new ModuleBlink(this, mc));
+        //this.modules.add(new ModuleBrightness(this, mc));
+        this.modules.add(new ModuleCameraClip(this, mc));
+        //this.modules.add(new ModuleEncryption(this, mc));
+        //this.modules.add(new ModuleESP(this, mc));
+        //this.modules.add(new ModuleFakeCoord(this, mc));
+        this.modules.add(new ModuleFly(this, mc));
+        this.modules.add(new ModuleFreecam(this, mc));
+        //this.modules.add(new ModuleFriends(this, mc));
+        this.modules.add(new ModuleGlide(this, mc));
+        this.modules.add(new ModuleGui(this, mc));
+        this.modules.add(new ModuleHelp(this, mc));
+        //this.modules.add(new ModuleHorseRide(this, mc));
+        //this.modules.add(new ModuleImpersonate(this, mc));
+        this.modules.add(new ModuleInfo(this, mc));
+        //this.modules.add(new ModuleIntervalThrow(this, mc));
+        //this.modules.add(new ModuleMarkers(this, mc));
+        //this.modules.add(new ModuleNofall(this, mc));
+        //this.modules.add(new ModuleSay(this, mc));
+        //this.modules.add(new ModuleSprint(this, mc));
+        //this.modules.add(new ModuleTextwidth(this, mc));
+        this.modules.add(new ModuleYaw(this, mc));
+
 
 
 

@@ -8,6 +8,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import nova.Command;
 import nova.Nova;
@@ -31,6 +32,8 @@ import java.util.Iterator;
  * Created by Skeleton Man on 6/22/2016.
  */
 public class ModuleGui extends ModuleBase{
+    // TODO: Add tickrate to render; implement settings and help
+
 
     private int width, height;
     private ArrayList<HashMap<String, Integer>> note;
@@ -66,7 +69,6 @@ public class ModuleGui extends ModuleBase{
         this.infoFormat = "[{x}, {z}] {v}km/h";
         this.potionInSeconds = true;
         this.showArmor = true;
-
     }
 
 
@@ -134,13 +136,16 @@ public class ModuleGui extends ModuleBase{
 
     private void drawStats()
     {
-        ItemStack armor[] = (ItemStack[]) mc.player.inventory.armorInventory.toArray();
+        // This should be fine to access by pointer since we're not editing anything
+        NonNullList<ItemStack> armor = mc.player.inventory.armorInventory;
         String helmet, chestplate, leggings, boots = "";
 
-        helmet = "h: " + (armor[3] != null ? Util.formatArmorDurability( ( ((double)armor[3].getMaxDamage() - (double)armor[3].getItemDamage() ) / (double)armor[3].getMaxDamage()) * 100.0D ) + "%" : "none");
-        chestplate = "c: " + (armor[2] != null ? Util.formatArmorDurability((((double)armor[2].getMaxDamage() - (double)armor[2].getItemDamage()) / (double)armor[2].getMaxDamage()) * 100.0D) + "%" : "none");
-        leggings = "l: " + (armor[1] != null ? Util.formatArmorDurability((((double)armor[1].getMaxDamage() - (double)armor[1].getItemDamage()) / (double)armor[1].getMaxDamage()) * 100.0D) + "%" : "none");
-        boots = "b: " + (armor[0] != null ? Util.formatArmorDurability( (((double)armor[0].getMaxDamage() - (double)armor[0].getItemDamage()) / (double)armor[0].getMaxDamage()) * 100.0D)  + "%" : "none");
+        // Maybe have to change to .equals() ?
+        // TODO: maybe make this a method?
+        helmet = "h: " + (armor.get(3) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(3).getMaxDamage() - (double) armor.get(3).getItemDamage()) / (double) armor.get(3).getMaxDamage()) * 100.0D) + "%" : "none");
+        chestplate = "c: " + (armor.get(2) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(2).getMaxDamage() - (double) armor.get(2).getItemDamage()) / (double) armor.get(2).getMaxDamage()) * 100.0D) + "%" : "none");
+        leggings = "l: " + (armor.get(1) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(1).getMaxDamage() - (double) armor.get(1).getItemDamage()) / (double) armor.get(1).getMaxDamage()) * 100.0D) + "%" : "none");
+        boots = "b: " + (armor.get(0) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(0).getMaxDamage() - (double) armor.get(0).getItemDamage()) / (double) armor.get(0).getMaxDamage()) * 100.0D) + "%" : "none");
 
         Iterator potions = mc.player.getActivePotionEffects().iterator();
         PotionEffect potionHolder;

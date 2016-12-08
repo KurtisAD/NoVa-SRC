@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Util;
@@ -83,13 +84,12 @@ public class ModuleInfo extends ModuleBase{
         {
             String durability = "";
 
-            ItemStack[] armor = (ItemStack[]) p.inventory.armorInventory.toArray();
-            ArrayUtils.reverse(armor);
+            NonNullList<ItemStack> armor = p.inventory.armorInventory;
             boolean hasArmor = false;
 
             for(ItemStack i : armor)
             {
-                durability += (i != null ? Util.formatArmorDurability( ( ((double)i.getMaxDamage() - (double)i.getItemDamage() ) / (double)i.getMaxDamage()) * 100.0D ): "---") + "/";
+                durability += (i != ItemStack.EMPTY ? Util.formatArmorDurability((((double) i.getMaxDamage() - (double) i.getItemDamage()) / (double) i.getMaxDamage()) * 100.0D) : "---") + "/";
 
                 if(i != null)
                     hasArmor = true;

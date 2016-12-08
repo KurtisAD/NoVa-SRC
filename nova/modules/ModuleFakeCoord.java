@@ -12,6 +12,7 @@ public class ModuleFakeCoord extends ModuleBase {
 
     // DO NOT USE THIS, DOES NOT PROTECT AGAINST COORDINATE EXPLOITS
     // NEEDS FIXING
+    // useless due to bedrock bruteforcer/ other stuff?
     static boolean isSpoofing;
 
     static int xOffset;

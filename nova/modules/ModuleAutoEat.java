@@ -12,6 +12,7 @@ import nova.events.PlayerTickEvent;
  * Created by Skeleton Man on 7/17/2016.
  */
 public class ModuleAutoEat extends ModuleBase {
+    // TODO: implement my own way instead of using wrust code
     private int oldSlot;
     private int bestSlot;
 
@@ -22,7 +23,9 @@ public class ModuleAutoEat extends ModuleBase {
 
     @EventHandler
     public void onUpdate(PlayerTickEvent e){
-        if(isEnabled) {
+
+        // TODO: also implement for spectator or add less jank code
+        if (isEnabled && !mc.player.isCreative()) {
             if (isEating()) {
                 ItemStack item = mc.player.inventory.getStackInSlot(bestSlot);
 

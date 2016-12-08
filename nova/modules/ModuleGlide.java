@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
+import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -22,7 +23,7 @@ public class ModuleGlide extends ModuleBase {
 
     }
 
-
+    @EventHandler
     public void onTick(PlayerTickEvent e)
     {
         if(this.isEnabled) {
