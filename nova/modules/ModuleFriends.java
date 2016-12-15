@@ -3,6 +3,7 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import nova.Command;
 import nova.core.RegisterArgument;
+import nova.core.Saveable;
 
 import java.util.ArrayList;
 
@@ -10,7 +11,8 @@ import java.util.ArrayList;
  * Created by Skeleton Man on 7/19/2016.
  */
 public class ModuleFriends extends ModuleBase{
-    ArrayList<String> friends;
+    @Saveable
+    public ArrayList<String> friends;
 
 
     public ModuleFriends(nova.Nova Nova, Minecraft mc) {

@@ -37,6 +37,7 @@ public class ModuleBase implements IModule {
 
 
     // TODO: fix module shit so it loads on declaration, maybe a check and set function for nulls?
+    // TODO: a lot of modules have public fields, need to privatize them
     public ModuleBase(Nova Nova, Minecraft mc) {
         this.Nova = Nova;
         this.isEnabled = false;

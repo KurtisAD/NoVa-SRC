@@ -5,6 +5,7 @@ import net.minecraft.util.ChatAllowedCharacters;
 import nova.Command;
 import nova.core.Base64;
 import nova.core.RegisterArgument;
+import nova.core.Saveable;
 import nova.core.Util;
 import nova.events.ChatRecievedEvent;
 import nova.events.ChatSentEvent;
@@ -32,7 +33,9 @@ import java.util.Queue;
  */
 public class ModuleEncryption extends ModuleBase
 {
+    // TODO: rewrite all of this, make encryption method private to git
 
+    @Saveable
     String delimeter;
 
     public HashMap a;
@@ -296,7 +299,7 @@ public class ModuleEncryption extends ModuleBase
             try
             {
                 String str3 = DecryptData(DecodeBase64(str1));
-                str3 = "\2473" + username + ": \247r" + str3 + "\247r";
+                str3 = "\2475" + username + ": \247r" + str3 + "\247r";
                 a.put(username, "");
 
                 Nova.message(str3);

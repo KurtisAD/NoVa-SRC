@@ -9,7 +9,6 @@ import nova.events.PlayerTickEvent;
 
 public class ModuleYaw extends ModuleBase 
 {
-
 	public float yaw;
 
 	public ModuleYaw(Nova Nova, Minecraft mc) {

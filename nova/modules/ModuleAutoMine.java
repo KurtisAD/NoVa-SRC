@@ -3,6 +3,7 @@ package nova.modules;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import nova.Command;
+import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -24,10 +25,10 @@ public class ModuleAutoMine extends ModuleBase {
         mc.gameSettings.keyBindAttack.pressed = false;
     }
 
-    public void onPlayerTick(PlayerTickEvent e)
-    {
+    @EventHandler
+    public void onPlayerTick(PlayerTickEvent e) {
         if (isEnabled){
-            if ((mc.objectMouseOver == null) || (mc.objectMouseOver.getBlockPos() == null)) {
+            if ((mc.objectMouseOver == null)) {
                 return;
             }
             if (Block.getIdFromBlock(mc.world.getBlockState(mc.objectMouseOver.getBlockPos()).getBlock()) != 0) {

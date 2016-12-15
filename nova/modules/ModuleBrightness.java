@@ -3,18 +3,22 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import nova.Command;
 import nova.core.RegisterArgument;
+import nova.core.Saveable;
 
 /**
  * Created by Skeleton Man on 7/19/2016.
  */
 public class ModuleBrightness extends ModuleBase{
+    // TODO: review metadata check
+
+    @Saveable
     float brightness;
     float defaultBrightness;
 
     public ModuleBrightness(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.brightness = 10024F;
+        this.brightness = 1024F;
         this.defaultBrightness = 0F;
 
         aliases.add("bright");

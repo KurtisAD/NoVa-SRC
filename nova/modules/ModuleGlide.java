@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
+import nova.core.Saveable;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -11,6 +12,7 @@ import nova.events.PlayerTickEvent;
  * Created by Skeleton Man on 7/21/2016.
  */
 public class ModuleGlide extends ModuleBase {
+    @Saveable
     double speed;
 
     public ModuleGlide(Nova Nova, Minecraft mc) {

@@ -2,12 +2,14 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import nova.Command;
 import nova.core.RegisterArgument;
+import nova.core.Saveable;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -15,7 +17,13 @@ import nova.events.PlayerTickEvent;
  * Created by Skeleton Man on 7/17/2016.
  */
 public class ModuleAutoArmor extends ModuleBase{
-    private boolean shields;
+    // TODO: fix everything using NonNullList, implement auto-totem, decide what to do with shields
+    // TODO: rewrite all this shit because I just fixed it without knowing what I was doing
+
+
+    @Saveable
+    public boolean totem;
+
     private final String[] armorName = {"MAINHAND", "BOOTS", "LEGGINGS", "CHESTPLATE", "HELMET", "OFFHAND"};
 
     public ModuleAutoArmor(nova.Nova Nova, Minecraft mc) {
@@ -24,13 +32,13 @@ public class ModuleAutoArmor extends ModuleBase{
         aliases.add("aa");
         this.command = new Command(Nova, this, aliases, "Equips armor if an armor slot is available and armor is found. From hotbar to top left to bottom right. Tells you when a piece is replaced.");
 
-        shields = false;
+        totem = false;
     }
 
 
-    @RegisterArgument(name = "shield", description = "Equips shield if offhand slot is available and is found.")
-    public void toggleShield(){
-        this.shields = !this.shields;
+    @RegisterArgument(name = "totem", description = "Equips totem if offhand slot is available and is found.")
+    public void toggleTotem() {
+        this.totem = !this.totem;
     }
 
     @EventHandler
@@ -39,31 +47,31 @@ public class ModuleAutoArmor extends ModuleBase{
         {
             // 3 is head, 2 is chest, 1 is leg, 0 is boot
             // TODO: iterate through the List instead of pass to array
-            ItemStack inv[];
-            ItemStack armor[] = (ItemStack[]) mc.player.inventory.armorInventory.toArray();
-            ItemStack offhand[] = (ItemStack[]) mc.player.inventory.offHandInventory.toArray();
+            NonNullList<ItemStack> inv;
+            NonNullList<ItemStack> armor = mc.player.inventory.armorInventory;
+            NonNullList<ItemStack> offhand = mc.player.inventory.offHandInventory;
 
             int armorIndex, inventoryIndex;
 
-            for(armorIndex = 0; armorIndex < armor.length + 1; armorIndex++) {
+            for (armorIndex = 0; armorIndex < armor.size() + 1; armorIndex++) {
 
                 // if slot is missing an item
-                if(armorIndex < armor.length ? armor[armorIndex] == null : offhand[0] == null) {
+                if (armorIndex < armor.size() ? armor.get(armorIndex) == ItemStack.EMPTY : offhand.get(0) == ItemStack.EMPTY) {
 
-                    inv = (ItemStack[]) mc.player.inventory.mainInventory.toArray();
+                    inv = mc.player.inventory.mainInventory;
 
                     // looping through inventory
-                    for(inventoryIndex = 0; inventoryIndex < inv.length; inventoryIndex++) {
+                    for (inventoryIndex = 0; inventoryIndex < inv.size(); inventoryIndex++) {
 
 
                         EntityEquipmentSlot type;
 
                         // if an item exists
-                        if(inv[inventoryIndex] != null) {
+                        if (inv.get(inventoryIndex) != ItemStack.EMPTY) {
 
                             // and if the item is armor
-                            if (inv[inventoryIndex].getItem() instanceof ItemArmor){
-                                type = ((ItemArmor)inv[inventoryIndex].getItem()).armorType;
+                            if (inv.get(inventoryIndex).getItem() instanceof ItemArmor) {
+                                type = ((ItemArmor) inv.get(inventoryIndex).getItem()).armorType;
 
                                 // and it's the type of armor needed
                                 if(     (type == EntityEquipmentSlot.HEAD && armorIndex == 3) ||
@@ -76,10 +84,11 @@ public class ModuleAutoArmor extends ModuleBase{
                                 }
                             }
                             // else if the item is a shield
-                            else if (inv[inventoryIndex].getItem() instanceof ItemShield && armorIndex == 4){
+
+                            else if (inv.get(inventoryIndex).getItem().getUnlocalizedName().equals("item.totem") && armorIndex == 4) {
                                 // and we're replacing offhand items
-                                if (shields){
-                                    replace(EntityEquipmentSlot.OFFHAND, inventoryIndex);
+                                if (totem) {
+                                    replaceTotem(inventoryIndex);
                                     break;
 
                                 }
@@ -99,12 +108,23 @@ public class ModuleAutoArmor extends ModuleBase{
     }
 
     public void replace(EntityEquipmentSlot type, int inventoryIndex){
-        Nova.notificationMessage("REPLACED " + this.getArmorName(type.getSlotIndex()));
-        mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.QUICK_MOVE, mc.player);
+        if (mc.player.openContainer instanceof ContainerPlayer) {
+            Nova.notificationMessage("REPLACED " + this.getArmorName(type.getSlotIndex()));
+            mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.QUICK_MOVE, mc.player);
+
+        }
+    }
+
+    public void replaceTotem(int inventoryIndex) {
+        if (mc.player.openContainer instanceof ContainerPlayer) {
+            Nova.notificationMessage("REPLACED TOTEM");
+            mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.PICKUP, mc.player);
+            mc.playerController.windowClick(0, 45, 0, ClickType.PICKUP, mc.player);
+        }
     }
 
     @Override
     public String getMetadata(){
-        return this.shields ? "(Shields)" : "";
+        return this.totem ? "(Totems)" : "";
     }
 }

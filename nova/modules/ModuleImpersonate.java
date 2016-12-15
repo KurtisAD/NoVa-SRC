@@ -10,6 +10,9 @@ import nova.core.Util;
  * Created by Skeleton Man on 7/22/2016.
  */
 public class ModuleImpersonate extends ModuleBase {
+    // Pretty sure this is fully broken, needs a new workaround
+
+
     public ModuleImpersonate(nova.Nova Nova, Minecraft mc) {
         super(Nova,mc);
 

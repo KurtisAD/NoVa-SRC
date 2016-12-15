@@ -8,6 +8,8 @@ import nova.events.PlayerTickEvent;
 /**
  * Created by Skeleton Man on 7/21/2016.
  */
+
+@Deprecated
 public class ModulePacketLook extends ModuleBase {
     Long expireTime;
 

@@ -148,7 +148,7 @@ public class Util {
     }
 
     public static String getItemNameAndEnchantments(ItemStack is) {
-        if(is != null) {
+        if (is != ItemStack.EMPTY) {
             if(is.isItemEnchanted()) {
                 NBTTagList e = is.getEnchantmentTagList();
                 String enchants = "";
