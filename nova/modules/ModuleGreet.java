@@ -1,26 +1,49 @@
 package nova.modules;
 
+import net.minecraft.client.Minecraft;
+import nova.Command;
+import nova.core.RegisterArgument;
+import nova.core.Saveable;
+import nova.core.Util;
+import nova.events.EventHandler;
+import nova.events.PlayerLogOffEvent;
+import nova.events.PlayerLogOnEvent;
+
+import java.util.*;
+
 /**
  * Created by Skeleton Man on 7/21/2016.
  */
 
 // TODO: pretty much rewrite this entire class
-public class ModuleGreet /*extends ModuleBase*/ {
-    /*
+public class ModuleGreet extends ModuleBase {
+
     Random rand;
-
-    boolean onJoin;
-    boolean onLeave;
-    ArrayList<String> ignoredPlayers;
-
     String defaultGreetings[] = {"Hey", "Welcome", "Hello", "Hi", "Greetings", "Salutations", "Good to see you", "{time}"};
     String defaultGoodbyes[] = {"Later", "So long", "See you later", "Good bye", "Bye", "Farewell"};
 
-    ArrayList<String> greetings;
-    ArrayList<String> goodbyes;
 
-    String greetingFormat;
-    String goodbyeFormat;
+    @Saveable
+    public boolean onJoin;
+
+    @Saveable
+    public boolean onLeave;
+
+    @Saveable
+    public ArrayList<String> ignoredPlayers;
+
+
+    @Saveable
+    public ArrayList<String> greetings;
+
+    @Saveable
+    public ArrayList<String> goodbyes;
+
+    @Saveable
+    public String greetingFormat;
+
+    @Saveable
+    public String goodbyeFormat;
 
 
 
@@ -28,15 +51,6 @@ public class ModuleGreet /*extends ModuleBase*/ {
         super(Nova, mc);
 
         this.command = new Command(Nova, this, aliases, "Greets");
-        this.command.registerArg("unignoreall", this.getClass().getMethod("unignoreall"), "Removes all ignored players");
-        this.command.registerArg("greetadd", this.getClass().getMethod("greetadd", String.class), "Add a welcome");
-        this.command.registerArg("greetdel", this.getClass().getMethod("greetdel", String.class), "Delete a welcome");
-        this.command.registerArg("byeadd", this.getClass().getMethod("byeadd", String.class), "Add a good bye");
-        this.command.registerArg("byedel", this.getClass().getMethod("byedel",String.class), "Delete a good bye");
-        this.command.registerArg("greetlist", this.getClass().getMethod("greetlist"), "Lists greetings");
-        this.command.registerArg("byelist", this.getClass().getMethod("byelist"), "Lists goodbyes");
-        this.command.registerArg("byeformat", this.getClass().getMethod("byeformat", String.class), "Change greeting format; {player} {msg} {.}");
-        this.command.registerArg("greetformat", this.getClass().getMethod("greetformat", String.class), "Change goodbye format; {player} {msg} {.}");
 
         this.ignoredPlayers = new ArrayList<String>();
         this.onJoin = true;
@@ -103,16 +117,19 @@ public class ModuleGreet /*extends ModuleBase*/ {
         this.Nova.confirmMessage(ret);
     }
 
+    @RegisterArgument(name = "unignoreall", description = "Removes all ignored players")
     public void unignoreall(){
         this.ignoredPlayers.clear();
         this.Nova.confirmMessage("Deleted all players from ignore list");
     }
 
+    @RegisterArgument(name = "greetadd", description = "Add a welcome")
     public void greetadd(String greet){
         this.greetings.add(greet);
         this.Nova.confirmMessage("Added greeting");
     }
 
+    @RegisterArgument(name = "greetdel", description = "Delete a welcome")
     public void greetdel(String greet){
         if(this.greetings.contains(greet)) {
             this.greetings.remove(greet);
@@ -122,11 +139,13 @@ public class ModuleGreet /*extends ModuleBase*/ {
         }
     }
 
+    @RegisterArgument(name = "byeadd", description = "Add a good bye")
     public void byeadd(String bye){
         this.goodbyes.add(bye);
         this.Nova.confirmMessage("Added goodbye");
     }
 
+    @RegisterArgument(name = "byedel", description = "Delete a good bye")
     public void byedel(String bye){
         if(this.goodbyes.contains(bye)) {
             this.goodbyes.remove(bye);
@@ -136,16 +155,23 @@ public class ModuleGreet /*extends ModuleBase*/ {
         }
     }
 
+    @RegisterArgument(name = "greetlist", description = "Lists greetings")
     public void greetlist(){
         this.Nova.message(Util.join(this.greetings, ", "));
     }
+
+    @RegisterArgument(name = "byelist", description = "Lists goodbyes")
     public void byelist(){
         this.Nova.message(Util.join(this.goodbyes, ", "));
     }
+
+    @RegisterArgument(name = "byeformat", description = "Change goodbye format; {player} {msg} {.}")
     public void byeformat(String format){
         this.Nova.confirmMessage("Changed goodbye format");
         this.goodbyeFormat = format;
     }
+
+    @RegisterArgument(name = "greetformat", description = "Change greeting format; {player} {msg} {.}")
     public void greetformat(String format){
         this.Nova.confirmMessage("Changed greeting format");
         this.greetingFormat = format;
@@ -214,5 +240,5 @@ public class ModuleGreet /*extends ModuleBase*/ {
         mc.player.sendChatMessage(msg);
     }
 
-*/
+
 }

@@ -15,6 +15,7 @@ public class ModuleNoKnockback extends ModuleBase {
 
         this.aliases.add("nk");
         this.aliases.add("knock");
+        this.aliases.add("antiknockback");
 
         this.command = new Command(Nova, this, aliases, "Prevents knockback from swords, bows, etc.");
     }
