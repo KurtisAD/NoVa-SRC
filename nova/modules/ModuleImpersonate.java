@@ -10,7 +10,8 @@ import nova.core.Util;
  * Created by Skeleton Man on 7/22/2016.
  */
 public class ModuleImpersonate extends ModuleBase {
-    // Pretty sure this is fully broken, needs a new workaround
+    // This is fully broken, needs a new workaround
+    // TODO: Implement using character width?
 
 
     public ModuleImpersonate(nova.Nova Nova, Minecraft mc) {

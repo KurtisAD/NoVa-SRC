@@ -78,30 +78,21 @@ public class ModuleEncryption extends ModuleBase
 
         try {
             localCipher = Cipher.getInstance("AES/CFB/NoPadding");
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            // TODO Auto-generated catch block
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             e.printStackTrace();
         }
+
         try {
             localCipher.init(2, g, h);
-        } catch (InvalidKeyException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            // TODO Auto-generated catch block
+        } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
+
         byte[] arrayOfByte2 = null;
+
         try {
             arrayOfByte2 = localCipher.doFinal(arrayOfByte1);
-        } catch (IllegalBlockSizeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            // TODO Auto-generated catch block
+        } catch (IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
         }
 
@@ -126,40 +117,27 @@ public class ModuleEncryption extends ModuleBase
 
         try {
             localCipher = Cipher.getInstance("AES/CFB/NoPadding");
-        } catch (NoSuchAlgorithmException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (NoSuchPaddingException e1) {
-            // TODO Auto-generated catch block
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e1) {
             e1.printStackTrace();
         }
+
         try {
             localCipher.init(1, g, h);
-        } catch (InvalidKeyException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            // TODO Auto-generated catch block
+        } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
+
         try {
             localByteArrayOutputStream.write(localCipher.doFinal(arrayOfByte2));
-        } catch (IllegalBlockSizeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        } catch (IllegalBlockSizeException | BadPaddingException | IOException e) {
             e.printStackTrace();
         }
 
         byte[] arrayOfByte3 = localByteArrayOutputStream.toByteArray();
+
         try {
             localByteArrayOutputStream.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return arrayOfByte3;

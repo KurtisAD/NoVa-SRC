@@ -18,9 +18,9 @@ import java.util.Map;
  */
 public class ModuleBindEditor extends ModuleBase{
 
-    @Saveable
     public boolean keys[];
 
+    @Saveable
     public Map<Integer, String> binds;
 
     public ModuleBindEditor(Nova Nova, Minecraft mc) {

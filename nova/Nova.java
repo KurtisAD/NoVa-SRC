@@ -32,7 +32,7 @@ public class Nova {
     public final String delimeter;
 
 
-    public static final String Version = "NoVa 11.a7 Optifine B2";
+    public static final String Version = "NoVa 11.a8 Optifine B2";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -71,6 +71,7 @@ public class Nova {
         this.modules.add(new ModuleCameraClip(this, mc));
         this.modules.add(new ModuleEncryption(this, mc));
         this.modules.add(new ModuleESP(this, mc));
+        this.modules.add(new ModuleExtraElytra(this, mc));
         //this.modules.add(new ModuleFakeCoord(this, mc));
         this.modules.add(new ModuleFly(this, mc));
         this.modules.add(new ModuleFlyBypass(this, mc));
@@ -92,7 +93,7 @@ public class Nova {
         this.modules.add(new ModuleNoslow(this, mc));
         this.modules.add(new ModuleSay(this, mc));
         this.modules.add(new ModuleSprint(this, mc));
-        //this.modules.add(new ModuleTextwidth(this, mc));
+        this.modules.add(new ModuleTextwidth(this, mc));
         this.modules.add(new ModuleTimer(this, mc));
         //this.modules.add(new ModuleTracers(this, mc));
         this.modules.add(new ModuleYaw(this, mc));

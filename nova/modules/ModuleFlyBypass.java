@@ -4,11 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import nova.Command;
+import nova.core.Util;
 import nova.events.EventHandler;
 import nova.events.LivingUpdateEvent;
 import nova.events.PacketReceivedEvent;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by Skeleton Man on 12/17/2016.
@@ -66,32 +65,10 @@ public class ModuleFlyBypass extends ModuleBase {
         if (this.isEnabled) {
             if (event.getPacket() instanceof SPacketPlayerPosLook) {
                 SPacketPlayerPosLook packet = (SPacketPlayerPosLook) event.getPacket();
-                setPrivateValue(SPacketPlayerPosLook.class, packet, mc.player.rotationYaw, "yaw");
-                setPrivateValue(SPacketPlayerPosLook.class, packet, mc.player.rotationPitch, "pitch");
+                Util.setPrivateValue(SPacketPlayerPosLook.class, packet, mc.player.rotationYaw, "yaw");
+                Util.setPrivateValue(SPacketPlayerPosLook.class, packet, mc.player.rotationPitch, "pitch");
             }
         }
     }
 
-    public static <T, E> void setPrivateValue(Class<? super T> classToAccess, T instance, E value, String... fieldNames) {
-        try {
-            findField(classToAccess, fieldNames).set(instance, value);
-        } catch (Exception e) {
-            //throw new UnableToAccessFieldException(fieldNames, e);
-        }
-    }
-
-    public static Field findField(Class<?> clazz, String... fieldNames) {
-        Exception failed = null;
-        for (String fieldName : fieldNames) {
-            try {
-                Field f = clazz.getDeclaredField(fieldName);
-                f.setAccessible(true);
-                return f;
-            } catch (Exception e) {
-                failed = e;
-            }
-        }
-        return null;
-        //throw new UnableToFindFieldException(fieldNames, failed);
-    }
 }
