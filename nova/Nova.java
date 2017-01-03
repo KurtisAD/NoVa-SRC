@@ -32,7 +32,7 @@ public class Nova {
     public final String delimeter;
 
 
-    public static final String Version = "NoVa 11.2.a8 Optifine B5";
+    public static final String Version = "NoVa 11.2.a9 Optifine B5";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
