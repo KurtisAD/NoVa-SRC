@@ -12,6 +12,9 @@ import java.util.ArrayList;
 
 public class Manager
 {
+	// TODO: Make it work like every other gui (maybe? having static doesn't really change anything)
+	// TODO: encrypt saved passwords because fuck plaintext
+
 	public static ArrayList<Alt> altList = new ArrayList<>();
 	public static GuiAltList altScreen = new GuiAltList();
 	public static final int slotHeight = 25;

@@ -36,7 +36,7 @@ public class ModuleBindEditor extends ModuleBase{
 
         keys = new boolean[256];
 
-        binds = new HashMap<Integer, String>();
+        binds = new HashMap<>();
     }
 
 

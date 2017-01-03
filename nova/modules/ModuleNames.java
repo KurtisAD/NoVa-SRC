@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
 import nova.Command;
+import nova.core.Util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,8 +40,12 @@ public class ModuleNames extends ModuleBase {
 
         String json = getSourceFromURL(url);
 
-        parser.parse(json).getAsJsonObject().get("id");
+        // maybe make it return a tuple with the enum
+        String uuid = Util.getGson().fromJson(parser.parse(json).getAsJsonObject().get("id"), String.class);
         // holder
+
+        url = new URL("https://api.mojang.com/user/profiles/" + uuid + "/names");
+
         return null;
     }
 
@@ -63,6 +68,13 @@ public class ModuleNames extends ModuleBase {
         isr.close();
 
         return result;
+    }
+
+    public class nameObject {
+        String name;
+        long changedToAt;
+
+
     }
 
 }

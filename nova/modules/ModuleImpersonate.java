@@ -34,7 +34,7 @@ public class ModuleImpersonate extends ModuleBase {
         p += Util.toFull("(((((((mmmmmmmmmmmmmmmmmmmmmmmmmmmm");
         p += "<" + username + "> " + msg;
 
-        mc.player.connection.netManager.sendPacket(new CPacketChatMessage(p));
+        mc.player.connection.getNetworkManager().sendPacket(new CPacketChatMessage(p));
 
     }
 }

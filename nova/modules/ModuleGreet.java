@@ -29,9 +29,6 @@ public class ModuleGreet extends ModuleBase {
     @Saveable
     public boolean onLeave;
 
-    @Saveable
-    public ArrayList<String> ignoredPlayers;
-
 
     @Saveable
     public ArrayList<String> greetings;
@@ -52,7 +49,6 @@ public class ModuleGreet extends ModuleBase {
 
         this.command = new Command(Nova, this, aliases, "Greets");
 
-        this.ignoredPlayers = new ArrayList<String>();
         this.onJoin = true;
         this.onLeave = true;
         this.greetings = new ArrayList<String>(Arrays.asList(this.defaultGreetings));
@@ -74,53 +70,6 @@ public class ModuleGreet extends ModuleBase {
     @RegisterArgument(name = "leave", description = "Goodbye")
     public void leave(){
         this.onLeave = !onLeave;
-    }
-
-    @RegisterArgument(name = "ignore", description = "Adds a player to the ignore list")
-    public void ignore(String name){
-        String player = name.toLowerCase();
-        if (!this.ignoredPlayers.contains(name)){
-            ignoredPlayers.add(name);
-            this.Nova.confirmMessage("Ignored " + name);
-        } else {
-            this.Nova.errorMessage("As much as you hate " + name + ", you can only ignore him once");
-        }
-    }
-
-    @RegisterArgument(name = "unignore", description = "Removes a player from the ignore list")
-    public void unignore(String name){
-        String player = name.toLowerCase();
-        if(this.ignoredPlayers.contains(player))
-        {
-            this.ignoredPlayers.remove(player);
-            this.Nova.confirmMessage("Unignored " + player);
-        }
-        else
-            this.Nova.errorMessage("You never ignored " + name);
-    }
-
-    @RegisterArgument(name = "ignored", description = "Lists ignored players")
-    public void ignored(String name){
-        if(this.ignoredPlayers.isEmpty())
-        {
-            this.Nova.errorMessage("Nobody ignored");
-            return;
-        }
-
-        String ret = "";
-        for(String s : this.ignoredPlayers)
-        {
-            ret += s + ", ";
-        }
-
-        ret = ret.substring(0, ret.length() - 2);
-        this.Nova.confirmMessage(ret);
-    }
-
-    @RegisterArgument(name = "unignoreall", description = "Removes all ignored players")
-    public void unignoreall(){
-        this.ignoredPlayers.clear();
-        this.Nova.confirmMessage("Deleted all players from ignore list");
     }
 
     @RegisterArgument(name = "greetadd", description = "Add a welcome")
@@ -191,7 +140,7 @@ public class ModuleGreet extends ModuleBase {
 
     public void greeting(String user)
     {
-        if(!(this.isEnabled && this.onJoin && !this.ignoredPlayers.contains(user.toLowerCase())))
+        if (!(this.isEnabled && this.onJoin))
             return;
 
         int i = rand.nextInt(greetings.size());
@@ -227,7 +176,7 @@ public class ModuleGreet extends ModuleBase {
     public void farewell(String user)
     {
 
-        if(!(this.isEnabled && this.onLeave && !this.ignoredPlayers.contains(user.toLowerCase())))
+        if (!(this.isEnabled && this.onLeave))
             return;
 
         int i = rand.nextInt(goodbyes.size());

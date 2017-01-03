@@ -20,7 +20,7 @@ public class Nova {
     // TODO: organize core so that it has some consistency
     // TODO: consider adding modules via reflection
     // TODO: Document more and more
-    // TODO: crash if savable field isn't public as a precaution maybe?
+    // TODO: make annotations throw errors
     // I swear to fuck I add more todo's than I solve
 
     public Minecraft mc;
@@ -32,7 +32,7 @@ public class Nova {
     public final String delimeter;
 
 
-    public static final String Version = "NoVa 11.a8 Optifine B2";
+    public static final String Version = "NoVa 11.2.a8 Optifine B5";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -71,10 +71,9 @@ public class Nova {
         this.modules.add(new ModuleCameraClip(this, mc));
         this.modules.add(new ModuleEncryption(this, mc));
         this.modules.add(new ModuleESP(this, mc));
-        this.modules.add(new ModuleExtraElytra(this, mc));
+        //this.modules.add(new ModuleExtraElytra(this, mc));
         //this.modules.add(new ModuleFakeCoord(this, mc));
         this.modules.add(new ModuleFly(this, mc));
-        this.modules.add(new ModuleFlyBypass(this, mc));
         this.modules.add(new ModuleFreecam(this, mc));
         this.modules.add(new ModuleFriends(this, mc));
         this.modules.add(new ModuleGlide(this, mc));
@@ -91,11 +90,13 @@ public class Nova {
         this.modules.add(new ModuleNofall(this, mc));
         this.modules.add(new ModuleNoKnockback(this, mc));
         this.modules.add(new ModuleNoslow(this, mc));
+        this.modules.add(new ModuleSafewalk(this, mc));
         this.modules.add(new ModuleSay(this, mc));
         this.modules.add(new ModuleSprint(this, mc));
         this.modules.add(new ModuleTextwidth(this, mc));
         this.modules.add(new ModuleTimer(this, mc));
-        //this.modules.add(new ModuleTracers(this, mc));
+        this.modules.add(new ModuleTracers(this, mc));
+        this.modules.add(new ModuleTrajectories(this, mc));
         this.modules.add(new ModuleYaw(this, mc));
 
 
@@ -107,6 +108,7 @@ public class Nova {
             moduleCache.put(m.getName().toLowerCase(), m);
             moduleNameCache.put(m.getClass().getSimpleName(), m.getName().toLowerCase());
 
+            m.loadModule();
         }
 
         events = new Events(this);

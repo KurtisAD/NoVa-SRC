@@ -1,8 +1,8 @@
 package nova;
 
+import nova.events.ChatSentEvent;
 import nova.events.EventHandler;
 import nova.modules.ModuleBase;
-import nova.events.ChatSentEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -80,11 +80,7 @@ public class Events {
             }
 
 
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
 

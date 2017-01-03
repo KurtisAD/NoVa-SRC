@@ -21,6 +21,6 @@ public class ModuleSay extends ModuleBase{
 
     @RegisterArgument(name = "say", description = "The say command")
     public void say(String message){
-        mc.player.connection.netManager.sendPacket(new CPacketChatMessage(message));
+        mc.player.connection.getNetworkManager().sendPacket(new CPacketChatMessage(message));
     }
 }

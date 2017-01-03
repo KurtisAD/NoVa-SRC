@@ -17,7 +17,6 @@ import nova.events.EntityRenderTickEvent;
 import nova.events.EventHandler;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,15 +27,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by Skeleton Man on 7/22/2016.
  */
 public class ModuleMarkers extends ModuleBase {
+
     @Saveable
     public Map<SimpleBlock, Marker> blockDescriptors;
 
     ConcurrentHashMap<Location, SimpleBlock> blocks;
-    ArrayList<ChunkLocation> chunks;
 
-    boolean iterating;
 
     // TODO: rewrite everything, maybe add a GUI because this shit is super complicated
+    // TODO: there's a bug where markers don't get unmarked, fix it
+    // TODO: correct the workaround so that it actually works great instead of barely functioning
 
     // As a design choice, I decided to keep ints as the input and parse to double when drawing marker to match old versions
     // This is supposed to fix a problem, I'm not sure if it does
@@ -44,18 +44,15 @@ public class ModuleMarkers extends ModuleBase {
     public ModuleMarkers(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        chunks = new ArrayList<ChunkLocation>();
 
-        blocks = new ConcurrentHashMap<Location, SimpleBlock>();
-        blockDescriptors = new HashMap<SimpleBlock, Marker>();
+        blocks = new ConcurrentHashMap<>();
+        blockDescriptors = new HashMap<>();
 
         aliases.add("m");
 
         this.command = new Command(Nova, this, aliases, "Draws a marker of a given style over a given block. Replaces x-ray. All IDs are in the format id:metadata. If you do not provide metadata, it is assumed to be 0. (ex. markers new 98:1; or markers new 98) Comes preloaded with a marker for chests.");
 
 //		this.command.registerArg("chunk", new Class[] { }, "Hilight quartz chunks in the nether");
-
-        this.iterating = false;
 
     }
 
@@ -208,6 +205,7 @@ public class ModuleMarkers extends ModuleBase {
         }
     }
 
+
     @Override
     public void onEnable()
     {
@@ -218,13 +216,12 @@ public class ModuleMarkers extends ModuleBase {
     @EventHandler
     public void onRendererTick(EntityRenderTickEvent e)
     {
-
         if(this.isEnabled)
         {
             this.drawMarkers();
         }
-
     }
+
 
     public void drawMarkers() //Something terribly wrong with the iterators
     {
@@ -235,19 +232,19 @@ public class ModuleMarkers extends ModuleBase {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         SimpleBlock block;
+        Location pos;
 
         for(Iterator<Location> i = blocks.keySet().iterator(); i.hasNext();) {
-            Location pos = i.next();
+            pos = i.next();
 
             block = blocks.get(pos);
 
-            if (block.id == 1){
-                int asdf= 0;
-            }
 
-            if(Util.distance(pos,TileEntityRendererDispatcher.staticPlayerX, TileEntityRendererDispatcher.staticPlayerZ) > 65536.0D || !blockDescriptors.containsKey(block))
+            if (!blockDescriptors.containsKey(block)) {
                 i.remove();
-            else
+            } else if (Util.distance(pos, TileEntityRendererDispatcher.staticPlayerX, TileEntityRendererDispatcher.staticPlayerZ) > 256.0D) {
+                continue;
+            } else
                 this.drawMarker(pos, blockDescriptors.get(block));
         }
 

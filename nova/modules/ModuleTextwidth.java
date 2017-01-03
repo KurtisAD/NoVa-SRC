@@ -54,7 +54,7 @@ public class ModuleTextwidth extends ModuleBase{
             else
                 message = Util.toFull(e.getMessage());
 
-            mc.player.connection.netManager.sendPacket(new CPacketChatMessage(message));
+            mc.player.connection.getNetworkManager().sendPacket(new CPacketChatMessage(message));
             return false;
         }
         else

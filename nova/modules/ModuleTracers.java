@@ -35,7 +35,7 @@ public class ModuleTracers extends ModuleBase {
     Map<String, Class> validEntities;
 
     @Saveable
-    public Map<Class, Color> traced;
+    public Map<String, Color> traced;
 
 
     public ModuleTracers(nova.Nova Nova, Minecraft mc) {
@@ -61,7 +61,7 @@ public class ModuleTracers extends ModuleBase {
     @RegisterArgument(name = "add", description = "Adds entity class to tracers")
     public void add(String name) {
         if (validEntities.containsKey(name.toLowerCase())) {
-            this.traced.put(validEntities.get(name.toLowerCase()), new Color(255, 255, 255));
+            this.traced.put(name.toLowerCase(), new Color(255, 255, 255));
             this.Nova.confirmMessage("Added " + name + " to tracers");
         } else {
             this.Nova.errorMessage("You cannot trace that entity; check -tracers valid");
@@ -70,18 +70,36 @@ public class ModuleTracers extends ModuleBase {
 
     @RegisterArgument(name = "del", description = "Removes entity from tracers")
     public void del(String name) {
-        if (this.traced.containsKey(this.validEntities.get(name.toLowerCase()))) {
-            this.traced.remove(this.validEntities.get(name.toLowerCase()));
+        if (this.traced.containsKey(name.toLowerCase())) {
+            this.traced.remove(name.toLowerCase());
             this.Nova.confirmMessage("Deleted " + name);
         } else {
             this.Nova.errorMessage("That entity has not been added");
         }
     }
 
+    @RegisterArgument(name = "list", description = "Lists traced entities")
+    public void list() {
+        String color = "";
+        for (String s : this.traced.keySet()) {
+
+            Color rgb = this.traced.get(s);
+            int r, g, b;
+            r = rgb.getRed();
+            g = rgb.getGreen();
+            b = rgb.getBlue();
+
+            color = "(" + r + ", " + b + ", " + g + ")";
+            this.Nova.message(s + ": " + color);
+
+        }
+
+    }
+
     @RegisterArgument(name = "rgb", description = "Changes the color of a tracer, insert RGB from 0-255")
     public void rgb(String name, int r, int g, int b) {
-        if (this.traced.containsKey(this.validEntities.get(name.toLowerCase()))) {
-            this.traced.put(this.validEntities.get(name.toLowerCase()), new Color(r, g, b));
+        if (this.traced.containsKey(name.toLowerCase())) {
+            this.traced.put(name.toLowerCase(), new Color(r, g, b));
             this.Nova.confirmMessage("Color of " + name + "Set to ");
         } else {
             this.Nova.errorMessage("That entity has not been added");
@@ -92,14 +110,14 @@ public class ModuleTracers extends ModuleBase {
     public void onEntityRenderTick(EntityRenderTickEvent e) {
         if (this.isEnabled) {
             for (Entity entity : mc.world.getLoadedEntityList()) {
-                if (this.traced.containsKey(entity.getClass())) {
-                    drawTracers(entity, traced.get(entity.getClass()));
+                if (this.traced.containsKey(getEntityName(entity.getClass()))) {
+                    drawTracers(entity, traced.get(getEntityName(entity.getClass())));
                 }
             }
         }
     }
 
-    public void drawTracers(Entity e, Color c) {
+    private void drawTracers(Entity e, Color c) {
         Vec3d eyes = new Vec3d(0, 0, 1).rotatePitch(-(float) Math.toRadians(mc.player.rotationPitch)).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
 
         double x = e.posX
@@ -115,7 +133,7 @@ public class ModuleTracers extends ModuleBase {
         glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
 
-        glColor3d(c.getRed(), c.getGreen(), c.getBlue());
+        glColor3d(c.getRed() / 255D, c.getGreen() / 255D, c.getBlue() / 255D);
 
         glBegin(GL_LINES);
         {
@@ -129,12 +147,15 @@ public class ModuleTracers extends ModuleBase {
         glDisable(GL_BLEND);
     }
 
-    public void addToValidEntities(Class entityClass) {
-        String name = entityClass.getSimpleName().replaceFirst("Entity", "").toLowerCase();
-        validEntities.put(name, entityClass);
+    private void addToValidEntities(Class entityClass) {
+        validEntities.put(getEntityName(entityClass), entityClass);
     }
 
-    public void addEntities() {
+    private String getEntityName(Class entityClass) {
+        return entityClass.getSimpleName().replaceFirst("Entity", "").toLowerCase();
+    }
+
+    private void addEntities() {
         addToValidEntities(EntityDragon.class);
         addToValidEntities(EntityWither.class);
 

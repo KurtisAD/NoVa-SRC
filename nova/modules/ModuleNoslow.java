@@ -39,8 +39,10 @@ public class ModuleNoslow extends ModuleBase {
 
     @EventHandler
     public void onTick(PlayerTickEvent e) {
-        fastLadder();
-        fastIce();
+        if (this.isEnabled) {
+            fastLadder();
+            fastIce();
+        }
     }
 
     private void fastLadder() {
