@@ -9,7 +9,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by Skeleton Man on 7/17/2016.
@@ -19,8 +18,6 @@ public class GuiDisconnectedOverride extends GuiDisconnected {
 
     private int autoReconnectTimer;
     private static ServerListEntryNormal lastServer;
-    private List<String> multilineMessage;
-    private int textHeight;
 
 
     public GuiDisconnectedOverride(GuiScreen screen, String reasonLocalizationKey, ITextComponent chatComp){

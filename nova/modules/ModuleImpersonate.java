@@ -10,6 +10,10 @@ import nova.core.Util;
  * Created by Skeleton Man on 7/22/2016.
  */
 public class ModuleImpersonate extends ModuleBase {
+    // This is fully broken, needs a new workaround
+    // TODO: Implement using character width?
+
+
     public ModuleImpersonate(nova.Nova Nova, Minecraft mc) {
         super(Nova,mc);
 
@@ -30,7 +34,7 @@ public class ModuleImpersonate extends ModuleBase {
         p += Util.toFull("(((((((mmmmmmmmmmmmmmmmmmmmmmmmmmmm");
         p += "<" + username + "> " + msg;
 
-        mc.player.connection.netManager.sendPacket(new CPacketChatMessage(p));
+        mc.player.connection.getNetworkManager().sendPacket(new CPacketChatMessage(p));
 
     }
 }

@@ -12,6 +12,7 @@ import nova.modules.ModuleBase;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -148,7 +149,7 @@ public class Util {
     }
 
     public static String getItemNameAndEnchantments(ItemStack is) {
-        if(is != null) {
+        if (is != ItemStack.EMPTY) {
             if(is.isItemEnchanted()) {
                 NBTTagList e = is.getEnchantmentTagList();
                 String enchants = "";
@@ -185,5 +186,28 @@ public class Util {
 
     public static double distance(Location pos, double x, double z){
         return Math.sqrt(Math.pow((x - pos.x),2) + Math.pow((z - pos.z),2));
+    }
+
+    public static <T, E> void setPrivateValue(Class<? super T> classToAccess, T instance, E value, String... fieldNames) {
+        try {
+            findField(classToAccess, fieldNames).set(instance, value);
+        } catch (Exception e) {
+            //throw new UnableToAccessFieldException(fieldNames, e);
+        }
+    }
+
+    public static Field findField(Class<?> clazz, String... fieldNames) {
+        Exception failed = null;
+        for (String fieldName : fieldNames) {
+            try {
+                Field f = clazz.getDeclaredField(fieldName);
+                f.setAccessible(true);
+                return f;
+            } catch (Exception e) {
+                failed = e;
+            }
+        }
+        return null;
+        //throw new UnableToFindFieldException(fieldNames, failed);
     }
 }

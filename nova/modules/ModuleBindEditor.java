@@ -5,6 +5,7 @@ import net.minecraft.client.gui.inventory.GuiChest;
 import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
+import nova.core.Saveable;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 import org.lwjgl.input.Keyboard;
@@ -16,9 +17,10 @@ import java.util.Map;
  * Created by Skeleton Man on 6/24/2016.
  */
 public class ModuleBindEditor extends ModuleBase{
-    boolean keys[];
-    int key;
 
+    public boolean keys[];
+
+    @Saveable
     public Map<Integer, String> binds;
 
     public ModuleBindEditor(Nova Nova, Minecraft mc) {
@@ -34,7 +36,7 @@ public class ModuleBindEditor extends ModuleBase{
 
         keys = new boolean[256];
 
-        binds = new HashMap<Integer, String>();
+        binds = new HashMap<>();
     }
 
 

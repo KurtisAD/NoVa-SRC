@@ -59,6 +59,6 @@ public class ModuleFly extends ModuleBase
 	@Override
 	public String getMetadata()
 	{
-		return this.speed == 0.05F ? "" :  "(" + Float.toString(speed) + ")";
+		return "(" + Float.toString(speed) + ")";
 	}
 }

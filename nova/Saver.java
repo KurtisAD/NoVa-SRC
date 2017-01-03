@@ -1,6 +1,7 @@
 package nova;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import nova.core.Saveable;
 import nova.core.Util;
@@ -26,12 +27,11 @@ public class Saver {
         for (Field f : m.getFields()) {
             if (f.isAnnotationPresent(Saveable.class)) {
 
-                checkAccessable(f, m);
+                f.setAccessible(true);
 
                 try {
                     json.add(f.getName(), Util.getGson().toJsonTree(f.get(m)));
                 } catch (IllegalAccessException e) {
-                    System.out.println("Something went terribly wrong in the Module Saver, this shouldn't happen.");
                     e.printStackTrace();
                 }
             }
@@ -49,7 +49,7 @@ public class Saver {
     }
 
     public static void loadModule(ModuleBase m) {
-        JsonObject json = new JsonObject();
+        JsonObject json;
         try {
             json = Util.getGson().fromJson(new JsonReader(new FileReader(Nova.novaDir + File.separator + m.name + ".nova")), JsonObject.class);
         } catch (FileNotFoundException e) {
@@ -64,24 +64,21 @@ public class Saver {
         for (Field f : m.getFields()) {
             if (f.isAnnotationPresent(Saveable.class)) {
 
-                checkAccessable(f, m);
+                f.setAccessible(true);
 
                 try {
                     // TODO: make this call more effective
-                    f.set(m, Util.getGson().fromJson(json.get(f.getName()), f.getType()) == null ? f.get(m) : Util.getGson().fromJson(json.get(f.getName()), f.getType()));
+                    f.set(m, Util.getGson().fromJson(json.get(f.getName()), f.getGenericType()) == null ?
+                            f.get(m) : Util.getGson().fromJson(json.get(f.getName()), f.getGenericType()));
+
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
+                } catch (JsonSyntaxException e) {
+                    System.out.println("JsonSyntaxException at Module " + m.getName() + " field " + f.getName() + "; saving module with default settings.");
+                    saveModule(m);
+                    return;
                 }
             }
-        }
-    }
-
-    public static void checkAccessable(Field f, ModuleBase m) {
-        // Check if we can access the field, we should be able to, but just in case
-        if (!f.isAccessible()) {
-            // if we can't access it, we log it so I can fix that shit and set the accessibility to true
-            System.out.println("Field " + f.getName() + " of type " + f.getType() + " in class " + m.getName() + " is not accessible.");
-            f.setAccessible(true);
         }
     }
 

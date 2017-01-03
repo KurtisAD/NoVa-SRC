@@ -18,8 +18,6 @@ public class GuiMultiplayerOverride extends GuiMultiplayer{
     // TODO: Properly implement without changing base class
 
     public static boolean autoReconnect = false;
-    private CharSequence hoveringText;
-    private ServerData selectedServer;
 
 
     public GuiMultiplayerOverride(GuiScreen parentScreen){
@@ -34,14 +32,13 @@ public class GuiMultiplayerOverride extends GuiMultiplayer{
 
 
         GuiDisconnectedOverride.updateLastServerFromServerList(guilistextended$iguilistentry, this);
-        if ((guilistextended$iguilistentry instanceof ServerListEntryNormal))
+        if (guilistextended$iguilistentry instanceof ServerListEntryNormal)
         {
-            connectToServer(((ServerListEntryNormal)guilistextended$iguilistentry).getServerData());
-        }
-        else if ((guilistextended$iguilistentry instanceof ServerListEntryLanDetected))
+            this.connectToServer(((ServerListEntryNormal) guilistextended$iguilistentry).getServerData());
+        } else if (guilistextended$iguilistentry instanceof ServerListEntryLanDetected)
         {
-            LanServerInfo lanserverdetector$lanserver = ((ServerListEntryLanDetected) guilistextended$iguilistentry).getServerData();
-            connectToServer(new ServerData(lanserverdetector$lanserver.getServerMotd(), lanserverdetector$lanserver.getServerIpPort(), true));
+            LanServerInfo lanserverinfo = ((ServerListEntryLanDetected) guilistextended$iguilistentry).getServerData();
+            this.connectToServer(new ServerData(lanserverinfo.getServerMotd(), lanserverinfo.getServerIpPort(), true));
         }
     }
 

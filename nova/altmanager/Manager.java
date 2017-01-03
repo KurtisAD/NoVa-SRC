@@ -12,6 +12,9 @@ import java.util.ArrayList;
 
 public class Manager
 {
+	// TODO: Make it work like every other gui (maybe? having static doesn't really change anything)
+	// TODO: encrypt saved passwords because fuck plaintext
+
 	public static ArrayList<Alt> altList = new ArrayList<>();
 	public static GuiAltList altScreen = new GuiAltList();
 	public static final int slotHeight = 25;
@@ -31,7 +34,6 @@ public class Manager
 		
 		FileWriter file;
 		try {
-			// TODO: fix ghetto code
 			file = new FileWriter(Nova.novaDir + File.separator + "alts.nova");
 			json.add("altList", Util.getGson().toJsonTree(altList));
 			file.write(Util.getGson().toJson(json));
@@ -45,8 +47,7 @@ public class Manager
 	public static void loadAlts()
 	{
 		try {
-			// TODO: fix ghetto code
-			json = json == null ? new JsonObject() : json;
+			json = new JsonObject();
 			json = Util.getGson().fromJson(new JsonReader(new FileReader(Nova.novaDir + File.separator + "alts.nova")), JsonObject.class);
 
 			altList = Util.getGson().fromJson(json.get("altList"),new TypeToken<ArrayList<Alt>>(){}.getType());

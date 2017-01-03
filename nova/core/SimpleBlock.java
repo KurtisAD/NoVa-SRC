@@ -34,6 +34,6 @@ public class SimpleBlock {
 
 	public String getName(){
 		Block block = Block.getBlockById(this.id);
-		return Block.REGISTRY.getNameForObject(block) + ":" + Integer.toString(id);
+		return "[" + Block.REGISTRY.getNameForObject(block) + "] [" + Integer.toString(id) + ":" + Integer.toString(metadata) + "]";
 	}
 }

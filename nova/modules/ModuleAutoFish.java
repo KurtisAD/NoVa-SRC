@@ -11,12 +11,18 @@ import nova.events.PlayerTickEvent;
  * Created by Skeleton Man on 6/24/2016.
  */
 public class ModuleAutoFish extends ModuleBase {
+    // TODO: more research on tolerance
+    // TODO: change the catching flag?
+
     private boolean catching;
+    private double tolerance;
+
 
     public ModuleAutoFish(Nova Nova, Minecraft mc) {
         super(Nova, mc);
         this.command = new Command(Nova, this, aliases, "Automatically catches fish");
         catching = false;
+        tolerance = -0.1D;
     }
 
 
@@ -51,6 +57,6 @@ public class ModuleAutoFish extends ModuleBase {
     private boolean isHooked(EntityFishHook hook)
     {
         return hook.motionX == 0.0D && hook.motionZ == 0.0D
-                && hook.motionY != 0.0D;
+                && hook.motionY <= tolerance;
     }
 }

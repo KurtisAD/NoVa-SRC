@@ -62,7 +62,7 @@ public class ModuleIntervalThrow extends ModuleBase {
             this.lastMs = System.nanoTime() / 1000000;
 
             if(this.offHand){
-                mc.player.connection.netManager.sendPacket(new CPacketPlayerTryUseItem(EnumHand.OFF_HAND));
+                mc.player.connection.getNetworkManager().sendPacket(new CPacketPlayerTryUseItem(EnumHand.OFF_HAND));
                 return;
             }
 
@@ -72,7 +72,7 @@ public class ModuleIntervalThrow extends ModuleBase {
                 mc.player.inventory.currentItem = this.changeToSlot;
             }
 
-            mc.player.connection.netManager.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
+            mc.player.connection.getNetworkManager().sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
 
 
             if(this.changeToSlot != -1)

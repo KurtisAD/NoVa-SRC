@@ -32,8 +32,7 @@ public class ModuleFreecam extends ModuleBase {
 		freecamEntity.rotationYawHead = mc.player.rotationYawHead;
 		mc.world.addEntityToWorld(-2, freecamEntity);
 		StaticNova.Nova.getModule(ModuleFly.class).onEnable();
-		mc.player.noClip = true;
-
+        StaticNova.Nova.getModule(ModuleNoclip.class).onEnable();
 
 		this.isEnabled = true;
 	}
@@ -48,6 +47,7 @@ public class ModuleFreecam extends ModuleBase {
 		return true;
 	}
 
+
 	@Override
 	public void onDisable()
 	{
@@ -61,6 +61,7 @@ public class ModuleFreecam extends ModuleBase {
 		mc.player.noClip = false;
 		mc.world.removeEntityFromWorld(-2);
 		StaticNova.Nova.getModule(ModuleFly.class).onDisable();
+        StaticNova.Nova.getModule(ModuleNoclip.class).onDisable();
 
 		this.isEnabled = false;
 	}

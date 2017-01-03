@@ -33,7 +33,7 @@ import java.util.Iterator;
  */
 public class ModuleGui extends ModuleBase{
     // TODO: Add tickrate to render; implement settings and help
-
+    // TODO: fix potion timer, poses incorrect time
 
     private int width, height;
     private ArrayList<HashMap<String, Integer>> note;
@@ -138,7 +138,7 @@ public class ModuleGui extends ModuleBase{
     {
         // This should be fine to access by pointer since we're not editing anything
         NonNullList<ItemStack> armor = mc.player.inventory.armorInventory;
-        String helmet, chestplate, leggings, boots = "";
+        String helmet, chestplate, leggings, boots, saturation = "";
 
         // Maybe have to change to .equals() ?
         // TODO: maybe make this a method?
@@ -146,6 +146,7 @@ public class ModuleGui extends ModuleBase{
         chestplate = "c: " + (armor.get(2) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(2).getMaxDamage() - (double) armor.get(2).getItemDamage()) / (double) armor.get(2).getMaxDamage()) * 100.0D) + "%" : "none");
         leggings = "l: " + (armor.get(1) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(1).getMaxDamage() - (double) armor.get(1).getItemDamage()) / (double) armor.get(1).getMaxDamage()) * 100.0D) + "%" : "none");
         boots = "b: " + (armor.get(0) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(0).getMaxDamage() - (double) armor.get(0).getItemDamage()) / (double) armor.get(0).getMaxDamage()) * 100.0D) + "%" : "none");
+        saturation = "sat: " + (mc.player.getFoodStats().getSaturationLevel() <= 0f ? "\247c" : "") + String.format("%.1f", mc.player.getFoodStats().getSaturationLevel());
 
         Iterator potions = mc.player.getActivePotionEffects().iterator();
         PotionEffect potionHolder;
@@ -205,6 +206,7 @@ public class ModuleGui extends ModuleBase{
             mc.fontRendererObj.drawStringWithShadow(chestplate, width - mc.fontRendererObj.getStringWidth(chestplate) - 2, 12 + potionShift, this.guiColor);
             mc.fontRendererObj.drawStringWithShadow(leggings, width - mc.fontRendererObj.getStringWidth(leggings) - 2, 22 + potionShift, this.guiColor);
             mc.fontRendererObj.drawStringWithShadow(boots, width - mc.fontRendererObj.getStringWidth(boots) - 2, 32 + potionShift, this.guiColor);
+            mc.fontRendererObj.drawStringWithShadow(saturation, width - mc.fontRendererObj.getStringWidth(saturation) - 2, 42 + potionShift, this.guiColor);
         }
 
     }

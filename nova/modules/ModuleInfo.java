@@ -8,7 +8,6 @@ import net.minecraft.util.NonNullList;
 import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Util;
-import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Created by Skeleton Man on 7/19/2016.
@@ -111,8 +110,7 @@ public class ModuleInfo extends ModuleBase{
             this.Nova.message("\247l" + p.getDisplayName().getUnformattedText() + "\'s Armor");
             String durability = "";
 
-            ItemStack[] armor = (ItemStack[]) p.inventory.armorInventory.toArray();
-            ArrayUtils.reverse(armor);
+            NonNullList<ItemStack> armor = p.inventory.armorInventory;
 
             for (ItemStack i : armor) {
                 this.Nova.message(Util.getItemNameAndEnchantments(i));

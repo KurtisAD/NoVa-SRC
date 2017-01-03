@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
+import nova.core.Saveable;
 import nova.core.Util;
 import nova.events.EntityLabelRenderedEvent;
 import nova.events.EventHandler;
@@ -20,13 +21,18 @@ import org.lwjgl.opengl.GL11;
  * Created by Skeleton Man on 7/19/2016.
  */
 public class ModuleESP extends ModuleBase {
+    @Saveable
     boolean healthEsp;
+    @Saveable
     boolean itemEsp;
+    @Saveable
     boolean armorEsp;
+
+    // TODO: Change how labels are rendered, code is prehistoric and needs rewriting
+    // TODO: Add more cool features that can be compressed (key factor here, a lot of the rendering is super big)
 
     public ModuleESP(Nova Nova, Minecraft mc) {
         super(Nova, mc);
-        // TODO Auto-generated constructor stub
 
         this.name = "ESP";
         this.command = new Command(Nova, this, aliases, "Hilights a player's name and shows their health, held item, and distance; friend's names are green.");
@@ -49,9 +55,7 @@ public class ModuleESP extends ModuleBase {
 
             FontRenderer fr = mc.fontRendererObj;
 
-
-            float var13 = 1.6F;
-            float var14 = 0.016666668F * var13;
+            float var14;
 
             double i = event.interpolationX;
             double j = event.interpolationY;
