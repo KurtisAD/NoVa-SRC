@@ -16,7 +16,6 @@ public class ModuleTextwidth extends ModuleBase{
         super(Nova, mc);
 
         aliases.add("width");
-        this.name = "TextWidth";
         this.command = new Command(Nova, this, aliases, "Converts chats to full-width unicode");
     }
 

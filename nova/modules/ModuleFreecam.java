@@ -9,6 +9,8 @@ import nova.events.EventHandler;
 import nova.events.PacketSendEvent;
 
 public class ModuleFreecam extends ModuleBase {
+    // TODO: do some tests to see if encryption can be easily seeded
+
 	double x, y, z;
 	float yaw, pitch;
     private EntityOtherPlayerMP freecamEntity;

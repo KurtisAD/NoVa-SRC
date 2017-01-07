@@ -32,7 +32,7 @@ public class Nova {
     public final String delimeter;
 
 
-    public static final String Version = "NoVa 11.2.a9 Optifine B5";
+    public static final String Version = "NoVa 11.2.a10 Optifine B5";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -56,7 +56,7 @@ public class Nova {
         //Format:            this.modules.add(new ModuleBase(this, mc));
 
 
-        //this.modules.add(new ModuleAntiAfk(this, mc));
+        this.modules.add(new ModuleAntiAfk(this, mc));
         this.modules.add(new ModuleAntifall(this, mc));
         this.modules.add(new ModuleAutoArmor(this, mc));
         this.modules.add(new ModuleAutoEat(this, mc));
@@ -73,6 +73,7 @@ public class Nova {
         this.modules.add(new ModuleESP(this, mc));
         //this.modules.add(new ModuleExtraElytra(this, mc));
         //this.modules.add(new ModuleFakeCoord(this, mc));
+        this.modules.add(new ModuleFastBreak(this, mc));
         this.modules.add(new ModuleFly(this, mc));
         this.modules.add(new ModuleFreecam(this, mc));
         this.modules.add(new ModuleFriends(this, mc));
@@ -83,7 +84,7 @@ public class Nova {
         this.modules.add(new ModuleHorseRide(this, mc));
         //this.modules.add(new ModuleImpersonate(this, mc));
         this.modules.add(new ModuleInfo(this, mc));
-        //this.modules.add(new ModuleIntervalThrow(this, mc));
+        this.modules.add(new ModuleIntervalThrow(this, mc));
         //this.modules.add(new ModuleJesus(this, mc));
         this.modules.add(new ModuleMarkers(this, mc));
         this.modules.add(new ModuleNoclip(this, mc));
@@ -92,6 +93,7 @@ public class Nova {
         this.modules.add(new ModuleNoslow(this, mc));
         this.modules.add(new ModuleSafewalk(this, mc));
         this.modules.add(new ModuleSay(this, mc));
+        this.modules.add(new ModuleSpeed(this, mc));
         this.modules.add(new ModuleSprint(this, mc));
         this.modules.add(new ModuleTextwidth(this, mc));
         this.modules.add(new ModuleTimer(this, mc));

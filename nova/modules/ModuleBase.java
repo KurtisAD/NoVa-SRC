@@ -16,11 +16,11 @@ import java.util.ArrayList;
  */
 public class ModuleBase implements IModule {
 
-    Nova Nova;
-    Minecraft mc;
+    protected Nova Nova;
+    protected Minecraft mc;
 
     public ArrayList<String> aliases;
-    public String name;
+    public final String name;
     public String defaultArg;
     public Command command;
 
@@ -31,7 +31,6 @@ public class ModuleBase implements IModule {
 
     // If false, this will essentially just act as a command.
     public boolean isToggleable;
-
 
     public String filepath;
 

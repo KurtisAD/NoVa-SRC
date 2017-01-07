@@ -3,6 +3,7 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import nova.Command;
 import nova.Nova;
+import nova.StaticNova;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.events.EventHandler;
@@ -28,8 +29,9 @@ public class ModuleFly extends ModuleBase
 	public void onEnable()
 	{
 		mc.player.capabilities.isFlying = true;
-		this.isEnabled = true;
-	}
+        StaticNova.Nova.getModule(ModuleSpeed.class).onDisable();
+        super.onEnable();
+    }
 
 	@Override
 	public void onDisable()
@@ -38,8 +40,9 @@ public class ModuleFly extends ModuleBase
 		if (!mc.player.capabilities.isCreativeMode) {
 			mc.player.capabilities.allowFlying = false;
 		}
-		this.isEnabled = false;
-	}
+
+        super.onDisable();
+    }
 
 	@EventHandler
 	public void onTick(PlayerTickEvent e)
@@ -59,6 +62,6 @@ public class ModuleFly extends ModuleBase
 	@Override
 	public String getMetadata()
 	{
-		return "(" + Float.toString(speed) + ")";
-	}
+        return "(" + (speed == 1.0f ? "Ready" : Float.toString(speed)) + ")";
+    }
 }

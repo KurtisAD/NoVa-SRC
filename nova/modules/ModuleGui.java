@@ -5,6 +5,8 @@ import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiScreenServerList;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -111,6 +113,8 @@ public class ModuleGui extends ModuleBase{
             this.drawNotifications();
 
             this.decrementNotes();
+
+            this.drawHorseStats();
 
         }
     }
@@ -267,6 +271,45 @@ public class ModuleGui extends ModuleBase{
             this.note.get(i).put(key, this.note.get(i).get(key) - 1);
 
         }
+    }
+
+    private void drawHorseStats() {
+        if (mc.player != null && mc.player.getRidingEntity() instanceof AbstractHorse) {
+            double speed = ((AbstractHorse) mc.player.getRidingEntity()).getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+            double jump = ((AbstractHorse) mc.player.getRidingEntity()).getHorseJumpStrength();
+            double health = ((AbstractHorse) mc.player.getRidingEntity()).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
+
+            double healthPercent = (health - 15) / 0.15D;
+            double jumpPercent = (jump - 0.4D) / 0.006D;
+            double speedPercent = (speed - 0.1125) / 0.00225D;
+
+            String healthStr = "Health: " + percentageModifier(healthPercent);
+            String jumpStr = "Jump: " + percentageModifier(jumpPercent);
+            String speedStr = "Speed: " + percentageModifier(speedPercent) + "\247r | " + String.format("%.3f", speed);
+
+            mc.fontRendererObj.drawStringWithShadow(healthStr, width / 2 + 92, height - 45, 0xFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(jumpStr, width / 2 + 92, height - 35, 0xFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(speedStr, width / 2 + 92, height - 25, 0xFFFFFF);
+        }
+    }
+
+    private String percentageModifier(double percent) {
+        String suffix = String.format("%.1f", percent) + "%";
+        String prefix = "\247";
+        if (percent < 20D) {
+            prefix += "c";
+        } else if (percent < 40D) {
+            prefix += "4";
+        } else if (percent < 60D) {
+            prefix += "3";
+        } else if (percent < 80D) {
+            prefix += "a";
+        } else if (percent < 100D) {
+            prefix += "6";
+        } else {
+            prefix += "d";
+        }
+        return prefix + suffix;
     }
 
     @EventHandler

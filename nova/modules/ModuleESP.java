@@ -34,7 +34,6 @@ public class ModuleESP extends ModuleBase {
     public ModuleESP(Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.name = "ESP";
         this.command = new Command(Nova, this, aliases, "Hilights a player's name and shows their health, held item, and distance; friend's names are green.");
 
         this.healthEsp = true;

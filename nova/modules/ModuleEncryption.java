@@ -49,7 +49,6 @@ public class ModuleEncryption extends ModuleBase
 
     public ModuleEncryption(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
-        this.name = "Encryption";
         this.isToggleable = false;
 
         this.command = new Command(Nova, this, aliases, "encrypts chats");
@@ -187,20 +186,24 @@ public class ModuleEncryption extends ModuleBase
         if (!(message.startsWith(this.delimeter)))
             return true;
 
-        String str1 = mc.player.getDisplayName().getUnformattedText();
-        System.out.print(str1);
+        String name = mc.player.getDisplayName().getUnformattedText();
+        System.out.print(name);
 
-        String str2 = Util.hash(str1);
+        String nameHash = Util.hash(name);
 
         try
         {
             int j = b.size() == 0 ? 1 : 0;
-            String str3 = EncodeBase64(EncryptData(message.substring(1)));
+
+            // This is where color codes are
+            String str3 = EncodeBase64(EncryptData(message.substring(1).replace(this.delimeter, "\247")));
 
             str3 = str3.replace("\r", "");
             str3 = str3.replace("\n", "");
-            String str4 = str2 + str3 + "\\\\";
-            if (str4.length() > 99 - str2.length() - 2)
+
+
+            String str4 = nameHash + str3 + "\\\\";
+            if (str4.length() > 99 - nameHash.length() - 2)
             {
                 StringBuilder localStringBuilder = new StringBuilder();
                 for (int k = 0; k < str3.length(); k++)
@@ -208,16 +211,16 @@ public class ModuleEncryption extends ModuleBase
                     char c1 = str3.charAt(k);
                     localStringBuilder.append(c1);
 
-                    if ((ChatAllowedCharacters.isAllowedCharacter(c1)) && (localStringBuilder.length() <= 99 - str2.length() - 2))
+                    if ((ChatAllowedCharacters.isAllowedCharacter(c1)) && (localStringBuilder.length() <= 99 - nameHash.length() - 2))
                         continue;
 
-                    String str7 = str2 + localStringBuilder.toString();
+                    String str7 = nameHash + localStringBuilder.toString();
                     b.add(str7);
                     localStringBuilder = new StringBuilder();
                 }
 
                 localStringBuilder.append("\\\\");
-                String str5 = str2 + localStringBuilder.toString();
+                String str5 = nameHash + localStringBuilder.toString();
                 b.add(str5);
                 if (j == 0)
                     return true;

@@ -39,6 +39,7 @@ public class ModuleFakeCoord extends ModuleBase {
 
     @RegisterArgument(name = "offset", description = "Offsets location by coordinate amount, rounded down to multiples of 16")
     public void doOffset(int xOffset, int yOffset, int zOffset){
+        // Can probably use & here, would cut operations in half
         ModuleFakeCoord.xOffset = (xOffset >> 4) << 4;
         ModuleFakeCoord.yOffset = (yOffset >> 4) << 4;
         ModuleFakeCoord.zOffset = (zOffset >> 4) << 4;
@@ -46,6 +47,7 @@ public class ModuleFakeCoord extends ModuleBase {
 
     @RegisterArgument(name = "set", description = "Sets location to coordinates, rounded down to multiples of 16")
     public void doSet(int xSet, int ySet, int zSet){
+        // Can probably use & here, would cut operations in half
         xOffset = (xSet - (int) mc.player.posX >> 4) << 4;
         yOffset = (ySet - (int) mc.player.posY >> 4) << 4;
         zOffset = (zSet - (int) mc.player.posZ >> 4) << 4;

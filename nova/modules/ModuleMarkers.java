@@ -7,11 +7,12 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import nova.Command;
-import nova.core.*;
+import nova.core.Location;
+import nova.core.Marker;
+import nova.core.RegisterArgument;
+import nova.core.Saveable;
 import nova.events.BlockRenderedEvent;
 import nova.events.EntityRenderTickEvent;
 import nova.events.EventHandler;
@@ -29,9 +30,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ModuleMarkers extends ModuleBase {
 
     @Saveable
-    public Map<SimpleBlock, Marker> blockDescriptors;
+    public Map<Integer, Marker> blockDescriptors;
 
-    ConcurrentHashMap<Location, SimpleBlock> blocks;
+    ConcurrentHashMap<Location, Integer> blocks;
 
 
     // TODO: rewrite everything, maybe add a GUI because this shit is super complicated
@@ -49,89 +50,123 @@ public class ModuleMarkers extends ModuleBase {
         blockDescriptors = new HashMap<>();
 
         aliases.add("m");
+        aliases.add("marker");
 
-        this.command = new Command(Nova, this, aliases, "Draws a marker of a given style over a given block. Replaces x-ray. All IDs are in the format id:metadata. If you do not provide metadata, it is assumed to be 0. (ex. markers new 98:1; or markers new 98) Comes preloaded with a marker for chests.");
+        this.command = new Command(Nova, this, aliases, "Draws a marker of a given style over a given block. Replaces x-ray. Does not consider metadata. Comes preloaded with a marker for chests.");
 
 //		this.command.registerArg("chunk", new Class[] { }, "Hilight quartz chunks in the nether");
 
+        // Default markers here
+        blockDescriptors.put(90, new Marker(175, 140, 100, 1));
+        blockDescriptors.put(130, new Marker(175, 40, 100, 0));
+        blockDescriptors.put(54, new Marker(170, 120, 45, 0));
+        blockDescriptors.put(146, new Marker(170, 120, 45, 0));
+
+        blockDescriptors.put(61, new Marker(140, 140, 140, 1));
+        blockDescriptors.put(62, new Marker(140, 140, 140, 1));
+        blockDescriptors.put(23, new Marker(140, 140, 140, 1));
+        blockDescriptors.put(158, new Marker(140, 140, 140, 1));
+        blockDescriptors.put(154, new Marker(140, 140, 140, 1));
+        blockDescriptors.put(117, new Marker(140, 140, 140, 1));
+
+
+        for (int i = 219; i <= 234; i++) {
+            blockDescriptors.put(i, new Marker(200, 200, 20, 0));
+
+        }
     }
 
 
-    @RegisterArgument(name = "new", description = "Adds a new marker of the given ID and metadata with the default style, a white star.")
+    @RegisterArgument(name = "new", description = "Adds a new marker of the given ID with the default style, a white star.")
     public void newMarker(String marker){
-        SimpleBlock block = getBlockFromString(marker);
+        int block = getBlockFromString(marker);
+        if (block == -1 || block == 0) {
+            return;
+        }
 
         if(blockDescriptors.containsKey(block))
         {
-            this.Nova.errorMessage("The block " + block.getName() + " has already been added");
+            this.Nova.errorMessage("The block " + getIdName(block) + " has already been added");
             return;
         }
 
         blockDescriptors.put(block, new Marker(255, 255, 255, 1));
 
-        Nova.confirmMessage("Added new block " + block.getName() + " with default settings");
+        Nova.confirmMessage("Added new block " + getIdName(block) + " with default settings");
         mc.renderGlobal.loadRenderers();
 
     }
 
-    @RegisterArgument(name = "del", description = "Deletes a marker of the given ID and metadata")
+    @RegisterArgument(name = "del", description = "Deletes a marker of the given ID")
     public void delMarker(String marker){
-        SimpleBlock block = getBlockFromString(marker);
+        int block = getBlockFromString(marker);
+        if (block == -1 || block == 0) {
+            return;
+        }
 
         if (!blockDescriptors.containsKey(block)) {
-            this.Nova.errorMessage("The block " + block.getName() + " does not exist, so you cannot delete it");
+            this.Nova.errorMessage("The block " + getIdName(block) + " does not exist, so you cannot delete it");
             return;
         }
 
         blockDescriptors.remove(block);
 
-        Nova.confirmMessage("Removed block " + block.getName());
+        Nova.confirmMessage("Removed block " + getIdName(block));
     }
 
     @RegisterArgument(name = "type", description = "Changes the type of a marker; 0 is box, 1 is star")
     public void changeType(String marker, int type){
-        SimpleBlock block = getBlockFromString(marker);
+        int block = getBlockFromString(marker);
+        if (block == -1 || block == 0) {
+            return;
+        }
 
         if (!blockDescriptors.containsKey(block)) {
-            this.Nova.errorMessage("The block " + block.getName() + " does not exist");
+            this.Nova.errorMessage("The block " + getIdName(block) + " does not exist");
             return;
         }
 
         Marker m = blockDescriptors.get(block);
         blockDescriptors.put(block, new Marker(m.color, type));
 
-        Nova.confirmMessage("Changed marker type of block " + block.getName() + " to " + type);
+        Nova.confirmMessage("Changed marker type of block " + getIdName(block) + " to " + type);
 
     }
 
-    @RegisterArgument(name = "add", description = "Adds a new marker of the given ID and metadata with colors R, G, B (see color) and the type (see type); (ex. markers new 98:2 255 0 0 1; adds a red star for mossy stone brick)")
+    @RegisterArgument(name = "add", description = "Adds a new marker of the given ID with colors R, G, B (see color) and the type (see type); (ex. markers new 98:2 255 0 0 1; adds a red star for mossy stone brick)")
     public void addMarker(String marker, int r, int g, int b, int type){
-        SimpleBlock block = getBlockFromString(marker);
+        int block = getBlockFromString(marker);
+        if (block == -1 || block == 0) {
+            return;
+        }
 
         if (blockDescriptors.containsKey(block)) {
-            this.Nova.errorMessage("The block " + block.getName() + " has already been added");
+            this.Nova.errorMessage("The block " + getIdName(block) + " has already been added");
             return;
         }
 
         blockDescriptors.put(block, new Marker(r,g,b,type));
 
-        Nova.confirmMessage("Added marker for block " + block.getName());
+        Nova.confirmMessage("Added marker for block " + getIdName(block));
         mc.renderGlobal.loadRenderers();
     }
 
-    @RegisterArgument(name = "color", description = "Changes the color for a marker of the given ID and metadata in the format R G B, where integers R G and B are in the interval [0, 255]")
+    @RegisterArgument(name = "color", description = "Changes the color for a marker of the given ID in the format R G B, where integers R G and B are in the interval [0, 255]")
     public void colorMarker(String marker, int r, int g, int b){
-        SimpleBlock block = getBlockFromString(marker);
+        int block = getBlockFromString(marker);
+        if (block == -1 || block == 0) {
+            return;
+        }
 
         if (!blockDescriptors.containsKey(block)) {
-            this.Nova.errorMessage("The block " + block.getName() + " has not been added yet");
+            this.Nova.errorMessage("The block " + getIdName(block) + " has not been added yet");
             return;
         }
 
         Marker m = blockDescriptors.get(block);
 
         blockDescriptors.put(block, new Marker(r, g, b, m.setting));
-        Nova.confirmMessage("Changed color for block " + block.getName());
+        Nova.confirmMessage("Changed color for block " + getIdName(block));
 
     }
 
@@ -139,19 +174,11 @@ public class ModuleMarkers extends ModuleBase {
     public void listMarkers(){
         String itemName = "";
 
-        for (SimpleBlock key : blockDescriptors.keySet()) {
+        for (int key : blockDescriptors.keySet()) {
             Marker marker = blockDescriptors.get(key);
 
-            try {
-                itemName = (new ItemStack(Item.getItemById(key.id), 1, key.metadata)).getDisplayName();
-            } catch(Exception e) {
-                itemName = "Unknown";
-            }
 
-
-            // TODO: set so it only outputs a certain length of double maybe? needs testing
-            this.Nova.message(Integer.toString(key.id) + ":" + Integer.toString(key.metadata)
-                    + " " + itemName
+            this.Nova.message(getIdName(key)
                     + " rgb(" + marker.color.getRed()
                     + ", " + marker.color.getGreen()
                     + ", " + marker.color.getBlue()
@@ -159,52 +186,46 @@ public class ModuleMarkers extends ModuleBase {
         }
     }
 
-    public SimpleBlock getBlockFromString(String blocktext) {
-        int id, metadata;
-        String[] tmp;
+    public int getBlockFromString(String blocktext) {
+        int id;
 
-
-        tmp = blocktext.split(":");
-
-        metadata = tmp.length > 1 ? Integer.parseInt(tmp[1]) : 0;
 
         try {
-            id = Integer.parseInt(tmp[0]);
+            id = Integer.parseInt(blocktext);
         } catch (NumberFormatException e) {
-            id = Block.getIdFromBlock(Block.getBlockFromName(tmp[0]));
-            if (id == -1) {
-                try {
-                    Nova.errorMessage("Invalid input: " + tmp[0] + ":" + tmp[1]);
-                } catch (ArrayIndexOutOfBoundsException e1) {
-                    Nova.errorMessage("Invalid input: " + tmp[0]);
-                }
-                id = 0;
+            id = Block.getIdFromBlock(Block.getBlockFromName(blocktext));
+            if (id == -1 || id == 0) {
+                Nova.errorMessage("Invalid input: " + blocktext);
             }
         }
 
-        return new SimpleBlock(id, metadata);
+        return id;
     }
+
 
 
     @EventHandler
     public void onBlockRendered(BlockRenderedEvent e){
-        if(blockDescriptors.containsKey(e.block)){
-            synchronized(blocks) {
-                if(e.block.equals(Block.getStateId(Block.getStateById(7)))){
-                    if (mc.player.dimension == -1 && (e.pos.y >= 5 && e.pos.y < 122))
-                        this.blocks.put(e.pos, e.block);
-                    else if (mc.player.dimension != -1 && e.pos.y >= 5)
-                        this.blocks.put(e.pos, e.block);
-
-                } else {
-                    this.blocks.put(e.pos, e.block);
-                }
-            }
-        } else {
-            this.blocks.remove(e.pos);
-        }
+        updateBlock(e.id, e.pos);
     }
 
+
+    private void updateBlock(int id, Location pos) {
+        if (blockDescriptors.containsKey(id)) {
+            if (id == (Block.getStateId(Block.getStateById(7)))) {
+                if (mc.player.dimension == -1 && (pos.y >= 5 && pos.y < 122))
+                    this.blocks.put(pos, id);
+                else if (mc.player.dimension != -1 && pos.y >= 5)
+                    this.blocks.put(pos, id);
+                else
+                    this.blocks.remove(pos);
+            } else {
+                this.blocks.put(pos, id);
+            }
+        } else {
+            this.blocks.remove(pos);
+        }
+    }
 
     @Override
     public void onEnable()
@@ -223,7 +244,7 @@ public class ModuleMarkers extends ModuleBase {
     }
 
 
-    public void drawMarkers() //Something terribly wrong with the iterators
+    private void drawMarkers() //Something terribly wrong with the iterators
     {
         int j2 = 225 % 0x10000;
         int k2 = 225 / 0x10000;
@@ -231,21 +252,19 @@ public class ModuleMarkers extends ModuleBase {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        SimpleBlock block;
+        int id;
         Location pos;
 
         for(Iterator<Location> i = blocks.keySet().iterator(); i.hasNext();) {
             pos = i.next();
 
-            block = blocks.get(pos);
+            id = blocks.get(pos);
 
 
-            if (!blockDescriptors.containsKey(block)) {
+            if (!blockDescriptors.containsKey(id) || Block.getIdFromBlock(mc.world.getBlockState(pos.getBlockPos()).getBlock()) != id) {
                 i.remove();
-            } else if (Util.distance(pos, TileEntityRendererDispatcher.staticPlayerX, TileEntityRendererDispatcher.staticPlayerZ) > 256.0D) {
-                continue;
             } else
-                this.drawMarker(pos, blockDescriptors.get(block));
+                this.drawMarker(pos, blockDescriptors.get(id));
         }
 
 
@@ -265,8 +284,13 @@ public class ModuleMarkers extends ModuleBase {
 //		}
     }
 
+    private String getIdName(int id) {
+        Block block = Block.getBlockById(id);
+        return "[" + Block.REGISTRY.getNameForObject(block) + "] [" + Integer.toString(id) + "]";
+    }
+
     // 0 is box, 1 is star, 2 is diagonal line
-    public void drawMarker(Location pos, Marker marker)
+    private void drawMarker(Location pos, Marker marker)
     {
 
         // I'm going to try to move the GL11 stuff into the draw functions themselves
@@ -296,13 +320,13 @@ public class ModuleMarkers extends ModuleBase {
 
         if(marker.setting == 0)
         {
-            drawOutlinedBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ), marker.color.getRed(), marker.color.getGreen(), marker.color.getBlue(), 255);
+            drawOutlinedBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ), marker.color.getRed(), marker.color.getGreen(), marker.color.getBlue());
         }
 
 
         if(marker.setting == 1)
         {
-            drawStar(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ), marker.color.getRed(), marker.color.getGreen(), marker.color.getBlue(), 255);
+            drawStar(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ), marker.color.getRed(), marker.color.getGreen(), marker.color.getBlue());
         }
 
 
@@ -317,106 +341,88 @@ public class ModuleMarkers extends ModuleBase {
 
     }
 
-    public int parseBlock(int id, int metadata)
-    {
-        return id + metadata << 12;
-    }
 
-    public int parseDescriptor(int r, int g, int b, int type)
-    {
-        return ( r << 24) | ( g << 16) | (b << 8) | type;
-    }
-
-    private int getBlockId(int key) {
-        return key & 0xFFF;
-    }
-
-    private int getBlockMetadata(int key) {
-        return key >> 12;
-    }
-
-
-    public static void drawOutlinedBoundingBox(AxisAlignedBB boundingBox,
-                                               int red, int green, int blue, int alpha) {
+    // TODO: rename
+    private static void drawOutlinedBoundingBox(AxisAlignedBB boundingBox,
+                                                int red, int green, int blue) {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
         vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         tessellator.draw();
         vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
         vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         tessellator.draw();
         vertexbuffer.begin(1, DefaultVertexFormats.POSITION_COLOR);
         vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         tessellator.draw();
     }
 
-    public static void drawStar(AxisAlignedBB aabb,
-                                int red, int green, int blue, int alpha) {
+    private static void drawStar(AxisAlignedBB aabb,
+                                 int red, int green, int blue) {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
 
         vertexbuffer.pos(aabb.minX, aabb.minY, aabb.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(aabb.maxX, aabb.maxY, aabb.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         tessellator.draw();
 
         vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
         vertexbuffer.pos(aabb.maxX, aabb.minY, aabb.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(aabb.minX, aabb.maxY, aabb.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         tessellator.draw();
 
         vertexbuffer.begin(1, DefaultVertexFormats.POSITION_COLOR);
         vertexbuffer.pos(aabb.minX, aabb.minY, aabb.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(aabb.maxX, aabb.maxY, aabb.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         tessellator.draw();
 
         vertexbuffer.begin(1, DefaultVertexFormats.POSITION_COLOR);
         vertexbuffer.pos(aabb.maxX, aabb.minY, aabb.maxZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         vertexbuffer.pos(aabb.minX, aabb.maxY, aabb.minZ)
-                .color(red, green, blue, alpha).endVertex();
+                .color(red, green, blue, 255).endVertex();
         tessellator.draw();
     }
-
 
 }

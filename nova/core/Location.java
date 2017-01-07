@@ -16,19 +16,22 @@ public class Location {
 		this.makeLocation(x, y, z);
 	}
 	
-	public void makeLocation(double x, double y, double z)
-	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		
-		blockX = (int)Math.round(x);
-		blockY = (int)Math.round(y);
-		blockZ = (int)Math.round(z);
+	public void makeLocation(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
 
-	}
-	
-	public String toString()
+        blockX = (int)Math.round(x);
+        blockY = (int)Math.round(y);
+        blockZ = (int)Math.round(z);
+    }
+
+    public BlockPos getBlockPos() {
+        return new BlockPos(blockX, blockY, blockZ);
+    }
+
+
+    public String toString()
 	{
 		return "(X: " + Double.toString(x) + ", Y:" + Double.toString(y) + ", Z:" + Double.toString(z) + ")";
 	}

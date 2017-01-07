@@ -17,6 +17,7 @@ import java.util.Map;
  * Created by Skeleton Man on 6/24/2016.
  */
 public class ModuleBindEditor extends ModuleBase{
+    // TODO: Add numpad keys
 
     public boolean keys[];
 

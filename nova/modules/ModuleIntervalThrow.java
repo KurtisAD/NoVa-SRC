@@ -22,7 +22,6 @@ public class ModuleIntervalThrow extends ModuleBase {
         super(Nova, mc);
 
         this.aliases.add("intt");
-        this.name = "IntervalThrow";
         this.command = new Command(Nova, this, aliases, "Throws the item in your hotbar every nth millisecond.");
 
         this.defaultArg = "int";

@@ -17,6 +17,8 @@ public class ModuleNoslow extends ModuleBase {
     public double ladderSpeed = 2.0D;
     @Saveable
     public float iceSlipperiness = 0.98F;
+    @Saveable
+    public boolean useItemSlowdown; // Hook in EntityPlayerSP onLivingUpdate()
 
 
     public ModuleNoslow(nova.Nova Nova, Minecraft mc) {
@@ -35,6 +37,11 @@ public class ModuleNoslow extends ModuleBase {
     @RegisterArgument(name = "slip", description = "Changes the slipperiness of ice")
     public void setIceSlipperiness(float slip) {
         this.iceSlipperiness = slip;
+    }
+
+    @RegisterArgument(name = "items", description = "Toggles slowdown when using items")
+    public void items() {
+        this.useItemSlowdown = !useItemSlowdown;
     }
 
     @EventHandler
@@ -76,7 +83,7 @@ public class ModuleNoslow extends ModuleBase {
 
     @Override
     public String getMetadata() {
-        return "( Ladders: " + ladderSpeed + ", Ice: " + iceSlipperiness + ")";
+        return "( Ladder: " + ladderSpeed + ", Ice: " + iceSlipperiness + (useItemSlowdown ? "| Items " : "") + ")";
     }
 
 }
