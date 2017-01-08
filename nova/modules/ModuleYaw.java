@@ -25,6 +25,14 @@ public class ModuleYaw extends ModuleBase
 		this.yaw = deg;
 	}
 
+    @RegisterArgument(name = "to", description = "Takes an X and Z coordinate to change your angle to")
+    public void lookTowards(int x, int z) {
+        double diffX = x + 0.5 - mc.player.posX;
+        double diffZ = z + 0.5 - mc.player.posZ;
+        yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / Math.PI) - 90.0F;
+
+    }
+
 
 	@Override
 	public void onEnable()

@@ -32,7 +32,7 @@ public class Nova {
     public final String delimeter;
 
 
-    public static final String Version = "NoVa 11.2.a10 Optifine B5";
+    public static final String Version = "NoVa 11.2.a11 Optifine B5";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -99,6 +99,7 @@ public class Nova {
         this.modules.add(new ModuleTimer(this, mc));
         this.modules.add(new ModuleTracers(this, mc));
         this.modules.add(new ModuleTrajectories(this, mc));
+        this.modules.add(new ModuleWaifuESP(this, mc));
         this.modules.add(new ModuleYaw(this, mc));
 
 
