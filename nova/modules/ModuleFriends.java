@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 
@@ -19,7 +18,7 @@ public class ModuleFriends extends ModuleBase{
         super(Nova, mc);
 
         this.aliases.add("friend");
-        this.command = new Command(Nova, this, aliases, "friends list for various purposes");
+        this.description = ("friends list for various purposes");
         this.isEnabled = true;
 
         this.defaultArg = "add";
@@ -61,6 +60,21 @@ public class ModuleFriends extends ModuleBase{
         } else {
             Nova.errorMessage("That friend doesn't exist");
         }
+    }
+
+    @RegisterArgument(name = "list", description = "Lists added friends")
+    public void listFriends() {
+        String list = "Friends: ";
+
+        for (String friend : friends) {
+            list += friend + ", ";
+        }
+
+        if (list.endsWith(", ")) {
+            list = list.substring(0, list.length() - 2);
+        }
+
+        Nova.message(list);
     }
 
     public boolean isFriend(String name)

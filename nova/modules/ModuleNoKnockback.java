@@ -2,7 +2,7 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
-import nova.Command;
+import net.minecraft.network.play.server.SPacketExplosion;
 import nova.events.EventHandler;
 import nova.events.PacketReceivedEvent;
 
@@ -17,7 +17,7 @@ public class ModuleNoKnockback extends ModuleBase {
         this.aliases.add("knock");
         this.aliases.add("antiknockback");
 
-        this.command = new Command(Nova, this, aliases, "Prevents knockback from swords, bows, etc.");
+        this.description = ("Prevents knockback from swords, bows, etc.");
     }
 
     @EventHandler
@@ -27,6 +27,10 @@ public class ModuleNoKnockback extends ModuleBase {
                 if (((SPacketEntityVelocity) e.getPacket()).getEntityID() == mc.player.getEntityId()) {
                     return false;
                 }
+            } else if (e.getPacket() instanceof SPacketExplosion) {
+                // Todo: create proper code that doesn't cancel the event
+                // maybe have to change the event system to support changing packets
+                // todo: figure out of event packet is by pointer
             }
         }
         return true;

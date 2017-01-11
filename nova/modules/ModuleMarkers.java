@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.AxisAlignedBB;
-import nova.Command;
 import nova.core.Location;
 import nova.core.Marker;
 import nova.core.RegisterArgument;
@@ -36,12 +35,8 @@ public class ModuleMarkers extends ModuleBase {
 
 
     // TODO: rewrite everything, maybe add a GUI because this shit is super complicated
-    // TODO: there's a bug where markers don't get unmarked, fix it
-    // TODO: correct the workaround so that it actually works great instead of barely functioning
 
     // As a design choice, I decided to keep ints as the input and parse to double when drawing marker to match old versions
-    // This is supposed to fix a problem, I'm not sure if it does
-
     public ModuleMarkers(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
@@ -52,7 +47,7 @@ public class ModuleMarkers extends ModuleBase {
         aliases.add("m");
         aliases.add("marker");
 
-        this.command = new Command(Nova, this, aliases, "Draws a marker of a given style over a given block. Replaces x-ray. Does not consider metadata. Comes preloaded with a marker for chests.");
+        this.description = ("Draws a marker of a given style over a given block. Replaces x-ray. Does not consider metadata. Comes preloaded with a marker for chests.");
 
 //		this.command.registerArg("chunk", new Class[] { }, "Hilight quartz chunks in the nether");
 

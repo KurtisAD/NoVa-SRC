@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -14,7 +13,7 @@ public class ModuleJesus extends ModuleBase {
     public ModuleJesus(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Walks on water");
+        this.description = ("Walks on water");
     }
 
     @EventHandler

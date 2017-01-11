@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.core.Util;
@@ -47,7 +46,7 @@ public class ModuleGreet extends ModuleBase {
     public ModuleGreet(nova.Nova Nova, Minecraft mc)  {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Greets");
+        this.description = ("Greets");
 
         this.onJoin = true;
         this.onLeave = true;

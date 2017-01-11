@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 
@@ -17,7 +16,7 @@ public class ModuleSpeed extends ModuleBase {
     public ModuleSpeed(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Modifies your movement speed");
+        this.description = ("Modifies your movement speed");
 
         this.speed = 1.3f;
 

@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 
@@ -15,7 +14,7 @@ public class ModuleTimer extends ModuleBase {
 
     public ModuleTimer(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
-        this.command = new Command(Nova, this, aliases, "Changes client tick speed");
+        this.description = ("Changes client tick speed");
 
         this.speed = 1.0f;
         this.defaultArg = "set";

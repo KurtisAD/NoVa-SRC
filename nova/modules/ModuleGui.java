@@ -12,7 +12,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
-import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
@@ -65,7 +64,7 @@ public class ModuleGui extends ModuleBase{
         this.maxDisplayedNotifications = 5;
         this.potionShift = 0;
 
-        this.command = new Command(Nova, this, aliases, "Toggles the GUI");
+        this.description = ("Toggles the GUI");
 
         this.guiColor = 0xFFFFFF;
         this.infoFormat = "[{x}, {z}] {v}km/h";

@@ -2,7 +2,6 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.projectile.EntityFishHook;
-import nova.Command;
 import nova.Nova;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
@@ -20,7 +19,7 @@ public class ModuleAutoFish extends ModuleBase {
 
     public ModuleAutoFish(Nova Nova, Minecraft mc) {
         super(Nova, mc);
-        this.command = new Command(Nova, this, aliases, "Automatically catches fish");
+        this.description = ("Automatically catches fish");
         catching = false;
         tolerance = -0.1D;
     }

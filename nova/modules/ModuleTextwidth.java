@@ -2,7 +2,6 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketChatMessage;
-import nova.Command;
 import nova.core.Util;
 import nova.events.ChatSentEvent;
 import nova.events.EventHandler;
@@ -16,7 +15,7 @@ public class ModuleTextwidth extends ModuleBase{
         super(Nova, mc);
 
         aliases.add("width");
-        this.command = new Command(Nova, this, aliases, "Converts chats to full-width unicode");
+        this.description = ("Converts chats to full-width unicode");
     }
 
 

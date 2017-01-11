@@ -2,7 +2,6 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.events.EventHandler;
@@ -25,7 +24,7 @@ public class ModuleNoslow extends ModuleBase {
         super(Nova, mc);
 
         aliases.add("ns");
-        this.command = new Command(Nova, this, aliases, "Makes you go fast");
+        this.description = ("Makes you go fast");
     }
 
 

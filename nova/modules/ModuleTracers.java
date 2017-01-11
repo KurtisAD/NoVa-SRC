@@ -10,7 +10,6 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.util.math.Vec3d;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.events.EntityRenderTickEvent;
@@ -28,9 +27,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ModuleTracers extends ModuleBase {
     // TODO: add color selection
-    // TODO: test and debug
     // TODO: add setting for friends
-    // TODO: FIX BECAUSE IT'S SUPER BROKEN
 
     Map<String, Class> validEntities;
 
@@ -43,7 +40,7 @@ public class ModuleTracers extends ModuleBase {
 
         this.aliases.add("tracer");
 
-        this.command = new Command(Nova, this, aliases, "Draws a line to players");
+        this.description = ("Draws a line to players");
         validEntities = new HashMap<>();
         traced = new HashMap<>();
         addEntities();

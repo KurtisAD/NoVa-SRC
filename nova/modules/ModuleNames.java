@@ -3,7 +3,6 @@ package nova.modules;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.core.Util;
 
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class ModuleNames extends ModuleBase {
         super(Nova, mc);
         this.isToggleable = false;
 
-        this.command = new Command(Nova, this, aliases, "Returns name history from current ingame name, player need not be online. \u00A72Green\u00A7r names are current, \u00A79blue\u00A7r names are open, \u00A74red\u00A7r names are taken, and \u00A76gold\u00A7r is Legacy. WARNING: name requests are capped at 600 every 10 minutes, don't spam use.");
+        this.description = ("Returns name history from current ingame name, player need not be online. \u00A72Green\u00A7r names are current, \u00A79blue\u00A7r names are open, \u00A74red\u00A7r names are taken, and \u00A76gold\u00A7r is Legacy. WARNING: name requests are capped at 600 every 10 minutes, don't spam use.");
     }
 
     private enum NameType {

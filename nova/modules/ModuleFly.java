@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.Nova;
 import nova.StaticNova;
 import nova.core.RegisterArgument;
@@ -18,8 +17,8 @@ public class ModuleFly extends ModuleBase
 
 	public ModuleFly(Nova Nova, Minecraft mc) {
 		super(Nova, mc);
-		this.command = new Command(Nova, this, aliases, "Flies");
-		this.defaultArg = "speed";
+        this.description = ("Flies");
+        this.defaultArg = "speed";
 
 		this.speed = 0.05F;
 	}

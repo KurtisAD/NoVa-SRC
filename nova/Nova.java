@@ -32,7 +32,7 @@ public class Nova {
     public final String delimeter;
 
 
-    public static final String Version = "NoVa 11.2.a11 Optifine B5";
+    public static final String Version = "NoVa 11.2.a12 Optifine B5";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -82,7 +82,6 @@ public class Nova {
         this.modules.add(new ModuleGui(this, mc));
         this.modules.add(new ModuleHelp(this, mc));
         this.modules.add(new ModuleHorseRide(this, mc));
-        //this.modules.add(new ModuleImpersonate(this, mc));
         this.modules.add(new ModuleInfo(this, mc));
         this.modules.add(new ModuleIntervalThrow(this, mc));
         //this.modules.add(new ModuleJesus(this, mc));
@@ -91,6 +90,7 @@ public class Nova {
         this.modules.add(new ModuleNofall(this, mc));
         this.modules.add(new ModuleNoKnockback(this, mc));
         this.modules.add(new ModuleNoslow(this, mc));
+        this.modules.add(new ModuleNotifications(this, mc));
         this.modules.add(new ModuleSafewalk(this, mc));
         this.modules.add(new ModuleSay(this, mc));
         this.modules.add(new ModuleSpeed(this, mc));
@@ -108,6 +108,7 @@ public class Nova {
 
         for(ModuleBase m : modules)
         {
+            // maybe put names and aliases in module cashe?
             moduleCache.put(m.getName().toLowerCase(), m);
             moduleNameCache.put(m.getClass().getSimpleName(), m.getName().toLowerCase());
 

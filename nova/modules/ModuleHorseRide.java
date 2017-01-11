@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
 import nova.events.PlayerTickEvent;
@@ -12,11 +11,13 @@ import nova.events.PlayerTickEvent;
 public class ModuleHorseRide extends ModuleBase{
     boolean horseJump;
 
+    // TODO: fix horse jump
+
     public ModuleHorseRide(Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
         this.aliases.add("horse");
-        this.command = new Command(Nova, this, aliases, "Can ride all horses; IN DEVELOPMENT AND TESTING");
+        this.description = ("Can ride all horses; IN DEVELOPMENT AND TESTING");
     }
     // Information is in EntityHorse.isTame()
 

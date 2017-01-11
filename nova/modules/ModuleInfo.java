@@ -5,7 +5,6 @@ import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Util;
 
@@ -16,7 +15,7 @@ public class ModuleInfo extends ModuleBase{
     public ModuleInfo(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Gives info about a player; currently only their armor and it's enchantments; unless a player is designated, you will get info for the closest player to you");
+        this.description = ("Gives info about a player; currently only their armor and it's enchantments; unless a player is designated, you will get info for the closest player to you");
         this.defaultArg = "player";
 
     }

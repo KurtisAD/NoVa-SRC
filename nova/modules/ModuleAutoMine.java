@@ -2,7 +2,6 @@ package nova.modules;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -15,7 +14,7 @@ public class ModuleAutoMine extends ModuleBase {
         super(Nova, mc);
 
         this.aliases.add("mine");
-        this.command = new Command(Nova, this, aliases, "Automatically mines");
+        this.description = ("Automatically mines");
     }
 
     @Override
@@ -31,11 +30,7 @@ public class ModuleAutoMine extends ModuleBase {
             if ((mc.objectMouseOver == null)) {
                 return;
             }
-            if (Block.getIdFromBlock(mc.world.getBlockState(mc.objectMouseOver.getBlockPos()).getBlock()) != 0) {
-                mc.gameSettings.keyBindAttack.pressed = true;
-            } else {
-                mc.gameSettings.keyBindAttack.pressed = false;
-            }
+            mc.gameSettings.keyBindAttack.pressed = Block.getIdFromBlock(mc.world.getBlockState(mc.objectMouseOver.getBlockPos()).getBlock()) != 0;
         }
     }
 }

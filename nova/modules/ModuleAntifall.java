@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.events.EventHandler;
@@ -14,11 +13,11 @@ public class ModuleAntifall extends ModuleBase {
     @Saveable
     public float tolerance;
 
-
+    // TODO: maybe implement using NaN or spamming teleport packets?
     public ModuleAntifall(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Catches you after you've fallen a certain distance by turning on fly, designed for NCP servers");
+        this.description = "Catches you after you've fallen a certain distance by turning on fly, designed for NCP servers";
         this.defaultArg = "tolerance";
         this.tolerance = 5.0F;
     }

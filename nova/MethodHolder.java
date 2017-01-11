@@ -8,8 +8,8 @@ import java.lang.reflect.Method;
 
 public class MethodHolder {
 
-    Method method;
-    Object object;
+    private Method method;
+    private Object object;
 
     public MethodHolder(Object o, Method m)
     {

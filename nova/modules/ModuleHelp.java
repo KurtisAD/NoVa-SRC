@@ -7,10 +7,12 @@ import nova.core.RegisterArgument;
 
 public class ModuleHelp extends ModuleBase 
 {
-    public ModuleHelp(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
 
-		this.command = new Command(Nova, this, aliases, "Sending cached base coords to kinorana...");
+	// TODO: maybe recognize aliases as well?
+	public ModuleHelp(nova.Nova Nova, Minecraft mc) {
+		super(Nova, mc);
+
+		this.description = "Sending cached base coords to kinorana...";
 
 		this.defaultArg = "module";
 	}
@@ -26,7 +28,7 @@ public class ModuleHelp extends ModuleBase
 
 		for(ModuleBase m : this.Nova.modules)
 		{
-			modules += m.aliases.get(0) + ", ";
+			modules += m.getAliases().get(0) + ", ";
 
 		}
 
@@ -47,19 +49,19 @@ public class ModuleHelp extends ModuleBase
 		int i = 0;
 		String aliases = "\247n\247l";
 
-		for(String s : c.aliases)
+		for (String s : m.getAliases())
 		{
 			i++;
-			if(i > c.aliases.size())
+			if (i > m.getAliases().size())
 				break;
 
-			if(i > c.aliases.size() - 1)
+			if (i > m.getAliases().size() - 1)
 				aliases += s;
 			else
 				aliases += s + ", ";
 		}
 
-		aliases += ":\247r " + c.getDescription();
+		aliases += ":\247r " + m.getDescription();
 
 		this.Nova.message(aliases);
 

@@ -2,8 +2,6 @@ package nova;
 
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
 
 /**
  * Created by Skeleton Man on 6/18/2016.
@@ -12,19 +10,16 @@ import java.util.concurrent.Callable;
 public class Argument {
 
     private String id;
-    public Class sets[];
+    private Class sets[];
     private Command c;
     private Method method;
-    private ArrayList<String> errors;
-    String usage;
-    private Callable ca;
+    private String usage;
 
     public Argument(Command c, String id, Method method, String use){
         this.c = c;
         this.id = id;
         this.sets = method.getParameterTypes();
         this.method = method;
-        this.errors = new ArrayList<String>();
 
         this.usage = "of format: \247o";
 
@@ -38,29 +33,24 @@ public class Argument {
     public Object[] matches(String argv[])
     {
 
-        this.errors.clear();
-
         if(sets == null || sets.length == 0)
             return new Object[]{};
 
         Object toReturn[]= new Object[argv.length];
         for(int i = 0; i < argv.length; i++) {
 
-            // TODO: find a way to compare without using strings
-            // getClass().equals() doesn't work
             try {
-                Object o = sets[i];
-                if (sets[i].getName().equals("boolean")) {
+                if (sets[i] == boolean.class) {
                     toReturn[i] = Boolean.parseBoolean(argv[i]);
-                } else if(sets[i].getName().equals("char")) {
+                } else if (sets[i] == char.class) {
                     toReturn[i] = argv[i].charAt(0);
-                } else if(sets[i].getName().equals("java.lang.String")) {
+                } else if (sets[i] == String.class) {
                     toReturn[i] = argv[i];
-                } else if(sets[i].getName().equals("int")) {
+                } else if (sets[i] == int.class) {
                     toReturn[i] = Integer.parseInt(argv[i]);
-                } else if(sets[i].getName().equals("float")) {
+                } else if (sets[i] == float.class) {
                     toReturn[i] = Float.parseFloat(argv[i]);
-                } else if(sets[i].getName().equals("double")) {
+                } else if (sets[i] == double.class) {
                     toReturn[i] = Double.parseDouble(argv[i]);
                 } else {
                     return null;

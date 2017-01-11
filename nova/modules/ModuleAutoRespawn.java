@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -13,7 +12,7 @@ public class ModuleAutoRespawn extends ModuleBase{
     public ModuleAutoRespawn(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
         aliases.add("respawn");
-        this.command = new Command(Nova, this, aliases, "Automatically respawns on death.");
+        this.description = ("Automatically respawn on death.");
 
     }
 
@@ -21,6 +20,5 @@ public class ModuleAutoRespawn extends ModuleBase{
     public void onPlayerTick(PlayerTickEvent e){
         if (this.isEnabled && mc.player.getHealth() <= 0)
             mc.player.respawnPlayer();
-
     }
 }

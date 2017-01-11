@@ -2,7 +2,6 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatAllowedCharacters;
-import nova.Command;
 import nova.core.Base64;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
@@ -51,7 +50,7 @@ public class ModuleEncryption extends ModuleBase
         super(Nova, mc);
         this.isToggleable = false;
 
-        this.command = new Command(Nova, this, aliases, "encrypts chats");
+        this.description = ("encrypts chats");
 
         this.defaultArg = "delimeter";
 
@@ -103,7 +102,7 @@ public class ModuleEncryption extends ModuleBase
         return new String(arrayOfByte3);
     }
 
-    public byte[] EncryptData(String paramString)
+    private byte[] EncryptData(String paramString)
     {
         byte[] arrayOfByte1 = paramString.getBytes();
         byte[] arrayOfByte2 = new byte[arrayOfByte1.length + 16];
@@ -142,12 +141,12 @@ public class ModuleEncryption extends ModuleBase
         return arrayOfByte3;
     }
 
-    public byte[] DecodeBase64(String paramString)
+    private byte[] DecodeBase64(String paramString)
     {
         return Base64.decodeToBytes(paramString);
     }
 
-    public String EncodeBase64(byte[] paramArrayOfByte)
+    private String EncodeBase64(byte[] paramArrayOfByte)
     {
         return Base64.encodeToString(paramArrayOfByte);
     }
@@ -248,7 +247,6 @@ public class ModuleEncryption extends ModuleBase
     public boolean onChatReceived(ChatRecievedEvent e)
     {		String username;
         String message;
-        String paramString3;
 
         message = e.getMessage();
         username = message.split(">")[0];

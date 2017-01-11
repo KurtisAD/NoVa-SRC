@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -12,7 +11,7 @@ public class ModuleFastBreak extends ModuleBase {
     public ModuleFastBreak(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Breaks blocks faster");
+        this.description = ("Breaks blocks faster");
     }
 
     @EventHandler

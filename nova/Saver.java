@@ -67,7 +67,6 @@ public class Saver {
                 f.setAccessible(true);
 
                 try {
-                    // TODO: make this call more effective
                     f.set(m, Util.getGson().fromJson(json.get(f.getName()), f.getGenericType()) == null ?
                             f.get(m) : Util.getGson().fromJson(json.get(f.getName()), f.getGenericType()));
 

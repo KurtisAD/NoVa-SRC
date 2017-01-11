@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.storage.MapData;
-import nova.Command;
 import nova.core.RegisterArgument;
 
 import javax.imageio.ImageIO;
@@ -20,13 +19,14 @@ import java.net.URL;
  * Created by Skeleton Man on 1/7/2017.
  */
 public class ModuleWaifuESP extends ModuleBase {
+    // This will eventually port over to the fake inventory class
 
-    // TODO: fetch from url
+
     public ModuleWaifuESP(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
         this.isToggleable = false;
         this.aliases.add("waifu");
-        this.command = new Command(Nova, this, aliases, "Shows your waifu, save waifus from URL, or load them from the Nova folder.");
+        this.description = ("Shows your waifu, save waifus from URL, or load them from the Nova folder.");
     }
 
     @RegisterArgument(name = "load", description = "Loads waifu from file, enter waifu name")
@@ -99,7 +99,7 @@ public class ModuleWaifuESP extends ModuleBase {
             try {
                 BufferedImage bi = isUrl ? ImageIO.read(new URL(path)) : ImageIO.read(new File(path));
                 if (bi.getHeight() != 128 || bi.getWidth() != 128) {
-                    Nova.errorMessage("Image file height and width do not match map size ( " + bi.getHeight() + ", " + bi.getWidth() + ")");
+                    Nova.errorMessage("Image file height and width do not match map size (" + bi.getWidth() + "," + bi.getHeight() + ") instead of (128,128)");
                     return;
                 }
                 getWaifu(bi);

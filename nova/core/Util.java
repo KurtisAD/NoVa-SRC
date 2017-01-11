@@ -7,11 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Util.EnumOS;
-import nova.modules.ModuleBase;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -64,37 +61,6 @@ public class Util {
         return var0.contains("win") ? EnumOS.WINDOWS : (var0.contains("mac") ? EnumOS.OSX : (var0.contains("solaris") ? EnumOS.SOLARIS : (var0.contains("sunos") ? EnumOS.SOLARIS : (var0.contains("linux") ? EnumOS.LINUX : (var0.contains("unix") ? EnumOS.LINUX : EnumOS.UNKNOWN)))));
     }
 
-    public static void saveModule(ModuleBase module){
-        FileWriter file;
-        try {
-            file = new FileWriter(module.filepath);
-            file.write(gson.toJson(module));
-            file.flush();
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-
-    /*
-     * Must only be called when NoV is intialized
-     */
-    /*
-    public static ModuleBase loadModule(ModuleBase module, Nova Nova, Minecraft mc){
-        try {
-            module = gson.fromJson(new JsonReader(new FileReader(module.filepath)),module.getClass());
-            module.initializeNonsavables(Nova, mc);
-            return module;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        saveModule(module);
-        return module;
-    }
-*/
     public static String capitalize(String str)
     {
         return str.substring(0, 1).toUpperCase() + str.substring(1);

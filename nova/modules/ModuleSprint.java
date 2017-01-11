@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.Nova;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
@@ -13,7 +12,7 @@ public class ModuleSprint extends ModuleBase{
     public ModuleSprint(Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Sprints when moving");
+        this.description = ("Sprints when moving");
     }
 
     @EventHandler

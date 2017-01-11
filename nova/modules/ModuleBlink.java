@@ -6,7 +6,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.PacketSendEvent;
 
@@ -23,7 +22,7 @@ public class ModuleBlink extends ModuleBase
     public ModuleBlink(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Synthetic lagswitch.");
+        this.description = ("Synthetic lagswitch.");
         this.delayedPackets = new ArrayList();
     }
 

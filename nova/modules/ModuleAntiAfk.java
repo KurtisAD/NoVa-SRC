@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -15,11 +14,10 @@ public class ModuleAntiAfk extends ModuleBase{
 
     private int timer;
     public ModuleAntiAfk(nova.Nova Nova, Minecraft mc) {
-        // TODO: change code to implement yaw module
         super(Nova, mc);
         aliases.add("afk");
         aliases.add("aafk");
-        this.command = new Command(Nova, this, aliases, "Walks randomly to prevent AFK detectors. From Wurst");
+        this.description = ("Sneaks on interval to prevent AFK detectors.");
 
         timer = 0;
     }

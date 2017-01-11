@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.core.RegisterArgument;
 import org.lwjgl.opengl.Display;
 
@@ -27,7 +26,7 @@ public class ModuleFakeCoord extends ModuleBase {
 
         aliases.add("fakecoords");
 
-        this.command = new Command(Nova, this, aliases, "Offsets coordinates in debug overlay and ModuleGui, input is rounded down to multiples of 16");
+        this.description = ("Offsets coordinates in debug overlay and ModuleGui, input is rounded down to multiples of 16");
 
         isSpoofing = false;
         xOffset = 0;
