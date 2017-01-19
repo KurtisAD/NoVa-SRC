@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -12,13 +11,13 @@ import nova.events.PlayerTickEvent;
  * Created by Skeleton Man on 7/17/2016.
  */
 public class ModuleAutoEat extends ModuleBase {
-    // TODO: implement my own way instead of using wrust code
+    // TODO: implement my own way instead of using wurst code
     private int oldSlot;
     private int bestSlot;
 
     public ModuleAutoEat(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
-        this.command = new Command(Nova, this, aliases, "Automatically eats. From Wrust");
+        this.description = ("Automatically eats. From Wurst");
     }
 
     @EventHandler
@@ -29,7 +28,7 @@ public class ModuleAutoEat extends ModuleBase {
             if (isEating()) {
                 ItemStack item = mc.player.inventory.getStackInSlot(bestSlot);
 
-                if (mc.player.getFoodStats().getFoodLevel() >= 20 || item == null || !(item.getItem() instanceof ItemFood)) {
+                if (mc.player.getFoodStats().getFoodLevel() >= 20 || item == ItemStack.EMPTY || !(item.getItem() instanceof ItemFood)) {
                     stopEating();
                 } else {
                     mc.player.inventory.currentItem = bestSlot;
@@ -43,7 +42,7 @@ public class ModuleAutoEat extends ModuleBase {
                 for (int i = 0; i < 9; i++) {
                     ItemStack item = mc.player.inventory.getStackInSlot(i);
 
-                    if (item == null) {
+                    if (item == ItemStack.EMPTY) {
                         continue;
                     }
 

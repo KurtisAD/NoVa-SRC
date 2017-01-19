@@ -2,7 +2,6 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketChatMessage;
-import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
 
@@ -14,7 +13,7 @@ public class ModuleSay extends ModuleBase{
         super(Nova, mc);
         this.isToggleable = false;
 
-        this.command = new Command(Nova, this, aliases, "Says whatever surrounded by quotes. Format: say \"Message\".");
+        this.description = ("Says whatever surrounded by quotes. Format: say \"Message\".");
         this.defaultArg = "say";
 
     }

@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
@@ -20,7 +19,7 @@ public class ModuleGlide extends ModuleBase {
 
         this.speed = -0.17D;
 
-        this.command = new Command(Nova, this, aliases, "Slows fall speed; NCP patched (?)");
+        this.description = ("Slows fall speed; NCP patched (?)");
         this.defaultArg = "speed";
 
     }

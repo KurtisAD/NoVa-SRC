@@ -3,7 +3,6 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.events.PlayerTickEvent;
 
@@ -22,8 +21,7 @@ public class ModuleIntervalThrow extends ModuleBase {
         super(Nova, mc);
 
         this.aliases.add("intt");
-        this.name = "IntervalThrow";
-        this.command = new Command(Nova, this, aliases, "Throws the item in your hotbar every nth millisecond.");
+        this.description = ("Throws the item in your hotbar every nth millisecond.");
 
         this.defaultArg = "int";
 

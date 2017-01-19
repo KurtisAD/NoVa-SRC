@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
@@ -34,8 +33,7 @@ public class ModuleESP extends ModuleBase {
     public ModuleESP(Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.name = "ESP";
-        this.command = new Command(Nova, this, aliases, "Hilights a player's name and shows their health, held item, and distance; friend's names are green.");
+        this.description = ("Hilights a player's name and shows their health, held item, and distance; friend's names are green.");
 
         this.healthEsp = true;
         this.itemEsp = true;

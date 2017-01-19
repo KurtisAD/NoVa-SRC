@@ -2,7 +2,6 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatAllowedCharacters;
-import nova.Command;
 import nova.core.Base64;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
@@ -49,10 +48,9 @@ public class ModuleEncryption extends ModuleBase
 
     public ModuleEncryption(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
-        this.name = "Encryption";
         this.isToggleable = false;
 
-        this.command = new Command(Nova, this, aliases, "encrypts chats");
+        this.description = ("encrypts chats");
 
         this.defaultArg = "delimeter";
 
@@ -104,7 +102,7 @@ public class ModuleEncryption extends ModuleBase
         return new String(arrayOfByte3);
     }
 
-    public byte[] EncryptData(String paramString)
+    private byte[] EncryptData(String paramString)
     {
         byte[] arrayOfByte1 = paramString.getBytes();
         byte[] arrayOfByte2 = new byte[arrayOfByte1.length + 16];
@@ -143,12 +141,12 @@ public class ModuleEncryption extends ModuleBase
         return arrayOfByte3;
     }
 
-    public byte[] DecodeBase64(String paramString)
+    private byte[] DecodeBase64(String paramString)
     {
         return Base64.decodeToBytes(paramString);
     }
 
-    public String EncodeBase64(byte[] paramArrayOfByte)
+    private String EncodeBase64(byte[] paramArrayOfByte)
     {
         return Base64.encodeToString(paramArrayOfByte);
     }
@@ -187,20 +185,24 @@ public class ModuleEncryption extends ModuleBase
         if (!(message.startsWith(this.delimeter)))
             return true;
 
-        String str1 = mc.player.getDisplayName().getUnformattedText();
-        System.out.print(str1);
+        String name = mc.player.getDisplayName().getUnformattedText();
+        System.out.print(name);
 
-        String str2 = Util.hash(str1);
+        String nameHash = Util.hash(name);
 
         try
         {
             int j = b.size() == 0 ? 1 : 0;
-            String str3 = EncodeBase64(EncryptData(message.substring(1)));
+
+            // This is where color codes are
+            String str3 = EncodeBase64(EncryptData(message.substring(1).replace(this.delimeter, "\247")));
 
             str3 = str3.replace("\r", "");
             str3 = str3.replace("\n", "");
-            String str4 = str2 + str3 + "\\\\";
-            if (str4.length() > 99 - str2.length() - 2)
+
+
+            String str4 = nameHash + str3 + "\\\\";
+            if (str4.length() > 99 - nameHash.length() - 2)
             {
                 StringBuilder localStringBuilder = new StringBuilder();
                 for (int k = 0; k < str3.length(); k++)
@@ -208,16 +210,16 @@ public class ModuleEncryption extends ModuleBase
                     char c1 = str3.charAt(k);
                     localStringBuilder.append(c1);
 
-                    if ((ChatAllowedCharacters.isAllowedCharacter(c1)) && (localStringBuilder.length() <= 99 - str2.length() - 2))
+                    if ((ChatAllowedCharacters.isAllowedCharacter(c1)) && (localStringBuilder.length() <= 99 - nameHash.length() - 2))
                         continue;
 
-                    String str7 = str2 + localStringBuilder.toString();
+                    String str7 = nameHash + localStringBuilder.toString();
                     b.add(str7);
                     localStringBuilder = new StringBuilder();
                 }
 
                 localStringBuilder.append("\\\\");
-                String str5 = str2 + localStringBuilder.toString();
+                String str5 = nameHash + localStringBuilder.toString();
                 b.add(str5);
                 if (j == 0)
                     return true;
@@ -245,7 +247,6 @@ public class ModuleEncryption extends ModuleBase
     public boolean onChatReceived(ChatRecievedEvent e)
     {		String username;
         String message;
-        String paramString3;
 
         message = e.getMessage();
         username = message.split(">")[0];

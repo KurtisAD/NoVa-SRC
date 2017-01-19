@@ -2,16 +2,16 @@ package nova.events;
 
 import net.minecraft.util.math.BlockPos;
 import nova.core.Location;
-import nova.core.SimpleBlock;
 
 /**
  * Created by Skeleton Man on 7/26/2016.
  */
 public class BlockRenderedEvent {
-    public SimpleBlock block;
+    public int id;
     public Location pos;
 
-    public BlockRenderedEvent(SimpleBlock block, BlockPos pos){
-        this.block = block;
+    public BlockRenderedEvent(int id, BlockPos pos) {
+        this.id = id;
         this.pos = new Location(pos);
-    }}
+    }
+}

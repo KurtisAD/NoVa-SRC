@@ -5,7 +5,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.LeftClickEvent;
 import nova.events.PlayerTickEvent;
@@ -19,7 +18,7 @@ public class ModuleAutotool extends ModuleBase{
     public ModuleAutotool(nova.Nova Nova, Minecraft mc) {
 
 		super(Nova, mc);
-		this.command = new Command(Nova, this, aliases, "Switches to better tool if possible");
+		this.description = ("Switches to better tool if possible");
 	}
 
     // This code need revision
@@ -45,7 +44,7 @@ public class ModuleAutotool extends ModuleBase{
 	public void onLeftClick(LeftClickEvent e){
 		if (this.isEnabled){
 			if ((mc.objectMouseOver == null) ||
-					(mc.objectMouseOver.getBlockPos() == null)) {
+					(mc.objectMouseOver.getBlockPos() == null)) { // maybe RayTraceResult.typeOfHit == miss ?
 				return;
 			}
             if (mc.world.getBlockState(mc.objectMouseOver.getBlockPos())

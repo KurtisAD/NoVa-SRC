@@ -2,7 +2,6 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketChatMessage;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Util;
 
@@ -20,7 +19,7 @@ public class ModuleImpersonate extends ModuleBase {
         this.isToggleable = false;
         this.aliases.add("imp");
 
-        this.command = new Command(Nova, this, aliases, "Impersonates a player");
+        this.description = ("Impersonates a player");
         this.defaultArg = "do";
     }
 

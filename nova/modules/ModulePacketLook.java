@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -20,7 +19,7 @@ public class ModulePacketLook extends ModuleBase {
         super(Nova, mc);
 
         this.isToggleable = false;
-        this.command = new Command(Nova, this, aliases,"Not togglable, sends packet looking stuff without changing your vision");
+        this.description = ("Not togglable, sends packet looking stuff without changing your vision");
 
         this.expireTime = 0L;
     }

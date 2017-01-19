@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 
@@ -9,7 +8,6 @@ import nova.core.Saveable;
  * Created by Skeleton Man on 7/19/2016.
  */
 public class ModuleBrightness extends ModuleBase{
-    // TODO: review metadata check
 
     @Saveable
     float brightness;
@@ -24,7 +22,7 @@ public class ModuleBrightness extends ModuleBase{
         aliases.add("bright");
         aliases.add("fullbright");
 
-        this.command = new Command(Nova, this, aliases, "Changes brightness");
+        this.description = ("Changes brightness");
         this.defaultArg = "set";
     }
 

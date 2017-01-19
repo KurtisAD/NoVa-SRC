@@ -9,7 +9,6 @@ import net.minecraft.item.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import nova.Command;
 import nova.events.EntityRenderTickEvent;
 import nova.events.EventHandler;
 import org.lwjgl.opengl.GL11;
@@ -23,7 +22,7 @@ public class ModuleTrajectories extends ModuleBase {
     public ModuleTrajectories(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Draws trajectories for projectiles. From Wurst");
+        this.description = ("Draws trajectories for projectiles. From Wurst");
     }
 
     @EventHandler
