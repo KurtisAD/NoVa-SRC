@@ -3,6 +3,7 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
+import nova.core.Util;
 
 import java.util.ArrayList;
 
@@ -66,6 +67,8 @@ public class ModuleFriends extends ModuleBase{
     public void listFriends() {
         String list = "Friends: ";
 
+        list += Util.join(friends, ", ");
+        /*
         for (String friend : friends) {
             list += friend + ", ";
         }
@@ -73,6 +76,7 @@ public class ModuleFriends extends ModuleBase{
         if (list.endsWith(", ")) {
             list = list.substring(0, list.length() - 2);
         }
+        */
 
         Nova.message(list);
     }

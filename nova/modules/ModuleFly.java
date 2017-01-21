@@ -29,7 +29,8 @@ public class ModuleFly extends ModuleBase
 	{
 		mc.player.capabilities.isFlying = true;
         StaticNova.Nova.getModule(ModuleSpeed.class).onDisable();
-        super.onEnable();
+		StaticNova.Nova.getModule(ModuleElytraFly.class).onDisable();
+		super.onEnable();
     }
 
 	@Override
@@ -61,6 +62,6 @@ public class ModuleFly extends ModuleBase
 	@Override
 	public String getMetadata()
 	{
-        return "(" + (speed == 1.0f ? "Ready" : Float.toString(speed)) + ")";
-    }
+		return "(" + (speed == 0.05F ? "Ready" : Float.toString(speed)) + ")";
+	}
 }

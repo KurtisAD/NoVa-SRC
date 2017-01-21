@@ -28,7 +28,6 @@ public class ModuleGreet extends ModuleBase {
     @Saveable
     public boolean onLeave;
 
-
     @Saveable
     public ArrayList<String> greetings;
 
@@ -41,12 +40,15 @@ public class ModuleGreet extends ModuleBase {
     @Saveable
     public String goodbyeFormat;
 
+    private long lastMessageTime;
 
 
     public ModuleGreet(nova.Nova Nova, Minecraft mc)  {
         super(Nova, mc);
 
         this.description = ("Greets");
+
+        this.lastMessageTime = Minecraft.getSystemTime();
 
         this.onJoin = true;
         this.onLeave = true;
@@ -137,8 +139,13 @@ public class ModuleGreet extends ModuleBase {
         this.farewell(e.getUsername());
     }
 
-    public void greeting(String user)
+    private void greeting(String user)
     {
+        // TODO: combine check with the next one
+        if (Minecraft.getSystemTime() - lastMessageTime < 100) {
+            return;
+        }
+
         if (!(this.isEnabled && this.onJoin))
             return;
 
@@ -170,10 +177,15 @@ public class ModuleGreet extends ModuleBase {
                 .replaceAll("\\{.\\}", period);
 
         mc.player.sendChatMessage(msg);
+        lastMessageTime = Minecraft.getSystemTime();
     }
 
-    public void farewell(String user)
+    private void farewell(String user)
     {
+        // TODO: combine check with the next one
+        if (Minecraft.getSystemTime() - lastMessageTime < 100) {
+            return;
+        }
 
         if (!(this.isEnabled && this.onLeave))
             return;
@@ -186,6 +198,7 @@ public class ModuleGreet extends ModuleBase {
                 .replaceAll("\\{.\\}", period);
 
         mc.player.sendChatMessage(msg);
+        lastMessageTime = Minecraft.getSystemTime();
     }
 
 

@@ -7,7 +7,7 @@ import nova.core.Saveable;
 /**
  * Created by Skeleton Man on 12/11/2016.
  */
-public class ModuleTimer extends ModuleBase {
+public class ModuleTimer extends ModuleBase { // TODO: fix the timer setting issues when disabled
 
     @Saveable
     public float speed;
@@ -25,7 +25,6 @@ public class ModuleTimer extends ModuleBase {
         this.speed = speed;
         mc.timer.timerSpeed = speed;
     }
-
 
     @Override
     public String getMetadata() {

@@ -1,8 +1,9 @@
 package nova.modules;
 
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
+import nova.core.RegisterArgument;
 import nova.core.Util;
 
 import java.io.IOException;
@@ -15,13 +16,15 @@ import java.net.URLConnection;
  * Created by Skeleton Man on 12/20/2016.
  */
 public class ModuleNames extends ModuleBase {
+    // TODO: colorcode names again
     JsonParser parser = new JsonParser();
 
     public ModuleNames(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
         this.isToggleable = false;
 
-        this.description = ("Returns name history from current ingame name, player need not be online. \u00A72Green\u00A7r names are current, \u00A79blue\u00A7r names are open, \u00A74red\u00A7r names are taken, and \u00A76gold\u00A7r is Legacy. WARNING: name requests are capped at 600 every 10 minutes, don't spam use.");
+        this.description = "Returns name history from current ingame name, player need not be online. \u00A72Green\u00A7r names are current, \u00A79blue\u00A7r names are open, \u00A74red\u00A7r names are taken, and \u00A76gold\u00A7r is Legacy. WARNING: name requests are capped at 600 every 10 minutes, don't spam use.";
+        this.defaultArg = "get";
     }
 
     private enum NameType {
@@ -31,7 +34,24 @@ public class ModuleNames extends ModuleBase {
         TAKEN
     }
 
-    private JsonObject getJsonFromName(String name) throws IOException {
+    @RegisterArgument(name = "get", description = "Get name history for current name")
+    public void getNames(String name) {
+        try {
+            JsonElement json = getJsonFromName(name);
+            NameObject names[] = Util.getGson().fromJson(json, NameObject[].class);
+
+            Nova.message("Name history for " + name + ":");
+            for (NameObject n : names) {
+                Nova.message(n.getName());
+            }
+            Nova.message("End of name history.");
+        } catch (IOException e) {
+            Nova.errorMessage("IOException thrown.");
+            e.printStackTrace();
+        }
+    }
+
+    private JsonElement getJsonFromName(String name) throws IOException {
         long unixTime = System.currentTimeMillis();
         URL url = null;
 
@@ -45,9 +65,10 @@ public class ModuleNames extends ModuleBase {
 
         url = new URL("https://api.mojang.com/user/profiles/" + uuid + "/names");
 
-        return null;
+        return parser.parse(getSourceFromURL(url));
     }
 
+    // maybe move this to Util?
     private String getSourceFromURL(URL url) throws IOException {
 
         InputStreamReader isr = null;
@@ -69,11 +90,16 @@ public class ModuleNames extends ModuleBase {
         return result;
     }
 
-    public class nameObject {
-        String name;
-        long changedToAt;
+    private class NameObject {
+        private String name;
+        private long changedToAt;
 
+        public String getName() {
+            return this.name;
+        }
 
+        public long getChangedToAt() {
+            return this.changedToAt;
+        }
     }
-
 }

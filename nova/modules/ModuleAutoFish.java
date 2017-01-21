@@ -19,7 +19,7 @@ public class ModuleAutoFish extends ModuleBase {
 
     public ModuleAutoFish(Nova Nova, Minecraft mc) {
         super(Nova, mc);
-        this.description = ("Automatically catches fish");
+        this.description = ("Automatically catches fish, based off Wurst");
         catching = false;
         tolerance = -0.1D;
     }

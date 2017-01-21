@@ -16,11 +16,8 @@ import java.lang.reflect.Field;
 public class Saver {
     // TODO: improve saver so it's private/public independent, maybe think of a better way?
 
+
     public static void saveModule(ModuleBase m) {
-        //get location in module
-        //get savables
-        //parse savables to gson
-        //save
 
         JsonObject json = new JsonObject();
 
@@ -53,8 +50,6 @@ public class Saver {
         try {
             json = Util.getGson().fromJson(new JsonReader(new FileReader(Nova.novaDir + File.separator + m.name + ".nova")), JsonObject.class);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-
             System.out.println("Module: " + m.getName() + " failed to load, saving default values...");
             saveModule(m);
 

@@ -1,23 +1,16 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.item.*;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.*;
-import net.minecraft.entity.projectile.*;
 import net.minecraft.util.math.Vec3d;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
+import nova.core.Util;
 import nova.events.EntityRenderTickEvent;
 import nova.events.EventHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -29,8 +22,6 @@ public class ModuleTracers extends ModuleBase {
     // TODO: add color selection
     // TODO: add setting for friends
 
-    Map<String, Class> validEntities;
-
     @Saveable
     public Map<String, Color> traced;
 
@@ -41,15 +32,13 @@ public class ModuleTracers extends ModuleBase {
         this.aliases.add("tracer");
 
         this.description = ("Draws a line to players");
-        validEntities = new HashMap<>();
-        traced = new HashMap<>();
-        addEntities();
     }
 
     @RegisterArgument(name = "valid", description = "Lists valid entites")
     public void valid() {
+        // Maybe use Util.join here?
         String ret = "";
-        for (String s : this.validEntities.keySet()) {
+        for (String s : Util.getValidEntities().keySet()) {
             ret += s + ", ";
         }
 
@@ -59,7 +48,7 @@ public class ModuleTracers extends ModuleBase {
 
     @RegisterArgument(name = "new", description = "Adds entity class to tracers with default color, white")
     public void add(String name) {
-        if (validEntities.containsKey(name.toLowerCase())) {
+        if (Util.getValidEntities().containsKey(name.toLowerCase())) {
             this.traced.put(name.toLowerCase(), new Color(255, 255, 255));
             this.Nova.confirmMessage("Added " + name + " to tracers");
         } else {
@@ -69,7 +58,7 @@ public class ModuleTracers extends ModuleBase {
 
     @RegisterArgument(name = "add", description = "Add entity to tracers with R G B colors")
     public void addrgb(String name, int r, int g, int b) {
-        if (validEntities.containsKey(name.toLowerCase())) {
+        if (Util.getValidEntities().containsKey(name.toLowerCase())) {
             this.traced.put(name.toLowerCase(), new Color(r, g, b));
             this.Nova.confirmMessage("Added " + name + " to tracers");
         } else {
@@ -119,8 +108,8 @@ public class ModuleTracers extends ModuleBase {
     public void onEntityRenderTick(EntityRenderTickEvent e) {
         if (this.isEnabled) {
             for (Entity entity : mc.world.getLoadedEntityList()) {
-                if (this.traced.containsKey(getEntityName(entity.getClass()))) {
-                    drawTracers(entity, traced.get(getEntityName(entity.getClass())));
+                if (this.traced.containsKey(Util.getEntityName(entity.getClass()))) {
+                    drawTracers(entity, traced.get(Util.getEntityName(entity.getClass())));
                 }
             }
         }
@@ -156,101 +145,4 @@ public class ModuleTracers extends ModuleBase {
         glDisable(GL_BLEND);
     }
 
-    private void addToValidEntities(Class entityClass) {
-        validEntities.put(getEntityName(entityClass), entityClass);
-    }
-
-    private String getEntityName(Class entityClass) {
-        return entityClass.getSimpleName().replaceFirst("Entity", "").toLowerCase();
-    }
-
-    private void addEntities() {
-        addToValidEntities(EntityDragon.class);
-        addToValidEntities(EntityWither.class);
-
-        addToValidEntities(EntityArmorStand.class);
-        addToValidEntities(EntityBoat.class);
-        addToValidEntities(EntityEnderCrystal.class);
-        addToValidEntities(EntityEnderEye.class);
-        addToValidEntities(EntityEnderPearl.class);
-        addToValidEntities(EntityExpBottle.class);
-        addToValidEntities(EntityFallingBlock.class);
-        addToValidEntities(EntityFireworkRocket.class);
-        addToValidEntities(EntityItem.class);
-        addToValidEntities(EntityItemFrame.class);
-        addToValidEntities(EntityMinecartChest.class);
-        addToValidEntities(EntityMinecartCommandBlock.class);
-        addToValidEntities(EntityMinecartEmpty.class);
-        addToValidEntities(EntityMinecartFurnace.class);
-        addToValidEntities(EntityMinecartHopper.class);
-        addToValidEntities(EntityMinecartMobSpawner.class);
-        addToValidEntities(EntityMinecartTNT.class);
-        addToValidEntities(EntityPainting.class);
-        addToValidEntities(EntityTNTPrimed.class);
-        addToValidEntities(EntityXPOrb.class);
-
-        addToValidEntities(EntityBlaze.class);
-        addToValidEntities(EntityCaveSpider.class);
-        addToValidEntities(EntityCreeper.class);
-        addToValidEntities(EntityElderGuardian.class);
-        addToValidEntities(EntityEnderman.class);
-        addToValidEntities(EntityEndermite.class);
-        addToValidEntities(EntityEvoker.class);
-        addToValidEntities(EntityGhast.class);
-        addToValidEntities(EntityGiantZombie.class);
-        addToValidEntities(EntityGuardian.class);
-        addToValidEntities(EntityHusk.class);
-        addToValidEntities(EntityIronGolem.class);
-        addToValidEntities(EntityMagmaCube.class);
-        addToValidEntities(EntityPigZombie.class);
-        addToValidEntities(EntityPolarBear.class);
-        addToValidEntities(EntityShulker.class);
-        addToValidEntities(EntitySilverfish.class);
-        addToValidEntities(EntitySkeleton.class);
-        addToValidEntities(EntitySlime.class);
-        addToValidEntities(EntitySnowman.class);
-        addToValidEntities(EntitySpider.class);
-        addToValidEntities(EntityStray.class);
-        addToValidEntities(EntityVex.class);
-        addToValidEntities(EntityVindicator.class);
-        addToValidEntities(EntityWitch.class);
-        addToValidEntities(EntityWitherSkeleton.class);
-        addToValidEntities(EntityZombie.class);
-        addToValidEntities(EntityZombieVillager.class);
-
-        addToValidEntities(EntityBat.class);
-        addToValidEntities(EntityChicken.class);
-        addToValidEntities(EntityCow.class);
-        addToValidEntities(EntityDonkey.class);
-        addToValidEntities(EntityHorse.class);
-        addToValidEntities(EntityLlama.class);
-        addToValidEntities(EntityMooshroom.class);
-        addToValidEntities(EntityMule.class);
-        addToValidEntities(EntityOcelot.class);
-        addToValidEntities(EntityPig.class);
-        addToValidEntities(EntityRabbit.class);
-        addToValidEntities(EntitySheep.class);
-        addToValidEntities(EntitySkeletonHorse.class);
-        addToValidEntities(EntitySquid.class);
-        addToValidEntities(EntityVillager.class);
-        addToValidEntities(EntityWolf.class);
-        addToValidEntities(EntityZombieHorse.class);
-
-        addToValidEntities(EntityOtherPlayerMP.class);
-
-        addToValidEntities(EntityDragonFireball.class);
-        addToValidEntities(EntityEgg.class);
-        addToValidEntities(EntityEvokerFangs.class);
-        addToValidEntities(EntityFishHook.class);
-        addToValidEntities(EntityLargeFireball.class);
-        addToValidEntities(EntityLlamaSpit.class);
-        addToValidEntities(EntityPotion.class);
-        addToValidEntities(EntityShulkerBullet.class);
-        addToValidEntities(EntitySmallFireball.class);
-        addToValidEntities(EntitySnowball.class);
-        addToValidEntities(EntitySpectralArrow.class);
-        addToValidEntities(EntityTippedArrow.class);
-        addToValidEntities(EntityWitherSkull.class);
-
-    }
 }

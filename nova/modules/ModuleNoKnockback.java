@@ -3,6 +3,7 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.network.play.server.SPacketExplosion;
+import nova.core.Util;
 import nova.events.EventHandler;
 import nova.events.PacketReceivedEvent;
 
@@ -17,7 +18,7 @@ public class ModuleNoKnockback extends ModuleBase {
         this.aliases.add("knock");
         this.aliases.add("antiknockback");
 
-        this.description = ("Prevents knockback from swords, bows, etc.");
+        this.description = ("Prevents knockback from swords, bows, explosions, etc.");
     }
 
     @EventHandler
@@ -28,9 +29,9 @@ public class ModuleNoKnockback extends ModuleBase {
                     return false;
                 }
             } else if (e.getPacket() instanceof SPacketExplosion) {
-                // Todo: create proper code that doesn't cancel the event
-                // maybe have to change the event system to support changing packets
-                // todo: figure out of event packet is by pointer
+                Util.setPrivateValue(SPacketExplosion.class, (SPacketExplosion) e.getPacket(), 0f, "motionX");
+                Util.setPrivateValue(SPacketExplosion.class, (SPacketExplosion) e.getPacket(), 0f, "motionY");
+                Util.setPrivateValue(SPacketExplosion.class, (SPacketExplosion) e.getPacket(), 0f, "motionZ");
             }
         }
         return true;

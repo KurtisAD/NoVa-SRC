@@ -3,6 +3,8 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
+import nova.events.EventHandler;
+import nova.events.PlayerMoveEvent;
 
 /**
  * Created by Skeleton Man on 1/4/2017.
@@ -30,6 +32,16 @@ public class ModuleSpeed extends ModuleBase {
             return;
         }
         super.onEnable();
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent e) {
+        if (this.isEnabled) {
+            double movePointer[] = e.getMovePointer();
+
+            movePointer[0] *= speed;
+            movePointer[2] *= speed;
+        }
     }
 
     @RegisterArgument(name = "set", description = "sets the speed")

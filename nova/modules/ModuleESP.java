@@ -21,11 +21,11 @@ import org.lwjgl.opengl.GL11;
  */
 public class ModuleESP extends ModuleBase {
     @Saveable
-    boolean healthEsp;
+    public boolean healthEsp;
     @Saveable
-    boolean itemEsp;
+    public boolean itemEsp;
     @Saveable
-    boolean armorEsp;
+    public boolean armorEsp;
 
     // TODO: Change how labels are rendered, code is prehistoric and needs rewriting
     // TODO: Add more cool features that can be compressed (key factor here, a lot of the rendering is super big)
@@ -43,7 +43,7 @@ public class ModuleESP extends ModuleBase {
     @EventHandler
     public boolean onEntityLabelRenderedEvent(EntityLabelRenderedEvent event)
     {
-
+        // TODO: consider if instanceof EntityOtherPlayerMP is needed
         if(this.isEnabled && event.entity instanceof EntityOtherPlayerMP)
         {
             Entity e = event.entity;
@@ -123,7 +123,6 @@ public class ModuleESP extends ModuleBase {
             else{
                 vertexbuffer.color(0, 0, 0, 255);
                 color = -1;
-
             }
 
             vertexbuffer.pos((double)(-var17 - 1), (double)(-1 + var16), 0.0D);

@@ -181,7 +181,7 @@ public class ModuleMarkers extends ModuleBase {
         }
     }
 
-    public int getBlockFromString(String blocktext) {
+    private int getBlockFromString(String blocktext) {
         int id;
 
 
@@ -239,7 +239,7 @@ public class ModuleMarkers extends ModuleBase {
     }
 
 
-    private void drawMarkers() //Something terribly wrong with the iterators
+    private void drawMarkers()
     {
         int j2 = 225 % 0x10000;
         int k2 = 225 / 0x10000;

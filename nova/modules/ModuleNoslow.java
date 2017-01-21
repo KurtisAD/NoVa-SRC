@@ -82,7 +82,7 @@ public class ModuleNoslow extends ModuleBase {
 
     @Override
     public String getMetadata() {
-        return "( Ladder: " + ladderSpeed + ", Ice: " + iceSlipperiness + (useItemSlowdown ? "| Items " : "") + ")";
+        return "(Ladder: " + ladderSpeed + ", Ice: " + iceSlipperiness + (useItemSlowdown ? "| Items" : "") + ")";
     }
 
 }

@@ -12,6 +12,7 @@ import nova.core.Util;
  * Created by Skeleton Man on 7/19/2016.
  */
 public class ModuleInfo extends ModuleBase{
+    // TODO: fix consistiency
     public ModuleInfo(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 

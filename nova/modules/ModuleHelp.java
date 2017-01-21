@@ -82,7 +82,8 @@ public class ModuleHelp extends ModuleBase
 
 			if(usage.length > 1)
 			{
-				boolean fuckOffPopbob = true;
+                // TODO: rename flag
+                boolean fuckOffPopbob = true;
 
 				for(String str : usage)
 				{

@@ -3,7 +3,8 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import nova.Nova;
 import nova.core.RegisterArgument;
-import nova.events.PlayerTickEvent;
+import nova.events.EventHandler;
+import nova.events.LivingUpdateEvent;
 
 /**
  * Created by Skeleton Man on 7/21/2016.
@@ -26,7 +27,8 @@ public class ModuleHorseRide extends ModuleBase{
         this.horseJump = !this.horseJump;
     }
 
-    public void onTick(PlayerTickEvent e)
+    @EventHandler
+    public void onLivingUpdate(LivingUpdateEvent e) // this event may be placed wrong
     {
         if(this.isEnabled && horseJump) {
             mc.player.horseJumpPower = 1.0F;

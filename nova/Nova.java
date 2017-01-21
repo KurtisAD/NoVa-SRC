@@ -31,8 +31,7 @@ public class Nova {
 
     public final String delimeter;
 
-
-    public static final String Version = "NoVa 11.2.a12 Optifine B5";
+    public static final String Version = "NoVa 11.2.a13 Optifine B5";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -69,6 +68,7 @@ public class Nova {
         //this.modules.add(new ModuleBlink(this, mc));
         this.modules.add(new ModuleBrightness(this, mc));
         this.modules.add(new ModuleCameraClip(this, mc));
+        this.modules.add(new ModuleElytraFly(this, mc));
         this.modules.add(new ModuleEncryption(this, mc));
         this.modules.add(new ModuleESP(this, mc));
         //this.modules.add(new ModuleExtraElytra(this, mc));
@@ -86,11 +86,14 @@ public class Nova {
         this.modules.add(new ModuleIntervalThrow(this, mc));
         //this.modules.add(new ModuleJesus(this, mc));
         this.modules.add(new ModuleMarkers(this, mc));
+        this.modules.add(new ModuleNames(this, mc));
         this.modules.add(new ModuleNoclip(this, mc));
         this.modules.add(new ModuleNofall(this, mc));
         this.modules.add(new ModuleNoKnockback(this, mc));
+        this.modules.add(new ModuleNoRender(this, mc));
         this.modules.add(new ModuleNoslow(this, mc));
         this.modules.add(new ModuleNotifications(this, mc));
+        this.modules.add(new ModulePeek(this, mc));
         this.modules.add(new ModuleSafewalk(this, mc));
         this.modules.add(new ModuleSay(this, mc));
         this.modules.add(new ModuleSpeed(this, mc));
@@ -108,7 +111,7 @@ public class Nova {
 
         for(ModuleBase m : modules)
         {
-            // maybe put names and aliases in module cashe?
+            // maybe put names and aliases in module cache?
             moduleCache.put(m.getName().toLowerCase(), m);
             moduleNameCache.put(m.getClass().getSimpleName(), m.getName().toLowerCase());
 
@@ -126,7 +129,7 @@ public class Nova {
 
     public void notificationMessage(String msg)
     {
-        if(((ModuleGui)getModule(ModuleGui.class)).isHidden)
+        if ((getModule(ModuleGui.class)).isHidden)
             this.message("\247l>>\247r " + msg);
         else
             getModule(ModuleGui.class).addToQueue(msg);
