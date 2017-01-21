@@ -2,7 +2,6 @@ package nova.modules;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
-import nova.Command;
 import nova.Nova;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
@@ -17,6 +16,7 @@ import java.util.Map;
  * Created by Skeleton Man on 6/24/2016.
  */
 public class ModuleBindEditor extends ModuleBase{
+    // TODO: Add numpad keys
 
     public boolean keys[];
 
@@ -30,7 +30,7 @@ public class ModuleBindEditor extends ModuleBase{
         aliases.add("bind");
         aliases.add("binds");
 
-        this.command = new Command(Nova, this, aliases, "Binds command sets to keys. Separate commands with pipes, and surround the whole set with quotes if it includes spaces. (ex. markers; or fly|freecam; or \"fly 0.065|bright -0.025\"");
+        this.description = ("Binds command sets to keys. Separate commands with pipes, and surround the whole set with quotes if it includes spaces. (ex. markers; or fly|freecam; or \"fly 0.065|bright -0.025\"");
         this.defaultArg = "add";
 
 
@@ -40,22 +40,17 @@ public class ModuleBindEditor extends ModuleBase{
     }
 
 
-    public int stringToKey(String key)
+    private int stringToKey(String key)
     {
         return Keyboard.getKeyIndex(key.substring(0, 1).toUpperCase());
     }
 
 
-
-    public boolean keyDown(int k)
-    {
-        if(mc.currentScreen != null && !(mc.currentScreen instanceof GuiChest))
+    private boolean keyDown(int k) {
+        if (mc.currentScreen != null && !(mc.currentScreen instanceof GuiChest))
             return false;
 
-        if(Keyboard.isKeyDown(k) != keys[k])
-            return keys[k] = !keys[k];
-        else
-            return false;
+        return Keyboard.isKeyDown(k) != keys[k] && (keys[k] = !keys[k]);
 
 
     }

@@ -3,8 +3,8 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
-import nova.Command;
 import nova.core.RegisterArgument;
+import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -22,8 +22,7 @@ public class ModuleIntervalThrow extends ModuleBase {
         super(Nova, mc);
 
         this.aliases.add("intt");
-        this.name = "IntervalThrow";
-        this.command = new Command(Nova, this, aliases, "Throws the item in your hotbar every nth millisecond.");
+        this.description = ("Throws the item in your hotbar every nth millisecond.");
 
         this.defaultArg = "int";
 
@@ -53,12 +52,11 @@ public class ModuleIntervalThrow extends ModuleBase {
         this.offHand = !this.offHand;
     }
 
-    public void onPlayerTick(PlayerTickEvent e)
-    {
+    @EventHandler
+    public void onPlayerTick(PlayerTickEvent e) {
         this.currentMs = System.nanoTime() / 1000000;
 
-        if(this.isEnabled && (this.currentMs - this.lastMs) >= this.intervalMs)
-        {
+        if(this.isEnabled && (this.currentMs - this.lastMs) >= this.intervalMs) {
             this.lastMs = System.nanoTime() / 1000000;
 
             if(this.offHand){
@@ -66,8 +64,7 @@ public class ModuleIntervalThrow extends ModuleBase {
                 return;
             }
 
-            if(this.changeToSlot != -1)
-            {
+            if(this.changeToSlot != -1) {
                 this.priorSlot = mc.player.inventory.currentItem;
                 mc.player.inventory.currentItem = this.changeToSlot;
             }
@@ -75,8 +72,7 @@ public class ModuleIntervalThrow extends ModuleBase {
             mc.player.connection.getNetworkManager().sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
 
 
-            if(this.changeToSlot != -1)
-            {
+            if(this.changeToSlot != -1) {
                 mc.player.inventory.currentItem = this.priorSlot;
             }
         }

@@ -6,7 +6,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import nova.Command;
 import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
@@ -17,7 +16,7 @@ public class ModuleExtraElytra extends ModuleBase {
     public ModuleExtraElytra(nova.Nova Nova, Minecraft mc) {
         super(Nova, mc);
 
-        this.command = new Command(Nova, this, aliases, "Changes your speed mid-flight. From Wurst");
+        this.description = ("Changes your speed mid-flight. From Wurst");
     }
 
     @EventHandler

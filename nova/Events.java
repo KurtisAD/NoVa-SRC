@@ -52,9 +52,10 @@ public class Events {
         }
     }
 
-    /*
+    /**
      * @return is canceled
      */
+    // Does this actually return if canceled?
     public boolean onEvent(Object o)
     {
 
@@ -75,7 +76,7 @@ public class Events {
                 res = mh.getMethod().invoke(mh.getObject(), type.cast(o));
 
                 if(res != null)
-                    if(!((Boolean)res).booleanValue())
+                    if (!(Boolean) res)
                         isCancelled = true;
             }
 
@@ -111,7 +112,7 @@ public class Events {
 
 
         for(ModuleBase m : Nova.modules) {
-            if(m.aliases.contains(argv.get(0))) {
+            if (m.getAliases().contains(argv.get(0))) {
                 m.command.parseArgs(argv.subList(1, argv.size()).toArray(new String[argv.size() - 1]));
                 return true;
             }
@@ -119,15 +120,4 @@ public class Events {
 
         return false;
     }
-
-    // pretty much a place holder, tick event fucks up due to player being set to null
-    // this will eventually be removed with better logic, just a quickfix
-    /*
-    public void onTick(){
-        if(Nova.mc.thePlayer == null){
-            return;
-        }
-        onEvent(new TickEvent());
-    }
-    */
 }

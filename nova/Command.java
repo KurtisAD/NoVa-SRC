@@ -5,7 +5,6 @@ import nova.modules.ModuleBase;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,33 +13,19 @@ import java.util.Map;
  * Created by Skeleton Man on 6/18/2016.
  */
 public class Command {
-    public ArrayList<String> aliases;
     public Nova Nova;
-    ModuleBase module;
+    private ModuleBase module;
     public Map<String, Argument> args;
-    String desc;
 
-    public Command(Nova Nova, ModuleBase module, ArrayList<String> aliases)
+    public Command(Nova Nova, ModuleBase module)
     {
-        this.aliases = aliases;
         this.module = module;
         this.Nova = Nova;
-        this.args = new HashMap<String, Argument>();
-        this.desc = "No description available";
+        this.args = new HashMap<>();
 
         getRegisteredArguments();
     }
 
-    public Command(Nova Nova, ModuleBase module, ArrayList<String> aliases, String desc)
-    {
-        this.aliases = aliases;
-        this.module = module;
-        this.Nova = Nova;
-        this.args = new HashMap<String, Argument>();
-        this.desc = desc;
-
-        getRegisteredArguments();
-    }
 
     public void getRegisteredArguments() {
 
@@ -51,14 +36,6 @@ public class Command {
             }
         }
     }
-
-    /*
-    public void registerArg(String arg, Method m, String usage)
-    {
-        args.put(arg, new Argument(this, arg, m, usage));
-
-    }
-    */
 
     public boolean parseArgs(String argv[])
     {
@@ -90,15 +67,7 @@ public class Command {
                 }
 
                 i += arg.getArgc();
-
-            } else if(argv[i].equals("set")) {
-                if(argv.length > i) {
-                    foundFlag = true;
-                    // TODO: Set field in module to this value if it matches the type.
-
-                }
             }
-
         }
 
         if(!foundFlag && argv.length > 0)
@@ -154,10 +123,5 @@ public class Command {
             e.printStackTrace();
         }
         return true;
-    }
-
-    public String getDescription()
-    {
-        return this.desc;
     }
 }

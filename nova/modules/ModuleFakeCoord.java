@@ -1,7 +1,6 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
-import nova.Command;
 import nova.core.RegisterArgument;
 import org.lwjgl.opengl.Display;
 
@@ -27,7 +26,7 @@ public class ModuleFakeCoord extends ModuleBase {
 
         aliases.add("fakecoords");
 
-        this.command = new Command(Nova, this, aliases, "Offsets coordinates in debug overlay and ModuleGui, input is rounded down to multiples of 16");
+        this.description = ("Offsets coordinates in debug overlay and ModuleGui, input is rounded down to multiples of 16");
 
         isSpoofing = false;
         xOffset = 0;
@@ -39,6 +38,7 @@ public class ModuleFakeCoord extends ModuleBase {
 
     @RegisterArgument(name = "offset", description = "Offsets location by coordinate amount, rounded down to multiples of 16")
     public void doOffset(int xOffset, int yOffset, int zOffset){
+        // Can probably use & here, would cut operations in half
         ModuleFakeCoord.xOffset = (xOffset >> 4) << 4;
         ModuleFakeCoord.yOffset = (yOffset >> 4) << 4;
         ModuleFakeCoord.zOffset = (zOffset >> 4) << 4;
@@ -46,6 +46,7 @@ public class ModuleFakeCoord extends ModuleBase {
 
     @RegisterArgument(name = "set", description = "Sets location to coordinates, rounded down to multiples of 16")
     public void doSet(int xSet, int ySet, int zSet){
+        // Can probably use & here, would cut operations in half
         xOffset = (xSet - (int) mc.player.posX >> 4) << 4;
         yOffset = (ySet - (int) mc.player.posY >> 4) << 4;
         zOffset = (zSet - (int) mc.player.posZ >> 4) << 4;

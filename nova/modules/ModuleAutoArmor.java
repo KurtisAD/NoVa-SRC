@@ -7,7 +7,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import nova.Command;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.events.EventHandler;
@@ -30,7 +29,7 @@ public class ModuleAutoArmor extends ModuleBase{
         super(Nova, mc);
 
         aliases.add("aa");
-        this.command = new Command(Nova, this, aliases, "Equips armor if an armor slot is available and armor is found. From hotbar to top left to bottom right. Tells you when a piece is replaced.");
+        this.description = ("Equips armor if an armor slot is available and armor is found. From hotbar to top left to bottom right. Tells you when a piece is replaced.");
 
         totem = false;
     }
@@ -46,7 +45,6 @@ public class ModuleAutoArmor extends ModuleBase{
         if(this.isEnabled)
         {
             // 3 is head, 2 is chest, 1 is leg, 0 is boot
-            // TODO: iterate through the List instead of pass to array
             NonNullList<ItemStack> inv;
             NonNullList<ItemStack> armor = mc.player.inventory.armorInventory;
             NonNullList<ItemStack> offhand = mc.player.inventory.offHandInventory;

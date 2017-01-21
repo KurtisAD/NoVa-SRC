@@ -15,14 +15,16 @@ import java.util.ArrayList;
  * Created by Skeleton Man on 6/18/2016.
  */
 public class ModuleBase implements IModule {
+    // TODO: make more fields protected for encapsulation
 
-    Nova Nova;
-    Minecraft mc;
+    protected Nova Nova;
+    protected Minecraft mc;
 
-    public ArrayList<String> aliases;
-    public String name;
+    protected ArrayList<String> aliases;
+    public final String name;
     public String defaultArg;
     public Command command;
+    protected String description;
 
     @Saveable
     public boolean isEnabled;
@@ -32,12 +34,9 @@ public class ModuleBase implements IModule {
     // If false, this will essentially just act as a command.
     public boolean isToggleable;
 
-
     public String filepath;
 
 
-    // TODO: fix module shit so it loads on declaration, maybe a check and set function for nulls?
-    // TODO: a lot of modules have public fields, need to privatize them
     public ModuleBase(Nova Nova, Minecraft mc) {
         this.Nova = Nova;
         this.isEnabled = false;
@@ -45,9 +44,10 @@ public class ModuleBase implements IModule {
         this.isToggleable = true;
         this.defaultArg = "";
 
-        aliases = new ArrayList<String>();
+        this.description = "No description available.";
+        this.aliases = new ArrayList<>();
 
-        this.command = new Command(Nova, this, aliases);
+        this.command = new Command(Nova, this);
         showEnabled = true;
 
         this.name = this.getClass().getSimpleName().replaceFirst("Module", "").toLowerCase();
@@ -80,6 +80,16 @@ public class ModuleBase implements IModule {
 
     public String getMetadata() {
         return "";
+    }
+
+    @Override
+    public ArrayList<String> getAliases() {
+        return this.aliases;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.description;
     }
 
 
