@@ -1,12 +1,11 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.util.math.Vec3d;
-import nova.StaticNova;
+import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
-import nova.events.EventHandler;
 import nova.events.LivingUpdateEvent;
 import nova.events.PlayerMoveEvent;
 
@@ -21,8 +20,8 @@ public class ModuleElytraFly extends ModuleBase {
     @Saveable
     public float speed;
 
-    public ModuleElytraFly(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleElytraFly() {
+        super();
 
         this.defaultArg = "speed";
         this.speed = 1F;
@@ -65,8 +64,8 @@ public class ModuleElytraFly extends ModuleBase {
 
     @Override
     public void onEnable() {
-        StaticNova.Nova.getModule(ModuleSpeed.class).onDisable();
-        StaticNova.Nova.getModule(ModuleFly.class).onDisable();
+        Nova.getModule(ModuleSpeed.class).onDisable();
+        Nova.getModule(ModuleFly.class).onDisable();
 
         super.onEnable();
     }

@@ -1,42 +1,75 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
-import nova.Nova;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.passive.AbstractHorse;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
-import nova.events.EventHandler;
+import nova.core.Saveable;
 import nova.events.LivingUpdateEvent;
 
 /**
  * Created by Skeleton Man on 7/21/2016.
  */
 public class ModuleHorseRide extends ModuleBase{
-    boolean horseJump;
+    // TODO: expand this module to all entities
+    @Saveable
+    public boolean horseJump;
+    @Saveable
+    public boolean shouldSpeed;
+    @Saveable
+    public float speed;
+    @Saveable
+    public float jump;
 
-    // TODO: fix horse jump
-
-    public ModuleHorseRide(Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleHorseRide() {
+        super();
 
         this.aliases.add("horse");
-        this.description = ("Can ride all horses; IN DEVELOPMENT AND TESTING");
-    }
-    // Information is in EntityHorse.isTame()
+        this.description = ("Can ride all horses");
 
-    @RegisterArgument(name = "jump", description = "Max jump everytime when jumping on horses")
+        this.defaultArg = "setspeed";
+
+        this.speed = 0.3375f;
+        this.jump = 1.0f;
+    }
+
+    @RegisterArgument(name = "jump", description = "Should modify jump on horses")
     public void toggleJump(){
         this.horseJump = !this.horseJump;
     }
 
+    @RegisterArgument(name = "setjump", description = "Sets the horse's jump")
+    public void setJump(float jump) {
+        this.jump = jump;
+    }
+
+    @RegisterArgument(name = "speed", description = "Should modify speed on horses")
+    public void toggleShouldSpeed() {
+        this.shouldSpeed = !this.shouldSpeed;
+    }
+
+    @RegisterArgument(name = "setspeed", description = "Sets the horse's speed")
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+
     @EventHandler
     public void onLivingUpdate(LivingUpdateEvent e) // this event may be placed wrong
     {
-        if(this.isEnabled && horseJump) {
+        if (this.isEnabled && mc.player.isRidingHorse()) {
             mc.player.horseJumpPower = 1.0F;
+            if (horseJump) {
+                ((AbstractHorse) mc.player.getRidingEntity()).getEntityAttribute(AbstractHorse.JUMP_STRENGTH).setBaseValue(jump);
+            }
+            if (shouldSpeed) {
+                ((AbstractHorse) mc.player.getRidingEntity()).getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(speed);
+            }
         }
     }
 
     @Override
     public String getMetadata(){
-        return horseJump ? "(Jump)" : "";
+        return (horseJump ? "(Jump) " : "") + (shouldSpeed ? "(Speed: " + speed + ")" : "");
     }
 }

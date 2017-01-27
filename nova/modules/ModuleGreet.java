@@ -1,10 +1,11 @@
 package nova.modules;
 
 import net.minecraft.client.Minecraft;
+import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.core.Util;
-import nova.events.EventHandler;
 import nova.events.PlayerLogOffEvent;
 import nova.events.PlayerLogOnEvent;
 
@@ -43,8 +44,8 @@ public class ModuleGreet extends ModuleBase {
     private long lastMessageTime;
 
 
-    public ModuleGreet(nova.Nova Nova, Minecraft mc)  {
-        super(Nova, mc);
+    public ModuleGreet() {
+        super();
 
         this.description = ("Greets");
 
@@ -76,54 +77,54 @@ public class ModuleGreet extends ModuleBase {
     @RegisterArgument(name = "greetadd", description = "Add a welcome")
     public void greetadd(String greet){
         this.greetings.add(greet);
-        this.Nova.confirmMessage("Added greeting");
+        Nova.confirmMessage("Added greeting");
     }
 
     @RegisterArgument(name = "greetdel", description = "Delete a welcome")
     public void greetdel(String greet){
         if(this.greetings.contains(greet)) {
             this.greetings.remove(greet);
-            this.Nova.confirmMessage("Removed greeting");
+            Nova.confirmMessage("Removed greeting");
         } else {
-            this.Nova.errorMessage("Could not remove greeting");
+            Nova.errorMessage("Could not remove greeting");
         }
     }
 
     @RegisterArgument(name = "byeadd", description = "Add a good bye")
     public void byeadd(String bye){
         this.goodbyes.add(bye);
-        this.Nova.confirmMessage("Added goodbye");
+        Nova.confirmMessage("Added goodbye");
     }
 
     @RegisterArgument(name = "byedel", description = "Delete a good bye")
     public void byedel(String bye){
         if(this.goodbyes.contains(bye)) {
             this.goodbyes.remove(bye);
-            this.Nova.confirmMessage("Removed goodbye");
+            Nova.confirmMessage("Removed goodbye");
         } else {
-            this.Nova.errorMessage("Could not remove goodbye");
+            Nova.errorMessage("Could not remove goodbye");
         }
     }
 
     @RegisterArgument(name = "greetlist", description = "Lists greetings")
     public void greetlist(){
-        this.Nova.message(Util.join(this.greetings, ", "));
+        Nova.message(Util.join(this.greetings, ", "));
     }
 
     @RegisterArgument(name = "byelist", description = "Lists goodbyes")
     public void byelist(){
-        this.Nova.message(Util.join(this.goodbyes, ", "));
+        Nova.message(Util.join(this.goodbyes, ", "));
     }
 
     @RegisterArgument(name = "byeformat", description = "Change goodbye format; {player} {msg} {.}")
     public void byeformat(String format){
-        this.Nova.confirmMessage("Changed goodbye format");
+        Nova.confirmMessage("Changed goodbye format");
         this.goodbyeFormat = format;
     }
 
     @RegisterArgument(name = "greetformat", description = "Change greeting format; {player} {msg} {.}")
     public void greetformat(String format){
-        this.Nova.confirmMessage("Changed greeting format");
+        Nova.confirmMessage("Changed greeting format");
         this.greetingFormat = format;
     }
 

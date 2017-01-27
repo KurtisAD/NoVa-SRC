@@ -1,9 +1,7 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.projectile.EntityFishHook;
-import nova.Nova;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -17,8 +15,8 @@ public class ModuleAutoFish extends ModuleBase {
     private double tolerance;
 
 
-    public ModuleAutoFish(Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleAutoFish() {
+        super();
         this.description = ("Automatically catches fish, based off Wurst");
         catching = false;
         tolerance = -0.1D;

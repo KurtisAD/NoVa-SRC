@@ -9,8 +9,8 @@ import net.minecraft.item.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import nova.core.EventHandler;
 import nova.events.EntityRenderTickEvent;
-import nova.events.EventHandler;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
@@ -19,8 +19,8 @@ import org.lwjgl.opengl.GL13;
  * Created by Skeleton Man on 1/2/2017.
  */
 public class ModuleTrajectories extends ModuleBase {
-    public ModuleTrajectories(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleTrajectories() {
+        super();
 
         this.description = ("Draws trajectories for projectiles. From Wurst");
     }

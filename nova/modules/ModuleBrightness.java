@@ -1,6 +1,5 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 
@@ -13,8 +12,8 @@ public class ModuleBrightness extends ModuleBase{
     float brightness;
     float defaultBrightness;
 
-    public ModuleBrightness(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleBrightness() {
+        super();
 
         this.brightness = 1024F;
         this.defaultBrightness = 0F;

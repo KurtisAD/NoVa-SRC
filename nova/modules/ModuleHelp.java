@@ -1,16 +1,16 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import nova.Argument;
 import nova.Command;
+import nova.Nova;
 import nova.core.RegisterArgument;
 
 public class ModuleHelp extends ModuleBase 
 {
 
 	// TODO: maybe recognize aliases as well?
-	public ModuleHelp(nova.Nova Nova, Minecraft mc) {
-		super(Nova, mc);
+    public ModuleHelp() {
+        super();
 
 		this.description = "Sending cached base coords to kinorana...";
 
@@ -21,13 +21,13 @@ public class ModuleHelp extends ModuleBase
 	@Override
 	public void toggleState()
 	{
-		this.Nova.message("Developed by kinorana, \"Kurt Dee\". Core developed by Pyrobyte until 1.6; simple and reliable and \247mprobably\247r definitely has no backdoors.");
-		this.Nova.message("help (module); all modules:");
+        Nova.message("Developed by kinorana, \"Kurt Dee\". Core developed by Pyrobyte until 1.6; simple and reliable and \247mprobably\247r definitely has no backdoors.");
+        Nova.message("Version: " + Nova.Version);
+        Nova.message("help (module); all modules:");
 
 		String modules = "";
 
-		for(ModuleBase m : this.Nova.modules)
-		{
+        for (ModuleBase m : Nova.getModules()) {
 			modules += m.getAliases().get(0) + ", ";
 
 		}
@@ -35,17 +35,17 @@ public class ModuleHelp extends ModuleBase
 		modules = modules.substring(0, modules.length() - 2);
 		modules += ".";
 
-		this.Nova.message(modules);
-	}
+        Nova.message(modules);
+    }
 
     @RegisterArgument(name = "module", description = "Gives help for modules")
     public void getModuleUsages(String name) {
-        if (!this.Nova.moduleNameCache.values().contains(name.toLowerCase())){
-			toggleState();
+        if (!Nova.getModuleNameCache().values().contains(name.toLowerCase())) {
+            toggleState();
 			return;
 		}
-		ModuleBase m = this.Nova.moduleCache.get(name);
-		Command c = m.command;
+        ModuleBase m = Nova.getModuleCache().get(name);
+        Command c = m.command;
 		int i = 0;
 		String aliases = "\247n\247l";
 
@@ -63,7 +63,7 @@ public class ModuleHelp extends ModuleBase
 
 		aliases += ":\247r " + m.getDescription();
 
-		this.Nova.message(aliases);
+        Nova.message(aliases);
 
 		String argument = "";
 		String arg = "";
@@ -78,7 +78,7 @@ public class ModuleHelp extends ModuleBase
 
 			argument += usage[0];
 
-			this.Nova.message(argument);
+            Nova.message(argument);
 
 			if(usage.length > 1)
 			{
@@ -93,8 +93,8 @@ public class ModuleHelp extends ModuleBase
 						continue;
 					}
 
-					this.Nova.message("  " + str);
-				}
+                    Nova.message("  " + str);
+                }
 			}
 		}
 	}

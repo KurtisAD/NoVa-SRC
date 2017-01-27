@@ -1,10 +1,9 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
-import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -20,8 +19,8 @@ public class ModuleNoslow extends ModuleBase {
     public boolean useItemSlowdown; // Hook in EntityPlayerSP onLivingUpdate()
 
 
-    public ModuleNoslow(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleNoslow() {
+        super();
 
         aliases.add("ns");
         this.description = ("Makes you go fast");

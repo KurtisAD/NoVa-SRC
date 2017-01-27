@@ -1,7 +1,6 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -9,8 +8,8 @@ import nova.events.PlayerTickEvent;
  */
 public class ModuleAutoRespawn extends ModuleBase{
 
-    public ModuleAutoRespawn(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleAutoRespawn() {
+        super();
         aliases.add("respawn");
         this.description = ("Automatically respawn on death.");
 

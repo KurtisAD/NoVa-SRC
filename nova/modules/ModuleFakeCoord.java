@@ -22,7 +22,7 @@ public class ModuleFakeCoord extends ModuleBase {
     final String spoofingTitle = " [FAKE COORDINATES ACTIVE]";
 
     public ModuleFakeCoord(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+        super();
 
         aliases.add("fakecoords");
 

@@ -2,7 +2,7 @@ package nova.modules;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import net.minecraft.client.Minecraft;
+import nova.Nova;
 import nova.core.RegisterArgument;
 import nova.core.Util;
 
@@ -19,8 +19,8 @@ public class ModuleNames extends ModuleBase {
     // TODO: colorcode names again
     JsonParser parser = new JsonParser();
 
-    public ModuleNames(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleNames() {
+        super();
         this.isToggleable = false;
 
         this.description = "Returns name history from current ingame name, player need not be online. \u00A72Green\u00A7r names are current, \u00A79blue\u00A7r names are open, \u00A74red\u00A7r names are taken, and \u00A76gold\u00A7r is Legacy. WARNING: name requests are capped at 600 every 10 minutes, don't spam use.";
@@ -79,7 +79,7 @@ public class ModuleNames extends ModuleBase {
 
         int numCharsRead;
         char[] charArray = new char[1024];
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         while ((numCharsRead = isr.read(charArray)) > 0) {
             sb.append(charArray, 0, numCharsRead);
         }

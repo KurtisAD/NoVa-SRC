@@ -6,7 +6,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PacketSendEvent;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class ModuleBlink extends ModuleBase
     private double timer;
 
     public ModuleBlink(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+        super();
 
         this.description = ("Synthetic lagswitch.");
         this.delayedPackets = new ArrayList();

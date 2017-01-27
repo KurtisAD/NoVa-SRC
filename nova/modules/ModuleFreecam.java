@@ -1,10 +1,9 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.play.client.CPacketPlayer;
-import nova.StaticNova;
-import nova.events.EventHandler;
+import nova.Nova;
+import nova.core.EventHandler;
 import nova.events.PacketSendEvent;
 
 public class ModuleFreecam extends ModuleBase {
@@ -14,8 +13,8 @@ public class ModuleFreecam extends ModuleBase {
 	float yaw, pitch;
     private EntityOtherPlayerMP freecamEntity;
 
-	public ModuleFreecam(nova.Nova Nova, Minecraft mc) {
-		super(Nova, mc);
+    public ModuleFreecam() {
+        super();
         this.description = ("Frees your camera");
     }
 
@@ -32,8 +31,8 @@ public class ModuleFreecam extends ModuleBase {
 		freecamEntity.setPositionAndRotation(mc.player.posX, mc.player.posY, mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch);
 		freecamEntity.rotationYawHead = mc.player.rotationYawHead;
 		mc.world.addEntityToWorld(-2, freecamEntity);
-		StaticNova.Nova.getModule(ModuleFly.class).onEnable();
-        StaticNova.Nova.getModule(ModuleNoclip.class).onEnable();
+        Nova.getModule(ModuleFly.class).onEnable();
+        Nova.getModule(ModuleNoclip.class).onEnable();
 
 		this.isEnabled = true;
 	}
@@ -61,8 +60,8 @@ public class ModuleFreecam extends ModuleBase {
 		}
 		mc.player.noClip = false;
 		mc.world.removeEntityFromWorld(-2);
-		StaticNova.Nova.getModule(ModuleFly.class).onDisable();
-        StaticNova.Nova.getModule(ModuleNoclip.class).onDisable();
+        Nova.getModule(ModuleFly.class).onDisable();
+        Nova.getModule(ModuleNoclip.class).onDisable();
 
 		this.isEnabled = false;
 	}

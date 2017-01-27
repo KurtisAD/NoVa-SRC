@@ -1,10 +1,8 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
-import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
-import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -14,8 +12,8 @@ public class ModuleGlide extends ModuleBase {
     @Saveable
     double speed;
 
-    public ModuleGlide(Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleGlide() {
+        super();
 
         this.speed = -0.17D;
 

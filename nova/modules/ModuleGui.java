@@ -13,10 +13,10 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.core.Util;
-import nova.events.EventHandler;
 import nova.events.GuiOpenEvent;
 import nova.events.RenderOverlayEvent;
 import nova.gui.GuiDisconnectedOverride;
@@ -56,8 +56,8 @@ public class ModuleGui extends ModuleBase{
     public static final String[] directions = { "SOUTH", "WEST", "NORTH", "EAST" };
 
 
-    public ModuleGui(Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleGui() {
+        super();
 
         this.isHidden = false;
         this.note = new ArrayList<HashMap<String, Integer>>();
@@ -121,7 +121,7 @@ public class ModuleGui extends ModuleBase{
     private void drawModuleData()
     {
         int position = 12;
-        for(ModuleBase m : Nova.modules) {
+        for (ModuleBase m : Nova.getModules()) {
 
             if(m.isEnabled && m.showEnabled) {
                 mc.fontRendererObj.drawStringWithShadow("> " + Util.capitalize(m.name) + " " + m.getMetadata(), 2, position, this.guiColor);

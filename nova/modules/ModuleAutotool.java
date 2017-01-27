@@ -2,10 +2,9 @@ package nova.modules;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.LeftClickEvent;
 import nova.events.PlayerTickEvent;
 
@@ -15,10 +14,9 @@ public class ModuleAutotool extends ModuleBase{
 	private boolean isActive = false;
 
 
-    public ModuleAutotool(nova.Nova Nova, Minecraft mc) {
-
-		super(Nova, mc);
-		this.description = ("Switches to better tool if possible");
+    public ModuleAutotool() {
+        super();
+        this.description = ("Switches to better tool if possible");
 	}
 
     // This code need revision

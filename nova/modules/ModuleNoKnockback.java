@@ -1,18 +1,17 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.network.play.server.SPacketExplosion;
+import nova.core.EventHandler;
 import nova.core.Util;
-import nova.events.EventHandler;
 import nova.events.PacketReceivedEvent;
 
 /**
  * Created by Skeleton Man on 12/9/2016.
  */
 public class ModuleNoKnockback extends ModuleBase {
-    public ModuleNoKnockback(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleNoKnockback() {
+        super();
 
         this.aliases.add("nk");
         this.aliases.add("knock");

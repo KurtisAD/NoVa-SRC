@@ -1,7 +1,7 @@
 package nova;
 
+import nova.core.EventHandler;
 import nova.events.ChatSentEvent;
-import nova.events.EventHandler;
 import nova.modules.ModuleBase;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,11 +17,9 @@ import java.util.regex.Pattern;
  * Created by Skeleton Man on 6/18/2016.
  */
 public class Events {
-    Nova Nova;
     Map<Class, ArrayList<MethodHolder>> handlers;
 
-    public Events(Nova Nova) {
-        this.Nova = Nova;
+    public Events() {
         handlers = new HashMap<>();
         getEventHandlers();
     }
@@ -29,7 +27,7 @@ public class Events {
     private void getEventHandlers() {
         ArrayList<MethodHolder> tmp;
 
-        for (ModuleBase module : Nova.modules) {
+        for (ModuleBase module : Nova.getModules()) {
             for (Method m : module.getClass().getDeclaredMethods()) {
                 if (m.isAnnotationPresent(EventHandler.class)) {
                     Class<?>[] params = m.getParameterTypes();
@@ -64,7 +62,7 @@ public class Events {
         try {
 
             Class type = o.getClass();
-            Object res = null;
+            Object res;
 
             if(this.handlers.get(type) == null)
             {
@@ -92,7 +90,7 @@ public class Events {
      * @return  if message started with delimter
      */
     public boolean onChat(String message){
-        if(message.startsWith(StaticNova.Nova.delimeter)){
+        if (message.startsWith(Nova.delimiter)) {
             onCommand(message.substring(1));
             return true;
         }
@@ -110,8 +108,7 @@ public class Events {
             argv.add(ma.group(1).replace("\"", ""));
 
 
-
-        for(ModuleBase m : Nova.modules) {
+        for (ModuleBase m : Nova.getModules()) {
             if (m.getAliases().contains(argv.get(0))) {
                 m.command.parseArgs(argv.subList(1, argv.size()).toArray(new String[argv.size() - 1]));
                 return true;

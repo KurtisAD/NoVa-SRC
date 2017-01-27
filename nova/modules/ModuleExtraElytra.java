@@ -1,20 +1,19 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
  * Created by Skeleton Man on 12/23/2016.
  */
 public class ModuleExtraElytra extends ModuleBase {
-    public ModuleExtraElytra(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleExtraElytra() {
+        super();
 
         this.description = ("Changes your speed mid-flight. From Wurst");
     }

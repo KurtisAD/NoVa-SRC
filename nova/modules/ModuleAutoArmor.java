@@ -1,15 +1,15 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
-import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -25,8 +25,8 @@ public class ModuleAutoArmor extends ModuleBase{
 
     private final String[] armorName = {"MAINHAND", "BOOTS", "LEGGINGS", "CHESTPLATE", "HELMET", "OFFHAND"};
 
-    public ModuleAutoArmor(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleAutoArmor() {
+        super();
 
         aliases.add("aa");
         this.description = ("Equips armor if an armor slot is available and armor is found. From hotbar to top left to bottom right. Tells you when a piece is replaced.");

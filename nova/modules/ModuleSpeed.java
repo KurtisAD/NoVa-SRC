@@ -1,9 +1,9 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
+import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
-import nova.events.EventHandler;
 import nova.events.PlayerMoveEvent;
 
 /**
@@ -15,8 +15,8 @@ public class ModuleSpeed extends ModuleBase {
     @Saveable
     public float speed;
 
-    public ModuleSpeed(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleSpeed() {
+        super();
 
         this.description = ("Modifies your movement speed");
 

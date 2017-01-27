@@ -1,16 +1,14 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
-import nova.Nova;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PlayerTickEvent;
 
 public class ModuleAutowalk extends ModuleBase{
 
 
-	public ModuleAutowalk(Nova Nova, Minecraft mc) {
-		super(Nova, mc);
-		this.description = ("as if you were holding \"W\"");
+    public ModuleAutowalk() {
+        super();
+        this.description = ("as if you were holding \"W\"");
 	}
 
 

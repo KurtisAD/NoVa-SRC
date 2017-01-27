@@ -1,10 +1,9 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
-import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -18,8 +17,8 @@ public class ModuleIntervalThrow extends ModuleBase {
     int priorSlot;
 
 
-    public ModuleIntervalThrow(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleIntervalThrow() {
+        super();
 
         this.aliases.add("intt");
         this.description = ("Throws the item in your hotbar every nth millisecond.");

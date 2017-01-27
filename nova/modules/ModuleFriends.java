@@ -1,6 +1,6 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
+import nova.Nova;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.core.Util;
@@ -15,8 +15,8 @@ public class ModuleFriends extends ModuleBase{
     public ArrayList<String> friends;
 
 
-    public ModuleFriends(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleFriends() {
+        super();
 
         this.aliases.add("friend");
         this.description = ("friends list for various purposes");
@@ -32,14 +32,14 @@ public class ModuleFriends extends ModuleBase{
     public void onEnable()
     {
         this.isEnabled = true;
-        this.Nova.confirmMessage("Friends enabled.");
+        Nova.confirmMessage("Friends enabled.");
     }
 
     @Override
     public void onDisable()
     {
         this.isEnabled = false;
-        this.Nova.notificationMessage("FRIENDS DISABLED. DON'T ACCIDENTALLY KILL ANYONE!");
+        Nova.notificationMessage("FRIENDS DISABLED. DON'T ACCIDENTALLY KILL ANYONE!");
     }
 
     @RegisterArgument(name = "add", description = "add a friend (eg. friend add Pyrobyte)")

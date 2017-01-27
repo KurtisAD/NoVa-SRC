@@ -13,14 +13,12 @@ import java.util.Map;
  * Created by Skeleton Man on 6/18/2016.
  */
 public class Command {
-    public Nova Nova;
     private ModuleBase module;
     public Map<String, Argument> args;
 
-    public Command(Nova Nova, ModuleBase module)
+    public Command(ModuleBase module)
     {
         this.module = module;
-        this.Nova = Nova;
         this.args = new HashMap<>();
 
         getRegisteredArguments();

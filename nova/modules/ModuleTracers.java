@@ -3,11 +3,12 @@ package nova.modules;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
+import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.core.Util;
 import nova.events.EntityRenderTickEvent;
-import nova.events.EventHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -26,8 +27,8 @@ public class ModuleTracers extends ModuleBase {
     public Map<String, Color> traced;
 
 
-    public ModuleTracers(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleTracers() {
+        super();
 
         this.aliases.add("tracer");
 
@@ -42,17 +43,17 @@ public class ModuleTracers extends ModuleBase {
             ret += s + ", ";
         }
 
-        this.Nova.confirmMessage("You can select:");
-        this.Nova.message(ret.substring(0, ret.length() - 2));
+        Nova.confirmMessage("You can select:");
+        Nova.message(ret.substring(0, ret.length() - 2));
     }
 
     @RegisterArgument(name = "new", description = "Adds entity class to tracers with default color, white")
     public void add(String name) {
         if (Util.getValidEntities().containsKey(name.toLowerCase())) {
             this.traced.put(name.toLowerCase(), new Color(255, 255, 255));
-            this.Nova.confirmMessage("Added " + name + " to tracers");
+            Nova.confirmMessage("Added " + name + " to tracers");
         } else {
-            this.Nova.errorMessage("You cannot trace that entity; check -tracers valid");
+            Nova.errorMessage("You cannot trace that entity; check -tracers valid");
         }
     }
 
@@ -60,9 +61,9 @@ public class ModuleTracers extends ModuleBase {
     public void addrgb(String name, int r, int g, int b) {
         if (Util.getValidEntities().containsKey(name.toLowerCase())) {
             this.traced.put(name.toLowerCase(), new Color(r, g, b));
-            this.Nova.confirmMessage("Added " + name + " to tracers");
+            Nova.confirmMessage("Added " + name + " to tracers");
         } else {
-            this.Nova.errorMessage("You cannot trace that entity; check -tracers valid");
+            Nova.errorMessage("You cannot trace that entity; check -tracers valid");
         }
     }
 
@@ -70,9 +71,9 @@ public class ModuleTracers extends ModuleBase {
     public void del(String name) {
         if (this.traced.containsKey(name.toLowerCase())) {
             this.traced.remove(name.toLowerCase());
-            this.Nova.confirmMessage("Deleted " + name);
+            Nova.confirmMessage("Deleted " + name);
         } else {
-            this.Nova.errorMessage("That entity has not been added");
+            Nova.errorMessage("That entity has not been added");
         }
     }
 
@@ -88,9 +89,9 @@ public class ModuleTracers extends ModuleBase {
             b = rgb.getBlue();
 
             color = "(" + r + ", " + b + ", " + g + ")";
-            this.Nova.message(s + ": " + color);
+            Nova.message(s + ": " + color);
         }
-        this.Nova.message("End of tracers list.");
+        Nova.message("End of tracers list.");
 
     }
 
@@ -98,9 +99,9 @@ public class ModuleTracers extends ModuleBase {
     public void rgb(String name, int r, int g, int b) {
         if (this.traced.containsKey(name.toLowerCase())) {
             this.traced.put(name.toLowerCase(), new Color(r, g, b));
-            this.Nova.confirmMessage("Changed color of " + name);
+            Nova.confirmMessage("Changed color of " + name);
         } else {
-            this.Nova.errorMessage("That entity has not been added");
+            Nova.errorMessage("That entity has not been added");
         }
     }
 

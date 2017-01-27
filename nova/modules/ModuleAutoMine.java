@@ -1,8 +1,7 @@
 package nova.modules;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -10,8 +9,8 @@ import nova.events.PlayerTickEvent;
  */
 public class ModuleAutoMine extends ModuleBase {
 
-    public ModuleAutoMine(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleAutoMine() {
+        super();
 
         this.aliases.add("mine");
         this.description = ("Automatically mines");

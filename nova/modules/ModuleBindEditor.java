@@ -1,11 +1,10 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
 import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
-import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -23,8 +22,8 @@ public class ModuleBindEditor extends ModuleBase{
     @Saveable
     public Map<Integer, String> binds;
 
-    public ModuleBindEditor(Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleBindEditor() {
+        super();
 
         this.isToggleable = false;
         aliases.add("bind");
@@ -63,7 +62,7 @@ public class ModuleBindEditor extends ModuleBase{
             {
                 for(String c : binds.get(i).split("\\|"))
                 {
-                    Nova.events.onCommand(c);
+                    Nova.getEvents().onCommand(c);
                 }
             }
         }

@@ -1,6 +1,5 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -9,11 +8,11 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
 import nova.core.Util;
 import nova.events.EntityLabelRenderedEvent;
-import nova.events.EventHandler;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -30,8 +29,8 @@ public class ModuleESP extends ModuleBase {
     // TODO: Change how labels are rendered, code is prehistoric and needs rewriting
     // TODO: Add more cool features that can be compressed (key factor here, a lot of the rendering is super big)
 
-    public ModuleESP(Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleESP() {
+        super();
 
         this.description = ("Hilights a player's name and shows their health, held item, and distance; friend's names are green.");
 
@@ -146,7 +145,7 @@ public class ModuleESP extends ModuleBase {
                 }
 
                 if(this.armorEsp){
-                    String armor = this.Nova.getModule(ModuleInfo.class).getArmorDurability(e.getDisplayName().getUnformattedText());
+                    String armor = Nova.getModule(ModuleInfo.class).getArmorDurability(e.getDisplayName().getUnformattedText());
                     int position = this.itemEsp ? -30 : -10;
 
                     fr.drawString(armor, -fr.getStringWidth(armor) / 2, position, 553648127);

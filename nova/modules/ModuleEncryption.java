@@ -1,14 +1,10 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatAllowedCharacters;
-import nova.core.Base64;
-import nova.core.RegisterArgument;
-import nova.core.Saveable;
-import nova.core.Util;
+import nova.Nova;
+import nova.core.*;
 import nova.events.ChatRecievedEvent;
 import nova.events.ChatSentEvent;
-import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 import javax.crypto.BadPaddingException;
@@ -35,7 +31,7 @@ public class ModuleEncryption extends ModuleBase
     // TODO: rewrite all of this, make encryption method private to git
 
     @Saveable
-    String delimeter;
+    String delimiter;
 
     public HashMap a;
     private byte[] d;
@@ -46,13 +42,13 @@ public class ModuleEncryption extends ModuleBase
     public Queue b;
     public int c;
 
-    public ModuleEncryption(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleEncryption() {
+        super();
         this.isToggleable = false;
 
         this.description = ("encrypts chats");
 
-        this.defaultArg = "delimeter";
+        this.defaultArg = "delimiter";
 
         a = new HashMap();
         d = new byte[] { 11, 90, 27, 71, -45, 126, -61, -7, -56, 105, 106, -56, -52, 2, 114, 3 };
@@ -63,7 +59,7 @@ public class ModuleEncryption extends ModuleBase
         b = new LinkedList();
         c = 0;
 
-        this.delimeter = "%";
+        this.delimiter = "%";
     }
 
     public String DecryptData(byte[] paramArrayOfByte)
@@ -167,10 +163,10 @@ public class ModuleEncryption extends ModuleBase
         }
     }
 
-    @RegisterArgument(name = "delimeter", description = "what to start a chat with to encrypt it, eg. %")
-    public void changeDelimeter(String del){
-        this.delimeter = del;
-        this.Nova.confirmMessage("Delimeter changed to: " + del);
+    @RegisterArgument(name = "delimiter", description = "what to start a chat with to encrypt it, eg. %")
+    public void changeDelimiter(String del) {
+        this.delimiter = del;
+        Nova.confirmMessage("Delimiter changed to: " + del);
     }
 
     @EventHandler
@@ -182,7 +178,7 @@ public class ModuleEncryption extends ModuleBase
     }
 
     public boolean encryptMessage(String message){
-        if (!(message.startsWith(this.delimeter)))
+        if (!(message.startsWith(this.delimiter)))
             return true;
 
         String name = mc.player.getDisplayName().getUnformattedText();
@@ -195,7 +191,7 @@ public class ModuleEncryption extends ModuleBase
             int j = b.size() == 0 ? 1 : 0;
 
             // This is where color codes are
-            String str3 = EncodeBase64(EncryptData(message.substring(1).replace(this.delimeter, "\247")));
+            String str3 = EncodeBase64(EncryptData(message.substring(1).replace(this.delimiter, "\247")));
 
             str3 = str3.replace("\r", "");
             str3 = str3.replace("\n", "");

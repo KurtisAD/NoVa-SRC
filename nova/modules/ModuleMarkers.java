@@ -1,20 +1,16 @@
 package nova.modules;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.AxisAlignedBB;
-import nova.core.Location;
-import nova.core.Marker;
-import nova.core.RegisterArgument;
-import nova.core.Saveable;
+import nova.Nova;
+import nova.core.*;
 import nova.events.BlockRenderedEvent;
 import nova.events.EntityRenderTickEvent;
-import nova.events.EventHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -37,8 +33,8 @@ public class ModuleMarkers extends ModuleBase {
     // TODO: rewrite everything, maybe add a GUI because this shit is super complicated
 
     // As a design choice, I decided to keep ints as the input and parse to double when drawing marker to match old versions
-    public ModuleMarkers(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleMarkers() {
+        super();
 
 
         blocks = new ConcurrentHashMap<>();
@@ -81,7 +77,7 @@ public class ModuleMarkers extends ModuleBase {
 
         if(blockDescriptors.containsKey(block))
         {
-            this.Nova.errorMessage("The block " + getIdName(block) + " has already been added");
+            Nova.errorMessage("The block " + getIdName(block) + " has already been added");
             return;
         }
 
@@ -100,7 +96,7 @@ public class ModuleMarkers extends ModuleBase {
         }
 
         if (!blockDescriptors.containsKey(block)) {
-            this.Nova.errorMessage("The block " + getIdName(block) + " does not exist, so you cannot delete it");
+            Nova.errorMessage("The block " + getIdName(block) + " does not exist, so you cannot delete it");
             return;
         }
 
@@ -117,7 +113,7 @@ public class ModuleMarkers extends ModuleBase {
         }
 
         if (!blockDescriptors.containsKey(block)) {
-            this.Nova.errorMessage("The block " + getIdName(block) + " does not exist");
+            Nova.errorMessage("The block " + getIdName(block) + " does not exist");
             return;
         }
 
@@ -136,7 +132,7 @@ public class ModuleMarkers extends ModuleBase {
         }
 
         if (blockDescriptors.containsKey(block)) {
-            this.Nova.errorMessage("The block " + getIdName(block) + " has already been added");
+            Nova.errorMessage("The block " + getIdName(block) + " has already been added");
             return;
         }
 
@@ -154,7 +150,7 @@ public class ModuleMarkers extends ModuleBase {
         }
 
         if (!blockDescriptors.containsKey(block)) {
-            this.Nova.errorMessage("The block " + getIdName(block) + " has not been added yet");
+            Nova.errorMessage("The block " + getIdName(block) + " has not been added yet");
             return;
         }
 
@@ -173,7 +169,7 @@ public class ModuleMarkers extends ModuleBase {
             Marker marker = blockDescriptors.get(key);
 
 
-            this.Nova.message(getIdName(key)
+            Nova.message(getIdName(key)
                     + " rgb(" + marker.color.getRed()
                     + ", " + marker.color.getGreen()
                     + ", " + marker.color.getBlue()

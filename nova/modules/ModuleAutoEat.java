@@ -1,10 +1,9 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -15,8 +14,8 @@ public class ModuleAutoEat extends ModuleBase {
     private int oldSlot;
     private int bestSlot;
 
-    public ModuleAutoEat(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleAutoEat() {
+        super();
         this.description = ("Automatically eats. From Wurst");
     }
 

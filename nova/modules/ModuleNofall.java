@@ -1,14 +1,13 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayer;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PlayerTickEvent;
 
 public class ModuleNofall extends ModuleBase{
 
-    public ModuleNofall(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleNofall() {
+        super();
         this.description = ("Standard no fall, NCP patched");
     }
 

@@ -16,97 +16,94 @@ import java.util.Map;
 
 // Implement in minecraft
 public class Nova {
-    // TODO: implement enabled event (What did I mean by this shit shit shit) (I think I meant adding an event type that checks if module is enabled? Similar to implementing pre/post events?)
+    // TODO: implement enabled event; adding an event type that checks if module is enabled? Similar to implementing pre/post events?
     // TODO: organize core so that it has some consistency
     // TODO: consider adding modules via reflection
     // TODO: Document more and more
     // TODO: make annotations throw errors
+    // Consider: making classes static
+    // TODO: explore removing module constructors
     // I swear to fuck I add more todo's than I solve
 
-    public Minecraft mc;
-    public Events events;
-    public ArrayList<ModuleBase> modules;
-    public Map<String, ModuleBase> moduleCache;
-    public Map<String, String> moduleNameCache;
+    private static Minecraft mc;
+    private static Events events;
+    private static ArrayList<ModuleBase> modules;
+    private static Map<String, ModuleBase> moduleCache;
+    private static Map<String, String> moduleNameCache;
 
-    public final String delimeter;
+    static final String delimiter = "-";
 
-    public static final String Version = "NoVa 11.2.a13 Optifine B5";
+    public static final String Version = "NoVa 11.2.a14 Optifine B5";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
     public static File novaDir = new File(Util.getAppDir("minecraft") + File.separator + "Nova");
 
-    public Nova(Minecraft mc){
-        this.mc = mc;
+    static {
+        mc = Minecraft.getMinecraft();
 
         if (!novaDir.exists()) {
             novaDir.mkdirs();
         }
 
-        this.delimeter = "-";
-
-        modules = new ArrayList<ModuleBase>();
-        moduleCache = new HashMap<String, ModuleBase>();
-        moduleNameCache = new HashMap<String, String>();
+        modules = new ArrayList<>();
+        moduleCache = new HashMap<>();
+        moduleNameCache = new HashMap<>();
 
 
         //Add Modules here
-        //Format:            this.modules.add(new ModuleBase(this, mc));
+        //Format:            this.modules.add(new ModuleBase());
 
 
-        this.modules.add(new ModuleAntiAfk(this, mc));
-        this.modules.add(new ModuleAntifall(this, mc));
-        this.modules.add(new ModuleAutoArmor(this, mc));
-        this.modules.add(new ModuleAutoEat(this, mc));
-        this.modules.add(new ModuleAutoFish(this, mc));
-        this.modules.add(new ModuleAutoMine(this, mc));
-        this.modules.add(new ModuleAutoRespawn(this, mc));
-        //this.modules.add(new ModuleAutotool(this, mc));
-        this.modules.add(new ModuleAutowalk(this, mc));
-        this.modules.add(new ModuleBindEditor(this, mc));
-        //this.modules.add(new ModuleBlink(this, mc));
-        this.modules.add(new ModuleBrightness(this, mc));
-        this.modules.add(new ModuleCameraClip(this, mc));
-        this.modules.add(new ModuleElytraFly(this, mc));
-        this.modules.add(new ModuleEncryption(this, mc));
-        this.modules.add(new ModuleESP(this, mc));
-        //this.modules.add(new ModuleExtraElytra(this, mc));
-        //this.modules.add(new ModuleFakeCoord(this, mc));
-        this.modules.add(new ModuleFastBreak(this, mc));
-        this.modules.add(new ModuleFly(this, mc));
-        this.modules.add(new ModuleFreecam(this, mc));
-        this.modules.add(new ModuleFriends(this, mc));
-        this.modules.add(new ModuleGlide(this, mc));
-        this.modules.add(new ModuleGreet(this, mc));
-        this.modules.add(new ModuleGui(this, mc));
-        this.modules.add(new ModuleHelp(this, mc));
-        this.modules.add(new ModuleHorseRide(this, mc));
-        this.modules.add(new ModuleInfo(this, mc));
-        this.modules.add(new ModuleIntervalThrow(this, mc));
-        //this.modules.add(new ModuleJesus(this, mc));
-        this.modules.add(new ModuleMarkers(this, mc));
-        this.modules.add(new ModuleNames(this, mc));
-        this.modules.add(new ModuleNoclip(this, mc));
-        this.modules.add(new ModuleNofall(this, mc));
-        this.modules.add(new ModuleNoKnockback(this, mc));
-        this.modules.add(new ModuleNoRender(this, mc));
-        this.modules.add(new ModuleNoslow(this, mc));
-        this.modules.add(new ModuleNotifications(this, mc));
-        this.modules.add(new ModulePeek(this, mc));
-        this.modules.add(new ModuleSafewalk(this, mc));
-        this.modules.add(new ModuleSay(this, mc));
-        this.modules.add(new ModuleSpeed(this, mc));
-        this.modules.add(new ModuleSprint(this, mc));
-        this.modules.add(new ModuleTextwidth(this, mc));
-        this.modules.add(new ModuleTimer(this, mc));
-        this.modules.add(new ModuleTracers(this, mc));
-        this.modules.add(new ModuleTrajectories(this, mc));
-        this.modules.add(new ModuleWaifuESP(this, mc));
-        this.modules.add(new ModuleYaw(this, mc));
-
-
-
+        modules.add(new ModuleAntiAfk());
+        modules.add(new ModuleAntifall());
+        modules.add(new ModuleAutoArmor());
+        modules.add(new ModuleAutoEat());
+        modules.add(new ModuleAutoFish());
+        modules.add(new ModuleAutoMine());
+        modules.add(new ModuleAutoRespawn());
+        //this.modules.add(new ModuleAutotool());
+        modules.add(new ModuleAutowalk());
+        modules.add(new ModuleBindEditor());
+        //this.modules.add(new ModuleBlink());
+        modules.add(new ModuleBrightness());
+        modules.add(new ModuleCameraClip());
+        modules.add(new ModuleElytraFly());
+        modules.add(new ModuleEncryption());
+        modules.add(new ModuleESP());
+        //this.modules.add(new ModuleExtraElytra());
+        //this.modules.add(new ModuleFakeCoord());
+        modules.add(new ModuleFastBreak());
+        modules.add(new ModuleFly());
+        modules.add(new ModuleFreecam());
+        modules.add(new ModuleFriends());
+        modules.add(new ModuleGlide());
+        modules.add(new ModuleGreet());
+        modules.add(new ModuleGui());
+        modules.add(new ModuleHelp());
+        modules.add(new ModuleHorseRide());
+        modules.add(new ModuleInfo());
+        modules.add(new ModuleIntervalThrow());
+        //this.modules.add(new ModuleJesus());
+        modules.add(new ModuleMarkers());
+        modules.add(new ModuleNames());
+        modules.add(new ModuleNoclip());
+        modules.add(new ModuleNofall());
+        modules.add(new ModuleNoKnockback());
+        modules.add(new ModuleNoRender());
+        modules.add(new ModuleNoslow());
+        modules.add(new ModuleNotifications());
+        modules.add(new ModulePeek());
+        modules.add(new ModuleSafewalk());
+        modules.add(new ModuleSay());
+        modules.add(new ModuleSpeed());
+        modules.add(new ModuleSprint());
+        modules.add(new ModuleTextwidth());
+        modules.add(new ModuleTimer());
+        modules.add(new ModuleTracers());
+        modules.add(new ModuleTrajectories());
+        modules.add(new ModuleWaifuESP());
+        modules.add(new ModuleYaw());
 
 
         for(ModuleBase m : modules)
@@ -118,30 +115,51 @@ public class Nova {
             m.loadModule();
         }
 
-        events = new Events(this);
+        events = new Events();
 
-        new StaticNova(this);
     }
 
-    public <T extends ModuleBase> T getModule(Class<T> type) {
+    public static <T extends ModuleBase> T getModule(Class<T> type) {
         return type.cast( moduleCache.get(moduleNameCache.get(type.getSimpleName())));
     }
 
-    public void notificationMessage(String msg)
+    public static Events getEvents() {
+        return events;
+    }
+
+    public static ArrayList<ModuleBase> getModules() {
+        return modules;
+    }
+
+    public static Map<String, ModuleBase> getModuleCache() {
+        return moduleCache;
+    }
+
+    public static Map<String, String> getModuleNameCache() {
+        return moduleNameCache;
+    }
+
+    public static boolean onEvent(Object o) {
+        return events.onEvent(o);
+    }
+
+    public static void notificationMessage(String msg)
     {
         if ((getModule(ModuleGui.class)).isHidden)
-            this.message("\247l>>\247r " + msg);
+            message("\247l>>\247r " + msg);
         else
             getModule(ModuleGui.class).addToQueue(msg);
     }
 
-    public void errorMessage(String s) {
+    public static void errorMessage(String s) {
         message("\247c[NV]\247r" + s);
     }
 
-    public void confirmMessage(String s) { message("\247b[NV]\247r " + s); }
+    public static void confirmMessage(String s) {
+        message("\247b[NV]\247r " + s);
+    }
 
-    public void message(String s){
+    public static void message(String s) {
         mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString(s));
     }
 

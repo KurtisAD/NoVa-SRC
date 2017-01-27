@@ -1,7 +1,6 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -13,8 +12,9 @@ public class ModuleAntiAfk extends ModuleBase{
     // TODO: implement own anti-afk
 
     private int timer;
-    public ModuleAntiAfk(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+
+    public ModuleAntiAfk() {
+        super();
         aliases.add("afk");
         aliases.add("aafk");
         this.description = ("Sneaks on interval to prevent AFK detectors.");

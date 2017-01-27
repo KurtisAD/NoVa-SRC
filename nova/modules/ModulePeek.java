@@ -1,11 +1,10 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemShulkerBox;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityShulkerBox;
+import nova.core.EventHandler;
 import nova.core.Util;
-import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
@@ -17,8 +16,8 @@ public class ModulePeek extends ModuleBase {
     // Maybe implement with middle click, or edit inventory GUI
     TileEntityShulkerBox sb;
 
-    public ModulePeek(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModulePeek() {
+        super();
         this.description = "Peek inside shulker boxes";
         this.sb = null;
     }

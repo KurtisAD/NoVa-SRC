@@ -1,10 +1,10 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import nova.Nova;
 import nova.core.RegisterArgument;
 import nova.core.Util;
 
@@ -13,8 +13,8 @@ import nova.core.Util;
  */
 public class ModuleInfo extends ModuleBase{
     // TODO: fix consistiency
-    public ModuleInfo(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleInfo() {
+        super();
 
         this.description = ("Gives info about a player; currently only their armor and it's enchantments; unless a player is designated, you will get info for the closest player to you");
         this.defaultArg = "player";
@@ -59,7 +59,7 @@ public class ModuleInfo extends ModuleBase{
         if(closest != null)
             this.getInfo(closest.getDisplayName().getUnformattedText());
         else
-            this.Nova.errorMessage("No players found!");
+            Nova.errorMessage("No players found!");
     }
 
     public EntityPlayer getPlayerByName(String player)
@@ -107,17 +107,17 @@ public class ModuleInfo extends ModuleBase{
         EntityPlayer p = this.getPlayerByName(player);
 
         if (this.getPlayerByName(player) != null) {
-            this.Nova.message("\247l" + p.getDisplayName().getUnformattedText() + "\'s Armor");
+            Nova.message("\247l" + p.getDisplayName().getUnformattedText() + "\'s Armor");
             String durability = "";
 
             NonNullList<ItemStack> armor = p.inventory.armorInventory;
 
             for (ItemStack i : armor) {
-                this.Nova.message(Util.getItemNameAndEnchantments(i));
+                Nova.message(Util.getItemNameAndEnchantments(i));
                 durability += (i != null ? Util.formatArmorDurability( ( ((double)i.getMaxDamage() - (double)i.getItemDamage() ) / (double)i.getMaxDamage()) * 100.0D ) : "---") + "/";
 
             }
-            this.Nova.message("\247l" + durability.substring(0, durability.length() - 1));
+            Nova.message("\247l" + durability.substring(0, durability.length() - 1));
 
             String item = Util.getItemNameAndEnchantments(((EntityOtherPlayerMP)p).inventory.getCurrentItem());
             String leftItem = Util.getItemNameAndEnchantments(((EntityOtherPlayerMP) p).inventory.offHandInventory.get(0));
@@ -126,7 +126,7 @@ public class ModuleInfo extends ModuleBase{
 
 
         } else {
-            this.Nova.errorMessage("Player not found!");
+            Nova.errorMessage("Player not found!");
         }
     }
 }

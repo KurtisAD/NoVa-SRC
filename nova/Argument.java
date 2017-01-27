@@ -56,11 +56,8 @@ public class Argument {
                     return null;
                 }
 
-            } catch(ClassCastException e) {
-                this.c.Nova.errorMessage("Invalid type on argument " + i + "; should be of type: " + sets[i].getSimpleName());
-                return null;
-            } catch(NumberFormatException e) {
-                this.c.Nova.errorMessage("Invalid type on argument " + i + "; should be of type: " + sets[i].getSimpleName());
+            } catch (ClassCastException | NumberFormatException e) {
+                Nova.errorMessage("Invalid type on argument " + i + "; should be of type: " + sets[i].getSimpleName());
                 return null;
             }
 

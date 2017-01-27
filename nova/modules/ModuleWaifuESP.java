@@ -1,10 +1,10 @@
 package nova.modules;
 
 import net.minecraft.block.material.MapColor;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.storage.MapData;
+import nova.Nova;
 import nova.core.RegisterArgument;
 
 import javax.imageio.ImageIO;
@@ -22,8 +22,8 @@ public class ModuleWaifuESP extends ModuleBase {
     // This will eventually port over to the fake inventory class
 
 
-    public ModuleWaifuESP(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleWaifuESP() {
+        super();
         this.isToggleable = false;
         this.aliases.add("waifu");
         this.description = ("Shows your waifu, save waifus from URL, or load them from the Nova folder.");

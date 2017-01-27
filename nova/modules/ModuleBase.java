@@ -17,8 +17,8 @@ import java.util.ArrayList;
 public class ModuleBase implements IModule {
     // TODO: make more fields protected for encapsulation
 
-    protected Nova Nova;
-    protected Minecraft mc;
+    // mc is a pointer, which is just easier to use than Minecraft.getMinecraft();
+    protected static final Minecraft mc = Minecraft.getMinecraft();
 
     protected ArrayList<String> aliases;
     public final String name;
@@ -37,17 +37,15 @@ public class ModuleBase implements IModule {
     public String filepath;
 
 
-    public ModuleBase(Nova Nova, Minecraft mc) {
-        this.Nova = Nova;
+    public ModuleBase() {
         this.isEnabled = false;
-        this.mc = mc;
         this.isToggleable = true;
         this.defaultArg = "";
 
         this.description = "No description available.";
         this.aliases = new ArrayList<>();
 
-        this.command = new Command(Nova, this);
+        this.command = new Command(this);
         showEnabled = true;
 
         this.name = this.getClass().getSimpleName().replaceFirst("Module", "").toLowerCase();

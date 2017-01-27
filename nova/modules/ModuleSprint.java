@@ -1,16 +1,14 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
-import nova.Nova;
-import nova.events.EventHandler;
+import nova.core.EventHandler;
 import nova.events.PlayerTickEvent;
 
 /**
  * Created by Skeleton Man on 7/21/2016.
  */
 public class ModuleSprint extends ModuleBase{
-    public ModuleSprint(Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleSprint() {
+        super();
 
         this.description = ("Sprints when moving");
     }

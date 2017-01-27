@@ -1,10 +1,14 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
 import nova.core.Saveable;
-import nova.events.*;
+import nova.events.PlayerEnterVisualRangeEvent;
+import nova.events.PlayerLeaveVisualRangeEvent;
+import nova.events.PlayerLogOffEvent;
+import nova.events.PlayerLogOnEvent;
 
 /**
  * Created by Skeleton Man on 1/8/2017.
@@ -21,8 +25,8 @@ public class ModuleNotifications extends ModuleBase {
     @Saveable
     public boolean logOffLoc;
 
-    public ModuleNotifications(nova.Nova Nova, Minecraft mc) {
-        super(Nova, mc);
+    public ModuleNotifications() {
+        super();
 
         this.aliases.add("note");
         this.aliases.add("notify");
@@ -32,7 +36,7 @@ public class ModuleNotifications extends ModuleBase {
         this.logOffLoc = true;
 
 
-        this.description = ("Notifies you of server events");
+        this.description = "Notifies you of server events";
     }
 
     @RegisterArgument(name = "see", description = "Toggles if you get a notification when a player enters or leaves your visual range")
@@ -67,7 +71,7 @@ public class ModuleNotifications extends ModuleBase {
 
 
                 if (this.logOffLoc) {
-                    EntityPlayer p = this.mc.world.getPlayerEntityByName(e.getUsername());
+                    EntityPlayer p = mc.world.getPlayerEntityByName(e.getUsername());
                     if (p != null)
                         Nova.message(p.getDisplayName().getUnformattedText() + " logged off at (" + p.posX + ", " + p.posY + ", " + p.posZ + ")");
                 }

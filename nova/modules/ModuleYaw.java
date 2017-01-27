@@ -1,17 +1,15 @@
 package nova.modules;
 
-import net.minecraft.client.Minecraft;
-import nova.Nova;
+import nova.core.EventHandler;
 import nova.core.RegisterArgument;
-import nova.events.EventHandler;
 import nova.events.PlayerTickEvent;
 
 public class ModuleYaw extends ModuleBase 
 {
 	public float yaw;
 
-	public ModuleYaw(Nova Nova, Minecraft mc) {
-		super(Nova, mc);
+    public ModuleYaw() {
+        super();
         this.description = ("Locks your yaw to the closest 45 degrees.");
 
 		this.defaultArg = "deg";
