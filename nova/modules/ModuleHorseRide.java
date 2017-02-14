@@ -16,10 +16,15 @@ public class ModuleHorseRide extends ModuleBase{
     public boolean horseJump;
     @Saveable
     public boolean shouldSpeed;
+    /*
+    @Saveable
+    public boolean jesus;
+    */
     @Saveable
     public float speed;
     @Saveable
     public float jump;
+
 
     public ModuleHorseRide() {
         super();
@@ -31,6 +36,10 @@ public class ModuleHorseRide extends ModuleBase{
 
         this.speed = 0.3375f;
         this.jump = 1.0f;
+
+        this.horseJump = true;
+        this.shouldSpeed = true;
+        //this.jesus = true;
     }
 
     @RegisterArgument(name = "jump", description = "Should modify jump on horses")
@@ -53,6 +62,12 @@ public class ModuleHorseRide extends ModuleBase{
         this.speed = speed;
     }
 
+    /*
+    @RegisterArgument(name = "jesus", description = "Makes horses walk on liquids")
+    public void toggleJesus(){
+        this.jesus = !jesus;
+    }
+    */
 
     @EventHandler
     public void onLivingUpdate(LivingUpdateEvent e) // this event may be placed wrong
@@ -65,11 +80,15 @@ public class ModuleHorseRide extends ModuleBase{
             if (shouldSpeed) {
                 ((AbstractHorse) mc.player.getRidingEntity()).getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(speed);
             }
+
+            if (mc.player.getRidingEntity().isInWater()) {
+                // mc.player.getRidingEntity().posY = Math.floor(mc.player.getRidingEntity().posY)+1;
+            }
         }
     }
 
     @Override
     public String getMetadata(){
-        return (horseJump ? "(Jump) " : "") + (shouldSpeed ? "(Speed: " + speed + ")" : "");
+        return (horseJump ? "(Jump: " + jump + ") " : "") + (shouldSpeed ? "(Speed: " + speed + ") " : "") /*+ (jesus ? "(Jesus)" : "")*/;
     }
 }

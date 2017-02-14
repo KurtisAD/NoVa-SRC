@@ -24,7 +24,7 @@ public class ModuleBase implements IModule {
     public final String name;
     public String defaultArg;
     public Command command;
-    protected String description;
+    protected String description = "No description available.";
 
     @Saveable
     public boolean isEnabled;
@@ -42,7 +42,6 @@ public class ModuleBase implements IModule {
         this.isToggleable = true;
         this.defaultArg = "";
 
-        this.description = "No description available.";
         this.aliases = new ArrayList<>();
 
         this.command = new Command(this);

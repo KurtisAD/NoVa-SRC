@@ -142,13 +142,9 @@ public class ModuleGreet extends ModuleBase {
 
     private void greeting(String user)
     {
-        // TODO: combine check with the next one
-        if (Minecraft.getSystemTime() - lastMessageTime < 100) {
+        if (Minecraft.getSystemTime() - lastMessageTime < 100 || !(this.isEnabled && this.onJoin)) {
             return;
         }
-
-        if (!(this.isEnabled && this.onJoin))
-            return;
 
         int i = rand.nextInt(greetings.size());
         String period = rand.nextInt(2) > 1 ? "." : "!";
@@ -183,13 +179,9 @@ public class ModuleGreet extends ModuleBase {
 
     private void farewell(String user)
     {
-        // TODO: combine check with the next one
-        if (Minecraft.getSystemTime() - lastMessageTime < 100) {
+        if (Minecraft.getSystemTime() - lastMessageTime < 100 || !(this.isEnabled && this.onLeave)) {
             return;
         }
-
-        if (!(this.isEnabled && this.onLeave))
-            return;
 
         int i = rand.nextInt(goodbyes.size());
         String period = rand.nextInt(2) > 1 ? "." : "!";

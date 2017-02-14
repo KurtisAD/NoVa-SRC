@@ -42,7 +42,7 @@ public class ModuleNames extends ModuleBase {
 
             Nova.message("Name history for " + name + ":");
             for (NameObject n : names) {
-                Nova.message(n.getName());
+                Nova.message("  >" + n.getName());
             }
             Nova.message("End of name history.");
         } catch (IOException e) {

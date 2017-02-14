@@ -17,12 +17,10 @@ import java.util.Map;
 // Implement in minecraft
 public class Nova {
     // TODO: implement enabled event; adding an event type that checks if module is enabled? Similar to implementing pre/post events?
-    // TODO: organize core so that it has some consistency
     // TODO: consider adding modules via reflection
-    // TODO: Document more and more
+    // TODO: Document more and more (For util and non-annotated methods in modules)
     // TODO: make annotations throw errors
-    // Consider: making classes static
-    // TODO: explore removing module constructors
+    // TODO: explore removing module constructors if unneeded(including removing description from the constructor)
     // I swear to fuck I add more todo's than I solve
 
     private static Minecraft mc;
@@ -33,7 +31,7 @@ public class Nova {
 
     static final String delimiter = "-";
 
-    public static final String Version = "NoVa 11.2.a14 Optifine B5";
+    public static final String Version = "NoVa 11.2.a15 Optifine B5";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -84,10 +82,11 @@ public class Nova {
         modules.add(new ModuleHorseRide());
         modules.add(new ModuleInfo());
         modules.add(new ModuleIntervalThrow());
-        //this.modules.add(new ModuleJesus());
+        modules.add(new ModuleJesus());
         modules.add(new ModuleMarkers());
         modules.add(new ModuleNames());
         modules.add(new ModuleNoclip());
+        modules.add(new ModuleNoHurtCam());
         modules.add(new ModuleNofall());
         modules.add(new ModuleNoKnockback());
         modules.add(new ModuleNoRender());
