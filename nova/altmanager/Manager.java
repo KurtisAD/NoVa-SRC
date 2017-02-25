@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import net.minecraft.client.gui.GuiScreen;
 import nova.Nova;
-import nova.core.Util;
+import nova.util.Util;
 
 import java.io.*;
 import java.util.ArrayList;

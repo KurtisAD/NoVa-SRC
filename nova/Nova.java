@@ -2,8 +2,10 @@ package nova;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
-import nova.core.Util;
-import nova.modules.*;
+import nova.event.Events;
+import nova.module.ModuleBase;
+import nova.module.modules.*;
+import nova.util.Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Skeleton Man on 6/18/2016.
+ * @author Kurt Dee
+ * @since 6/18/2016
  */
 
-// Implement in minecraft
 public class Nova {
     // TODO: implement enabled event; adding an event type that checks if module is enabled? Similar to implementing pre/post events?
     // TODO: consider adding modules via reflection
@@ -26,12 +28,12 @@ public class Nova {
     private static Minecraft mc;
     private static Events events;
     private static ArrayList<ModuleBase> modules;
-    private static Map<String, ModuleBase> moduleCache;
-    private static Map<String, String> moduleNameCache;
+    private static Map<Class<? extends ModuleBase>, ModuleBase> moduleCache;
+    private static Map<String, Class<? extends ModuleBase>> moduleAliasCache;
 
-    static final String delimiter = "-";
+    public static final String delimiter = "-";
 
-    public static final String Version = "NoVa 11.2.a15 Optifine B5";
+    public static final String Version = "NoVa 11.2.a16 Optifine B5";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
@@ -46,7 +48,7 @@ public class Nova {
 
         modules = new ArrayList<>();
         moduleCache = new HashMap<>();
-        moduleNameCache = new HashMap<>();
+        moduleAliasCache = new HashMap<>();
 
 
         //Add Modules here
@@ -68,6 +70,7 @@ public class Nova {
         modules.add(new ModuleCameraClip());
         modules.add(new ModuleElytraFly());
         modules.add(new ModuleEncryption());
+        modules.add(new ModuleEntityRide());
         modules.add(new ModuleESP());
         //this.modules.add(new ModuleExtraElytra());
         //this.modules.add(new ModuleFakeCoord());
@@ -79,7 +82,6 @@ public class Nova {
         modules.add(new ModuleGreet());
         modules.add(new ModuleGui());
         modules.add(new ModuleHelp());
-        modules.add(new ModuleHorseRide());
         modules.add(new ModuleInfo());
         modules.add(new ModuleIntervalThrow());
         modules.add(new ModuleJesus());
@@ -108,8 +110,11 @@ public class Nova {
         for(ModuleBase m : modules)
         {
             // maybe put names and aliases in module cache?
-            moduleCache.put(m.getName().toLowerCase(), m);
-            moduleNameCache.put(m.getClass().getSimpleName(), m.getName().toLowerCase());
+            moduleCache.put(m.getClass(), m);
+
+            for (String alias : m.getAliases()) {
+                moduleAliasCache.put(alias, m.getClass());
+            }
 
             m.loadModule();
         }
@@ -118,8 +123,14 @@ public class Nova {
 
     }
 
+    /**
+     * Returns the Nova module instance
+     *
+     * @param type The class of the module instance requested
+     * @return The module instance of the class type
+     */
     public static <T extends ModuleBase> T getModule(Class<T> type) {
-        return type.cast( moduleCache.get(moduleNameCache.get(type.getSimpleName())));
+        return type.cast(moduleCache.get(type));
     }
 
     public static Events getEvents() {
@@ -130,12 +141,12 @@ public class Nova {
         return modules;
     }
 
-    public static Map<String, ModuleBase> getModuleCache() {
+    public static Map<Class<? extends ModuleBase>, ? extends ModuleBase> getModuleCache() {
         return moduleCache;
     }
 
-    public static Map<String, String> getModuleNameCache() {
-        return moduleNameCache;
+    public static Map<String, Class<? extends ModuleBase>> getModuleAliasCache() {
+        return moduleAliasCache;
     }
 
     public static boolean onEvent(Object o) {
