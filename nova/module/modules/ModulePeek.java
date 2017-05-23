@@ -30,7 +30,7 @@ public class ModulePeek extends ModuleBase {
         if (is.getItem() instanceof ItemShulkerBox) {
             TileEntityShulkerBox entityBox = new TileEntityShulkerBox();
             Util.setPrivateValue(TileEntityShulkerBox.class, entityBox, ((ItemShulkerBox) is.getItem()).getBlock(), "blockType");
-            entityBox.setWorld(mc.world);
+            entityBox.setWorldObj(mc.world);
             entityBox.readFromNBT(is.getTagCompound().getCompoundTag("BlockEntityTag"));
             sb = entityBox;
         }

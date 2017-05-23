@@ -19,4 +19,5 @@ public class ModuleNofall extends ModuleBase {
                 mc.player.connection.sendPacket(new CPacketPlayer(true));
         }
     }
+
 }

@@ -36,7 +36,7 @@ public class ModuleIntervalThrow extends ModuleBase {
     @RegisterArgument(
             name = "int",
             description = "period in milliseconds (ex. 100)")
-    public void setInt(long inter){
+    public void setInt(int inter) {
         this.intervalMs = inter;
     }
 

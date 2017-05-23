@@ -55,7 +55,7 @@ public class ModuleAutoArmor extends ModuleBase {
             for (armorIndex = 0; armorIndex < armor.size() + 1; armorIndex++) {
 
                 // if slot is missing an item
-                if (armorIndex < armor.size() ? armor.get(armorIndex) == ItemStack.EMPTY : offhand.get(0) == ItemStack.EMPTY) {
+                if (armorIndex < armor.size() ? armor.get(armorIndex) == ItemStack.field_190927_a : offhand.get(0) == ItemStack.field_190927_a) {
 
                     inv = mc.player.inventory.mainInventory;
 
@@ -66,7 +66,7 @@ public class ModuleAutoArmor extends ModuleBase {
                         EntityEquipmentSlot type;
 
                         // if an item exists
-                        if (inv.get(inventoryIndex) != ItemStack.EMPTY) {
+                        if (inv.get(inventoryIndex) != ItemStack.field_190927_a) {
 
                             // and if the item is armor
                             if (inv.get(inventoryIndex).getItem() instanceof ItemArmor) {

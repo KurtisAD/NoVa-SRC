@@ -13,12 +13,14 @@ import nova.util.Util;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Created by Skeleton Man on 12/9/2016.
+ * @author Kurt Dee
+ * @since 12/9/2016
  */
 public class ModuleTracers extends ModuleBase {
     // TODO: add color selection
@@ -39,7 +41,7 @@ public class ModuleTracers extends ModuleBase {
     @RegisterArgument(name = "valid", description = "Lists valid entites")
     public void valid() {
         Nova.confirmMessage("You can select:");
-        Nova.message(Util.join(Util.getValidEntities().keySet(), ", "));
+        Nova.message(Util.join((Collection<String>) Util.getValidEntities().keySet(), ", "));
     }
 
     @RegisterArgument(name = "new", description = "Adds entity class to tracers with default color, white")

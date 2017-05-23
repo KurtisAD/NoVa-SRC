@@ -25,7 +25,6 @@ public class ModuleFly extends ModuleBase
 	public void onEnable()
 	{
 		mc.player.capabilities.isFlying = true;
-		Nova.getModule(ModuleSpeed.class).onDisable();
 		Nova.getModule(ModuleElytraFly.class).onDisable();
 		super.onEnable();
     }

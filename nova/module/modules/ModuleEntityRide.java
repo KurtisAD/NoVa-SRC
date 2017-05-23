@@ -63,7 +63,7 @@ public class ModuleEntityRide extends ModuleBase {
 
     @EventHandler
     public boolean onPacketRecieve(PacketReceivedEvent e) {
-        if (this.isEnabled && mc.player.isRiding()) {
+        if (this.isEnabled && mc.player != null && mc.player.isRiding()) {
             if (e.getPacket() instanceof SPacketEntityVelocity && ((SPacketEntityVelocity) e.getPacket()).getEntityID() == mc.player.getRidingEntity().getEntityId()) {
                 return false;
             }

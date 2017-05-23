@@ -73,11 +73,35 @@ public class ModuleGui extends ModuleBase {
         this.showArmor = true;
     }
 
+    @RegisterArgument(name = "format",
+            description = "Wrap your argument in quotes! Changes format of the coord/info text; {x} parses to the x-coord, {z}, {y} do the same; {d} is your direction, {D} is it's single character representation; {v} is your velocity in km/h, {fps}, {p} is pitch value, & is the formatting char")
+    public void setInfoFormat(String infoFormat) {
+        this.infoFormat = infoFormat;
+    }
 
-    @Override
-    public void toggleState()
-    {
-        this.isHidden = !this.isHidden;
+    @RegisterArgument(name = "armor", description = "Toggles armor display")
+    public void toggleArmor() {
+        this.showArmor = !this.showArmor;
+    }
+
+    @RegisterArgument(name = "potion", description = "Toggles potion timer, either in seconds or minutes")
+    public void togglePotionInSeconds() {
+        this.potionInSeconds = !potionInSeconds;
+    }
+
+
+    @EventHandler
+    public void onGuiOpenEvent(GuiOpenEvent e) {
+        if (e.getGui() instanceof GuiDisconnected) {
+            GuiDisconnected screen = (GuiDisconnected) e.getGui();
+            e.setGui(new GuiDisconnectedOverride(screen.parentScreen, screen.reason, screen.message));
+        } else if (e.getGui() instanceof GuiMultiplayer) {
+            GuiMultiplayer screen = (GuiMultiplayer) e.getGui();
+            e.setGui(new GuiMultiplayerOverride(screen.parentScreen));
+        } else if (e.getGui() instanceof GuiScreenServerList) {
+            GuiScreenServerList screen = (GuiScreenServerList) e.getGui();
+            e.setGui(new GuiScreenServerListOverride(screen.lastScreen, screen.serverData));
+        }
     }
 
     @EventHandler
@@ -96,11 +120,12 @@ public class ModuleGui extends ModuleBase {
             String v = Double.toString(this.getPlayerVelocity());
             String d = directions[MathHelper.floor((double) (mc.player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3];
             String D = Character.toString(d.charAt(0));
+            String p = String.format("%.1f", mc.player.rotationPitch);
 
 
             String fps = Integer.toString(Minecraft.getDebugFPS());
 
-            String info = this.infoFormat.replaceAll("&", "\247").replaceAll("\\{x\\}", x).replaceAll("\\{z\\}", z).replaceAll("\\{y\\}", y).replaceAll("\\{v\\}", v).replaceAll("\\{d\\}", d).replaceAll("\\{D\\}", D).replaceAll("\\{fps\\}", fps);
+            String info = this.infoFormat.replaceAll("&", "\247").replaceAll("\\{x\\}", x).replaceAll("\\{z\\}", z).replaceAll("\\{y\\}", y).replaceAll("\\{v\\}", v).replaceAll("\\{d\\}", d).replaceAll("\\{D\\}", D).replaceAll("\\{fps\\}", fps).replaceAll("\\{p\\}", p);
 
 
             mc.fontRendererObj.drawStringWithShadow(info, 2, 2, this.guiColor);
@@ -146,10 +171,10 @@ public class ModuleGui extends ModuleBase {
 
         // Maybe have to change to .equals() ?
         // TODO: maybe make this a method?
-        helmet = "h: " + (armor.get(3) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(3).getMaxDamage() - (double) armor.get(3).getItemDamage()) / (double) armor.get(3).getMaxDamage()) * 100.0D) + "%" : "none");
-        chestplate = "c: " + (armor.get(2) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(2).getMaxDamage() - (double) armor.get(2).getItemDamage()) / (double) armor.get(2).getMaxDamage()) * 100.0D) + "%" : "none");
-        leggings = "l: " + (armor.get(1) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(1).getMaxDamage() - (double) armor.get(1).getItemDamage()) / (double) armor.get(1).getMaxDamage()) * 100.0D) + "%" : "none");
-        boots = "b: " + (armor.get(0) != ItemStack.EMPTY ? Util.formatArmorDurability((((double) armor.get(0).getMaxDamage() - (double) armor.get(0).getItemDamage()) / (double) armor.get(0).getMaxDamage()) * 100.0D) + "%" : "none");
+        helmet = "h: " + (armor.get(3) != ItemStack.field_190927_a ? Util.formatArmorDurability((((double) armor.get(3).getMaxDamage() - (double) armor.get(3).getItemDamage()) / (double) armor.get(3).getMaxDamage()) * 100.0D) + "%" : "none");
+        chestplate = "c: " + (armor.get(2) != ItemStack.field_190927_a ? Util.formatArmorDurability((((double) armor.get(2).getMaxDamage() - (double) armor.get(2).getItemDamage()) / (double) armor.get(2).getMaxDamage()) * 100.0D) + "%" : "none");
+        leggings = "l: " + (armor.get(1) != ItemStack.field_190927_a ? Util.formatArmorDurability((((double) armor.get(1).getMaxDamage() - (double) armor.get(1).getItemDamage()) / (double) armor.get(1).getMaxDamage()) * 100.0D) + "%" : "none");
+        boots = "b: " + (armor.get(0) != ItemStack.field_190927_a ? Util.formatArmorDurability((((double) armor.get(0).getMaxDamage() - (double) armor.get(0).getItemDamage()) / (double) armor.get(0).getMaxDamage()) * 100.0D) + "%" : "none");
         saturation = "sat: " + (mc.player.getFoodStats().getSaturationLevel() <= 0f ? "\247c" : "") + String.format("%.1f", mc.player.getFoodStats().getSaturationLevel());
 
         Iterator potions = mc.player.getActivePotionEffects().iterator();
@@ -312,33 +337,9 @@ public class ModuleGui extends ModuleBase {
         return prefix + suffix;
     }
 
-    @EventHandler
-    public void onGuiOpenEvent(GuiOpenEvent e){
-        if (e.getGui() instanceof GuiDisconnected){
-            GuiDisconnected screen = (GuiDisconnected) e.getGui();
-            e.setGui(new GuiDisconnectedOverride(screen.parentScreen, screen.reason, screen.message));
-        } else if (e.getGui() instanceof GuiMultiplayer){
-            GuiMultiplayer screen = (GuiMultiplayer) e.getGui();
-            e.setGui(new GuiMultiplayerOverride(screen.parentScreen));
-        } else if (e.getGui() instanceof GuiScreenServerList){
-            GuiScreenServerList screen = (GuiScreenServerList) e.getGui();
-            e.setGui(new GuiScreenServerListOverride(screen.lastScreen, screen.serverData));
-        }
+    @Override
+    public void toggleState() {
+        this.isHidden = !this.isHidden;
     }
 
-    @RegisterArgument(name = "format",
-            description = "Wrap your argument in quotes! Changes format of the coord/info text; {x} parses to the x-coord, {z}, {y} do the same; {d} is your direction, {D} is it's single character representation; {v} is your velocity in km/h, {fps}, & is the formatting char")
-    public void setInfoFormat(String infoFormat){
-        this.infoFormat = infoFormat;
-    }
-
-    @RegisterArgument(name = "armor", description = "Toggles armor display")
-    public void toggleArmor(){
-        this.showArmor = !this.showArmor;
-    }
-
-    @RegisterArgument(name = "potion", description = "Toggles potion timer, either in seconds or minutes")
-    public void togglePotionInSeconds(){
-        this.potionInSeconds = !potionInSeconds;
-    }
 }

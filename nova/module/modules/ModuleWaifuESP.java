@@ -41,7 +41,7 @@ public class ModuleWaifuESP extends ModuleBase {
     }
 
     public void getWaifu(BufferedImage bi) {
-        ItemStack theMap = ItemMap.setupNewMap(mc.world, Double.MAX_VALUE, Double.MAX_VALUE, (byte) 1, false, false);
+        ItemStack theMap = ItemMap.func_190906_a(mc.world, Double.MAX_VALUE, Double.MAX_VALUE, (byte) 1, false, false);
         theMap.setStackDisplayName("Do it for her.");
 
         MapData md = ((ItemMap) theMap.getItem()).getMapData(theMap, mc.world);
@@ -77,9 +77,9 @@ public class ModuleWaifuESP extends ModuleBase {
 
 
         // Saving the map data, may need to be tweaked
-        this.mc.entityRenderer.resetData();
+        this.mc.entityRenderer.func_190564_k(); // reset data
 
-        mc.world.setData("map_" + theMap.getMetadata(), md);
+        mc.world.setItemData("map_" + theMap.getMetadata(), md);
         mc.entityRenderer.getMapItemRenderer().updateMapTexture(md);
 
         mc.player.inventory.mainInventory.set(mc.player.inventory.currentItem, theMap);

@@ -89,7 +89,7 @@ public class ModuleInfo extends ModuleBase {
 
             for(ItemStack i : armor)
             {
-                durability += (i != ItemStack.EMPTY ? Util.formatArmorDurability((((double) i.getMaxDamage() - (double) i.getItemDamage()) / (double) i.getMaxDamage()) * 100.0D) : "---") + "/";
+                durability += (i != ItemStack.field_190927_a ? Util.formatArmorDurability((((double) i.getMaxDamage() - (double) i.getItemDamage()) / (double) i.getMaxDamage()) * 100.0D) : "---") + "/";
 
                 if(i != null)
                     hasArmor = true;

@@ -4,7 +4,6 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.math.AxisAlignedBB;
 import nova.event.EventHandler;
 import nova.event.events.BlockCollisionEvent;
-import nova.event.events.LivingUpdateEvent;
 import nova.module.ModuleBase;
 
 /**
@@ -29,9 +28,13 @@ public class ModuleJesus extends ModuleBase {
 
         }
     }
-
+/*
     @EventHandler
-    public void onLivingUpdate(LivingUpdateEvent e) {
+    public void onPacketSend(PacketSendEvent e){
+        if(e.getPacket() instanceof CPacketPlayer && !mc.player.isInWater() && mc.player.isAboveWater() && !mc.player.isAboveLand()) {
+            CPacketPlayer packet = (CPacketPlayer) subject.getPacket();
 
-    }
+            e.getPacket().setY((mc.player.ticksExisted % 2 == 0 ? 0.02 : 0) + mc.player.posY);
+        }
+        */
 }

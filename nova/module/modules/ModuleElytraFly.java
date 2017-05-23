@@ -34,12 +34,11 @@ public class ModuleElytraFly extends ModuleBase {
         this.speed = speed;
     }
 
+
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         if (this.isEnabled && mc.player.isElytraFlying()) {
-            /*if (e.getMovePointer()[1] < 0){
-                e.getMovePointer()[1] = 0D ;
-            }*/
+            e.getMovePointer()[1] = 0D;
 
             float strafe = mc.gameSettings.keyBindLeft.pressed ? speed : 0;
             strafe -= mc.gameSettings.keyBindRight.pressed ? speed : 0;
@@ -50,10 +49,12 @@ public class ModuleElytraFly extends ModuleBase {
             playerVector = playerVector.rotatePitch(-mc.player.rotationPitch * 0.017453292F);
             playerVector = playerVector.rotateYaw(-mc.player.rotationYaw * 0.017453292F);
 
-            e.getMovePointer()[0] = playerVector.xCoord * speed;
-            e.getMovePointer()[1] = playerVector.yCoord * speed;
-            e.getMovePointer()[2] = playerVector.zCoord * speed;
+            e.getMovePointer()[0] = playerVector.xCoord;
+            e.getMovePointer()[1] = playerVector.yCoord;
+            e.getMovePointer()[2] = playerVector.zCoord;
         }
+
+
     }
 
     @EventHandler
@@ -65,7 +66,6 @@ public class ModuleElytraFly extends ModuleBase {
 
     @Override
     public void onEnable() {
-        Nova.getModule(ModuleSpeed.class).onDisable();
         Nova.getModule(ModuleFly.class).onDisable();
 
         super.onEnable();

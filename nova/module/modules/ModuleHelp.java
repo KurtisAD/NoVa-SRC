@@ -22,9 +22,9 @@ public class ModuleHelp extends ModuleBase
 	@Override
 	public void toggleState()
 	{
-        Nova.message("Developed by kinorana, \"Kurt Dee\". Core developed by Pyrobyte until 1.6; simple and reliable and \247mprobably\247r definitely has no backdoors.");
-        Nova.message("Version: " + Nova.Version);
-        Nova.message("help (module); all modules:");
+		Nova.message("\2477Version: " + Nova.Version);
+		Nova.message("Developed by kinorana, \"Kurt Dee\". Core developed by Pyrobyte until 1.6; simple and reliable and \247mprobably\247r definitely has no backdoors.");
+		Nova.message("\2478help (module); all modules:");
 
 		String modules = "";
 
