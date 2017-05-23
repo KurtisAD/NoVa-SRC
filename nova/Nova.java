@@ -2,8 +2,11 @@ package nova;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
-import nova.core.Util;
-import nova.modules.*;
+import nova.event.Event;
+import nova.event.Events;
+import nova.module.ModuleBase;
+import nova.module.modules.*;
+import nova.util.Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,137 +14,185 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Skeleton Man on 6/18/2016.
+ * @author Kurt Dee
+ * @since 6/18/2016
  */
 
-// Implement in minecraft
 public class Nova {
-    // TODO: implement enabled event (What did I mean by this shit shit shit) (I think I meant adding an event type that checks if module is enabled? Similar to implementing pre/post events?)
-    // TODO: organize core so that it has some consistency
-    // TODO: consider adding modules via reflection
-    // TODO: Document more and more
+    // TODO: implement enabled event; adding an event type that checks if module is enabled? Similar to implementing pre/post events?
+    // TODO: consider adding modules via reflections
+    // TODO: Document more and more (For util and non-annotated methods in modules)
     // TODO: make annotations throw errors
+    // TODO: explore removing module constructors if unneeded(including removing description from the constructor)
     // I swear to fuck I add more todo's than I solve
 
-    public Minecraft mc;
-    public Events events;
-    public ArrayList<ModuleBase> modules;
-    public Map<String, ModuleBase> moduleCache;
-    public Map<String, String> moduleNameCache;
+    private static Minecraft mc;
+    private static Events events;
+    private static ArrayList<ModuleBase> modules;
+    private static Map<Class<? extends ModuleBase>, ModuleBase> moduleCache;
+    private static Map<String, Class<? extends ModuleBase>> moduleAliasCache;
 
-    public final String delimeter;
+    public static final String delimiter = "-";
 
-    public static final String Version = "NoVa 11.2.a13 Optifine B5";
+    public static final String Version = "NoVa 11.2.a18 Optifine B7";
     /**
      * NovaClient file directory ".minecraft/Nova/"
      */
     public static File novaDir = new File(Util.getAppDir("minecraft") + File.separator + "Nova");
 
-    public Nova(Minecraft mc){
-        this.mc = mc;
+    static {
+        mc = Minecraft.getMinecraft();
 
         if (!novaDir.exists()) {
             novaDir.mkdirs();
         }
 
-        this.delimeter = "-";
-
-        modules = new ArrayList<ModuleBase>();
-        moduleCache = new HashMap<String, ModuleBase>();
-        moduleNameCache = new HashMap<String, String>();
+        modules = new ArrayList<>();
+        moduleCache = new HashMap<>();
+        moduleAliasCache = new HashMap<>();
 
 
         //Add Modules here
-        //Format:            this.modules.add(new ModuleBase(this, mc));
+        //Format:            this.modules.add(new ModuleBase());
 
-
-        this.modules.add(new ModuleAntiAfk(this, mc));
-        this.modules.add(new ModuleAntifall(this, mc));
-        this.modules.add(new ModuleAutoArmor(this, mc));
-        this.modules.add(new ModuleAutoEat(this, mc));
-        this.modules.add(new ModuleAutoFish(this, mc));
-        this.modules.add(new ModuleAutoMine(this, mc));
-        this.modules.add(new ModuleAutoRespawn(this, mc));
-        //this.modules.add(new ModuleAutotool(this, mc));
-        this.modules.add(new ModuleAutowalk(this, mc));
-        this.modules.add(new ModuleBindEditor(this, mc));
-        //this.modules.add(new ModuleBlink(this, mc));
-        this.modules.add(new ModuleBrightness(this, mc));
-        this.modules.add(new ModuleCameraClip(this, mc));
-        this.modules.add(new ModuleElytraFly(this, mc));
-        this.modules.add(new ModuleEncryption(this, mc));
-        this.modules.add(new ModuleESP(this, mc));
-        //this.modules.add(new ModuleExtraElytra(this, mc));
-        //this.modules.add(new ModuleFakeCoord(this, mc));
-        this.modules.add(new ModuleFastBreak(this, mc));
-        this.modules.add(new ModuleFly(this, mc));
-        this.modules.add(new ModuleFreecam(this, mc));
-        this.modules.add(new ModuleFriends(this, mc));
-        this.modules.add(new ModuleGlide(this, mc));
-        this.modules.add(new ModuleGreet(this, mc));
-        this.modules.add(new ModuleGui(this, mc));
-        this.modules.add(new ModuleHelp(this, mc));
-        this.modules.add(new ModuleHorseRide(this, mc));
-        this.modules.add(new ModuleInfo(this, mc));
-        this.modules.add(new ModuleIntervalThrow(this, mc));
-        //this.modules.add(new ModuleJesus(this, mc));
-        this.modules.add(new ModuleMarkers(this, mc));
-        this.modules.add(new ModuleNames(this, mc));
-        this.modules.add(new ModuleNoclip(this, mc));
-        this.modules.add(new ModuleNofall(this, mc));
-        this.modules.add(new ModuleNoKnockback(this, mc));
-        this.modules.add(new ModuleNoRender(this, mc));
-        this.modules.add(new ModuleNoslow(this, mc));
-        this.modules.add(new ModuleNotifications(this, mc));
-        this.modules.add(new ModulePeek(this, mc));
-        this.modules.add(new ModuleSafewalk(this, mc));
-        this.modules.add(new ModuleSay(this, mc));
-        this.modules.add(new ModuleSpeed(this, mc));
-        this.modules.add(new ModuleSprint(this, mc));
-        this.modules.add(new ModuleTextwidth(this, mc));
-        this.modules.add(new ModuleTimer(this, mc));
-        this.modules.add(new ModuleTracers(this, mc));
-        this.modules.add(new ModuleTrajectories(this, mc));
-        this.modules.add(new ModuleWaifuESP(this, mc));
-        this.modules.add(new ModuleYaw(this, mc));
-
-
-
+        modules.add(new ModuleAntiAfk());
+        modules.add(new ModuleAntifall());
+        modules.add(new ModuleAutoArmor());
+        modules.add(new ModuleAutoFish());
+        modules.add(new ModuleAutoMine());
+        modules.add(new ModuleAutoRespawn());
+        //this.modules.add(new ModuleAutotool());
+        modules.add(new ModuleAutowalk());
+        modules.add(new ModuleBindEditor());
+        //this.modules.add(new ModuleBlink());
+        modules.add(new ModuleBrightness());
+        modules.add(new ModuleCameraClip());
+        modules.add(new ModuleRewriteMaps());
+        modules.add(new ModuleElytraFly());
+        modules.add(new ModuleEncryption());
+        modules.add(new ModuleEntityRide());
+        modules.add(new ModuleESP());
+        modules.add(new ModuleExtraElytra());
+        //this.modules.add(new ModuleFakeCoord());
+        modules.add(new ModuleFastBreak());
+        modules.add(new ModuleFly());
+        modules.add(new ModuleFreecam());
+        modules.add(new ModuleFriends());
+        modules.add(new ModuleGlide());
+        modules.add(new ModuleGreet());
+        modules.add(new ModuleGui());
+        modules.add(new ModuleHelp());
+        modules.add(new ModuleInfo());
+        modules.add(new ModuleIntervalThrow());
+        modules.add(new ModuleJesus());
+        modules.add(new ModuleMarkers());
+        modules.add(new ModuleNames());
+        modules.add(new ModuleNoclip());
+        modules.add(new ModuleNoHurtCam());
+        modules.add(new ModuleNofall());
+        modules.add(new ModuleNoKnockback());
+        modules.add(new ModuleNoRender());
+        modules.add(new ModuleNoslow());
+        modules.add(new ModuleNotifications());
+        modules.add(new ModulePeek());
+        modules.add(new ModulePitch());
+        modules.add(new ModuleSafewalk());
+        modules.add(new ModuleSay());
+        modules.add(new ModuleSprint());
+        modules.add(new ModuleTeleport());
+        modules.add(new ModuleTextwidth());
+        modules.add(new ModuleTimer());
+        modules.add(new ModuleTracers());
+        modules.add(new ModuleTrajectories());
+        modules.add(new ModuleWaifuESP());
+        modules.add(new ModuleYaw());
 
 
         for(ModuleBase m : modules)
         {
             // maybe put names and aliases in module cache?
-            moduleCache.put(m.getName().toLowerCase(), m);
-            moduleNameCache.put(m.getClass().getSimpleName(), m.getName().toLowerCase());
+            moduleCache.put(m.getClass(), m);
+
+            for (String alias : m.getAliases()) {
+                moduleAliasCache.put(alias, m.getClass());
+            }
 
             m.loadModule();
         }
 
-        events = new Events(this);
+        events = new Events();
 
-        new StaticNova(this);
     }
 
-    public <T extends ModuleBase> T getModule(Class<T> type) {
-        return type.cast( moduleCache.get(moduleNameCache.get(type.getSimpleName())));
+    /**
+     * Returns the Nova module instance
+     *
+     * @param type The class of the module instance requested
+     * @return The module instance of the class type
+     */
+    public static <T extends ModuleBase> T getModule(Class<T> type) {
+        return type.cast(moduleCache.get(type));
     }
 
-    public void notificationMessage(String msg)
+    /**
+     * Returns the event static instance where events can be called from
+     *
+     * @return The event static instance
+     */
+    public static Events getEvents() {
+        return events;
+    }
+
+    /**
+     * @return The list of modules, alphabetized
+     */
+    public static ArrayList<ModuleBase> getModules() {
+        return modules;
+    }
+
+    /**
+     *
+     * @return A Map between the module class and its instance
+     */
+    public static Map<Class<? extends ModuleBase>, ? extends ModuleBase> getModuleCache() {
+        return moduleCache;
+    }
+
+    /**
+     *
+     * @return A map between a module's name/alias and its class
+     */
+    public static Map<String, Class<? extends ModuleBase>> getModuleAliasCache() {
+        return moduleAliasCache;
+    }
+
+    /**
+     * The method to call an event. This trigger the appropriate methods in the module list.
+     *
+     * @param   o   The event object
+     * @return If the event is canceled
+     */
+    public static boolean onEvent(Event o) {
+        return events.onEvent(o);
+    }
+
+    public static void notificationMessage(String msg)
     {
         if ((getModule(ModuleGui.class)).isHidden)
-            this.message("\247l>>\247r " + msg);
+            message("\247l>>\247r " + msg);
         else
             getModule(ModuleGui.class).addToQueue(msg);
     }
 
-    public void errorMessage(String s) {
+    public static void errorMessage(String s) {
         message("\247c[NV]\247r" + s);
     }
 
-    public void confirmMessage(String s) { message("\247b[NV]\247r " + s); }
+    public static void confirmMessage(String s) {
+        message("\247b[NV]\247r " + s);
+    }
 
-    public void message(String s){
+    public static void message(String s) {
         mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString(s));
     }
 
