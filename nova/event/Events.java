@@ -54,7 +54,7 @@ public class Events {
      * @return is canceled
      */
     // Does this actually return if canceled?
-    public boolean onEvent(Object o)
+    public boolean onEvent(Event o)
     {
 
         boolean isCancelled = false;

@@ -40,7 +40,7 @@ public class Argument {
         for(int i = 0; i < argv.length; i++) {
 
             try {
-                if (sets[i] == boolean.class) {
+                if (sets[i] == boolean.class) { // TODO: Is boolean ever used? Consider removing
                     toReturn[i] = Boolean.parseBoolean(argv[i]);
                 } else if (sets[i] == char.class) {
                     toReturn[i] = argv[i].charAt(0);

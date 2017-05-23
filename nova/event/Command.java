@@ -25,7 +25,7 @@ public class Command {
     }
 
 
-    public void getRegisteredArguments() {
+    private void getRegisteredArguments() {
 
         for (Method m : this.module.getClass().getDeclaredMethods()) {
             if (m.isAnnotationPresent(RegisterArgument.class)) {

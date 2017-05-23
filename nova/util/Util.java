@@ -100,6 +100,12 @@ public class Util {
         return Long.toHexString(hash).substring(8);
     }
 
+    /**
+     * Converts a string of text into its fullwidth equivalent
+     *
+     * @param s The string of normal characters to convert
+     * @return The fullwidth string
+     */
     public static String toFull(String s) {
         String ret = "";
         char[] c = s.toCharArray();
@@ -118,7 +124,7 @@ public class Util {
     }
 
     public static String getItemNameAndEnchantments(ItemStack is) {
-        if (is != ItemStack.EMPTY) {
+        if (is != ItemStack.field_190927_a) {
             if(is.isItemEnchanted()) {
                 NBTTagList e = is.getEnchantmentTagList();
                 String enchants = "";
@@ -149,7 +155,7 @@ public class Util {
      * @return The concatenated string
      */
     public static String join(Collection<String> strs, String glue) {
-        return join((String[]) strs.toArray(), glue);
+        return join(strs.toArray(new String[0]), glue);
     }
 
     /**
